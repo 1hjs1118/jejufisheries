@@ -72,12 +72,41 @@
     .mini{font-size:12px;color:var(--muted)}
     .sources{font-size:13px}
     .sources li{margin:8px 0}
+    .tariff-shift{margin:22px 0 26px;border:1px solid #b9cbd5;border-radius:14px;overflow:hidden;background:#f8fbfc}
+    .tariff-shift-head{padding:16px 20px;background:var(--navy);color:#fff}
+    .tariff-shift-head strong{display:block;font-size:18px}
+    .tariff-shift-head span{font-size:12px;opacity:.85}
+    .tariff-steps{display:grid;grid-template-columns:repeat(3,1fr)}
+    .tariff-step{padding:17px 18px;border-right:1px solid var(--line)}
+    .tariff-step:last-child{border-right:0}
+    .tariff-step b{display:block;margin-bottom:5px;color:var(--blue)}
+    .tariff-step p{font-size:13px;margin:0}
+    .swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:22px}
+    .swot-card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;break-inside:avoid}
+    .swot-head{display:flex;align-items:center;gap:12px;padding:17px 19px;border-bottom:1px solid var(--line)}
+    .swot-letter{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;color:#fff;font-size:23px;font-weight:900;line-height:1}
+    .swot-head h3{margin:0;font-size:18px}
+    .swot-head p{margin:1px 0 0;color:var(--muted);font-size:12px}
+    .swot-card.s .swot-head{background:#edf8f2}.swot-card.s .swot-letter{background:#237a55}
+    .swot-card.w .swot-head{background:#fff7e8}.swot-card.w .swot-letter{background:#aa7116}
+    .swot-card.o .swot-head{background:#edf7fb}.swot-card.o .swot-letter{background:#176b87}
+    .swot-card.t .swot-head{background:#fff1ef}.swot-card.t .swot-letter{background:#a54437}
+    .swot-table{margin:0;border:0;border-radius:0;font-size:13px}
+    .swot-table th{background:#f6f8f9}
+    .swot-table th,.swot-table td{padding:11px 12px}
+    .swot-table td:first-child{width:72px;white-space:nowrap;font-weight:900;color:var(--navy)}
+    .evidence-ref{display:inline-block;margin-left:3px;font-size:11px;font-weight:800;white-space:nowrap}
+    .swot-action{margin-top:20px;padding:18px 20px;border:1px solid #b9dedf;border-radius:12px;background:var(--pale)}
+    .swot-action strong{color:#124f61}
     .footer-note{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
     .print-btn{position:fixed;right:22px;bottom:22px;border:0;border-radius:999px;background:var(--navy);color:#fff;padding:12px 17px;font-weight:800;box-shadow:0 5px 18px rgba(18,50,74,.25);cursor:pointer}
     @media(max-width:850px){
       header,main{padding-left:24px;padding-right:24px}
       .summary-grid{grid-template-columns:1fr 1fr}
-      .two-col,.issue-grid{grid-template-columns:1fr}
+      .two-col,.issue-grid,.swot-grid{grid-template-columns:1fr}
+      .tariff-steps{grid-template-columns:1fr}
+      .tariff-step{border-right:0;border-bottom:1px solid var(--line)}
+      .tariff-step:last-child{border-bottom:0}
       h1{font-size:28px}
     }
     @media(max-width:520px){
@@ -94,7 +123,9 @@
       header:after,nav,.print-btn{display:none}
       main{padding:22px 4px}
       section{margin-bottom:30px}
-      .country{break-inside:avoid}
+      .country,.swot-card{break-inside:avoid}
+      .swot-grid{display:block}
+      .swot-card{margin-bottom:12px}
       a{color:#111}
     }
   </style>
@@ -116,7 +147,7 @@
     <a href="#summary">종합 요약</a><a href="#method">관세 판단기준</a>
     <a href="#us">미국</a><a href="#cn">중국</a><a href="#vn">베트남</a>
     <a href="#jp">일본</a><a href="#th">태국</a><a href="#eu">EU</a>
-    <a href="#issues">최신 이슈</a><a href="#jeju">제주 시사점</a><a href="#sources">근거자료</a>
+    <a href="#issues">최신 이슈</a><a href="#jeju">제주 시사점</a><a href="#sources">근거자료</a><a href="#swot">SWOT</a>
   </nav>
 
   <main>
@@ -409,7 +440,116 @@
         <li><a href="https://www.ft.com/content/aba8d356-489a-469b-bb49-b54e74acc3a0">Financial Times, EU CATCH 전환기 통관차질 및 미국산 한시유예 보도(2026.7.12)</a></li>
       </ol>
       <p class="mini">본 보고서는 정책 검토용 요약자료이다. 실제 수출입 신고 전에는 관세청 UNI-PASS, 상대국 최신 관세율표 및 품목분류 사전심사 등을 통해 적용세율을 재확인해야 한다.</p>
-      <div class="footer-note">제주특별자치도 수산물 주요 교역권역별 FTA·관세 현황 | 기준일 2026년 7월</div>
+    </section>
+
+    <section id="swot">
+      <h2>Ⅵ. 제주 수산물 권역별 SWOT 분석</h2>
+      <p class="lead">2026년 7월 30일 현재의 통상조치, 수산물 교역통계 및 시장보도를 토대로 6개 권역별 강점·약점·기회·위협을 재구성했다. SWOT의 ‘강점·약점’은 제주 공급역량과 시장접근 여건, ‘기회·위협’은 상대국 정책·수요·경쟁 변화에 중점을 두었다.</p>
+
+      <div class="tariff-shift">
+        <div class="tariff-shift-head">
+          <strong>미국 상호관세 무효화 이후의 관세 전환과 제주 영향</strong>
+          <span>IEEPA 판결과 2026.7.24 시행 강제노동 관련 무역법 301조 조치를 구분하여 해석</span>
+        </div>
+        <div class="tariff-steps">
+          <div class="tariff-step">
+            <b>① 법적 전환</b>
+            <p>연방대법원은 2026.2.20. IEEPA가 대통령에게 관세 부과 권한을 부여하지 않는다고 판시해 종전 상호·마약관세의 법적 근거를 부정했다. 다만 무역법 301조 등 다른 법률에 따른 관세 권한까지 부정한 판결은 아니다. <a class="evidence-ref" href="https://www.supremecourt.gov/opinions/25pdf/607us2r12_8nj9.pdf">[연방대법원]</a></p>
+          </div>
+          <div class="tariff-step">
+            <b>② 새 관세 구조</b>
+            <p>미국은 2026.7.24.부터 강제노동 생산품 수입금지 제도의 미비를 이유로 60개 경제권에 301조 관세를 시행했다. 한국산은 적용 가능한 관세와 합산하여 12.5%가 되도록 하는 상한형이고, 중국·베트남·태국산은 원칙적으로 12.5% 추가형이며 일본은 12.5%, EU는 10% 상한형이다. <a class="evidence-ref" href="https://www.federalregister.gov/documents/2026/07/28/2026-15181/notice-of-actions-in-section-301-investigations-of-acts-policies-and-practices-of-various-economies">[미 연방관보]</a></p>
+          </div>
+          <div class="tariff-step">
+            <b>③ 기회와 한계</b>
+            <p>중국산 냉동 틸라피아처럼 기존 301조 25% 대상 품목은 새 12.5%가 누적될 수 있어 한국산과의 가격격차가 확대된다. 다만 중국산 범용 흰살생선과 제주산 활·냉장 넙치는 완전한 대체재가 아니므로, 필레·간편식·외식 원료 규격에서 대체 가능성을 우선 검증해야 한다. <a class="evidence-ref" href="https://www.easyfish.net/en/how-u-s-tariffs-are-reshaping-the-tilapia-supply-chain/">[시장분석]</a></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout"><strong>관세 해석:</strong> 한·미 FTA의 양허세율 자체가 폐지된 것은 아니지만, 한국산 제품에 별도의 301조 관세가 적용되어 기존 0% 특혜품목도 합산세율이 12.5%가 될 수 있다. 반대로 중국산은 신규 12.5%가 추가되는 구조여서 기존 대중 301조 관세 대상인지에 따라 총부담이 달라진다. 실제 적용 전에는 HTSUS 세번, 국가별 제외목록, 기존 301조 대상 여부를 함께 확인해야 한다.</div>
+
+      <div class="swot-grid">
+        <article class="swot-card s">
+          <div class="swot-head">
+            <div class="swot-letter">S</div>
+            <div><h3>강점</h3><p>제주 공급기반·FTA·시장 인지도</p></div>
+          </div>
+          <table class="swot-table">
+            <thead><tr><th>권역</th><th>제주 수산물 수출입 관련 판단</th></tr></thead>
+            <tbody>
+              <tr><td>미국</td><td>2025년 한국 수산식품의 미국 수출이 5.2억 달러로 9% 증가했고 넙치 수출도 9% 늘어, 관세 변동 속에서도 K-수산물 수요와 제주 대표 양식어종의 시장성이 확인됐다. <a class="evidence-ref" href="https://www.donga.com/en/article/all/20260116/6060796/1">[동아일보]</a></td></tr>
+              <tr><td>중국</td><td>한국 수산식품의 대중 수출이 2025년 6.2억 달러로 18% 증가했으며, 제주와의 지리적 근접성·한중 FTA/RCEP·신선 수산물 운송 적합성이 함께 작용할 수 있다. <a class="evidence-ref" href="https://www.donga.com/en/article/all/20260116/6060796/1">[동아일보]</a></td></tr>
+              <tr><td>베트남</td><td>한·ASEAN FTA, 한·베트남 FTA, RCEP을 품목별로 선택할 수 있고, 현지에서 한국산 해조류가 이미 높은 시장점유율을 형성해 제주 해조·간편식의 연계 판매 기반이 있다. <a class="evidence-ref" href="https://www.ajupress.com/view/20260422161670014">[아주프레스]</a></td></tr>
+              <tr><td>일본</td><td>일본은 2025년 한국 수산식품 최대 수출시장인 6.8억 달러 규모이며, 제주산 활넙치·전복은 짧은 운송거리와 기존 활어 유통망을 활용할 수 있다. <a class="evidence-ref" href="https://www.donga.com/en/article/all/20260116/6060796/1">[동아일보]</a></td></tr>
+              <tr><td>태국</td><td>태국은 한국의 제4위 수산식품 수출시장이고 1인당 수산물 소비가 세계 평균보다 높다. 방콕 수산식품 수출지원센터와 기존 한·ASEAN/RCEP 채널도 활용 가능하다. <a class="evidence-ref" href="https://thailandedition.com/i/korean-seafood-success-thaifex-2026-00a16a223d901c88a0b4820f">[현지보도]</a></td></tr>
+              <tr><td>EU</td><td>한·EU FTA의 낮은 관세장벽과 K-Fish·한류 인지도는 제주산 전복·해조류·가공 넙치를 원산지·품질·지속가능성을 강조한 프리미엄 제품으로 포지셔닝하는 데 유리하다. <a class="evidence-ref" href="https://en.empresaexterior.com/The-Korean-wave-conquers-the-European-palate%3B-K-fish-and-K-food-are-consolidating-their-position-thanks-to-the-K-pop-and-K-beauty./">[유럽시장 보도]</a></td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="swot-card w">
+          <div class="swot-head">
+            <div class="swot-letter">W</div>
+            <div><h3>약점</h3><p>비용·규격·인증·수출구조의 제약</p></div>
+          </div>
+          <table class="swot-table">
+            <thead><tr><th>권역</th><th>제주 수산물 수출입 관련 판단</th></tr></thead>
+            <tbody>
+              <tr><td>미국</td><td>종전 FTA 0% 품목도 새 301조 관세로 합산 12.5% 부담이 생기며, FDA 수산물 HACCP·MMPA COA·항공 냉장물류비까지 겹친다. 소규모 제주 업체에는 통관 고정비가 특히 크다. <a class="evidence-ref" href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/421d887">[미 CBP]</a></td></tr>
+              <tr><td>중국</td><td>생산·가공·저장시설 등록, 화물별 위생증명 및 이력추적이 요구되고 내수 둔화도 병존한다. 제주 수출이 소수 활·냉장 품목과 제한된 바이어에 집중되면 행정비용과 거래중단 충격이 커진다. <a class="evidence-ref" href="https://www.mof.go.kr/doc/ko/selectDoc.do?bbsSeq=10&amp;docSeq=64423&amp;menuSeq=971">[해양수산부]</a></td></tr>
+              <tr><td>베트남</td><td>현지 성공기업은 생산·제품·마케팅의 현지화를 강화하고 있다. 제주산 완제품을 그대로 수출하면 가격경쟁력과 반복구매가 약할 수 있어 소포장·상온유통·현지 조리법 대응이 필요하다. <a class="evidence-ref" href="https://www.ajupress.com/view/20260422161670014">[아주프레스]</a></td></tr>
+              <tr><td>일본</td><td>활넙치 중심 수출은 폐사·항공·활어차 운송비와 환율에 민감하고, RCEP도 품목별 장기철폐·제외가 혼재한다. 필레·조제품 전환이 늦으면 기존 거래선 의존이 고착될 수 있다.</td></tr>
+              <tr><td>태국</td><td>한·태국 CEPA는 아직 발효 전이고, 고온 환경의 냉장유통비와 현지 가격민감도가 높다. 2026년 박람회 성과도 조미·가공 제품 중심이어서 제주 활·냉장품에 바로 적용하기 어렵다. <a class="evidence-ref" href="https://thailandedition.com/i/korean-seafood-success-thaifex-2026-00a16a223d901c88a0b4820f">[현지보도]</a></td></tr>
+              <tr><td>EU</td><td>장거리 냉동·냉장물류, EU 승인시설, 위생증명, IUU·CATCH 입력과 지속가능성 인증 비용이 동시에 발생한다. 물량이 작은 제주 업체는 공동물류·공동인증 없이는 단가를 맞추기 어렵다. <a class="evidence-ref" href="https://www.ft.com/content/53a977de-ddaf-4b2c-b19a-e2e08af38e0a">[FT]</a></td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="swot-card o">
+          <div class="swot-head">
+            <div class="swot-letter">O</div>
+            <div><h3>기회</h3><p>수요 확대·경쟁국 관세·신규 시장접근</p></div>
+          </div>
+          <table class="swot-table">
+            <thead><tr><th>권역</th><th>제주 수산물 수출입 관련 판단</th></tr></thead>
+            <tbody>
+              <tr><td>미국</td><td>한국산의 합산세율은 12.5%이나 중국산은 신규 12.5%가 추가되고 기존 301조 25% 대상 품목은 누적된다. 중국산 흰살생선·필레·가공품을 쓰던 외식·유통업체에 제주 넙치 필레·간편식의 대체 공급을 제안할 여지가 커졌다. <a class="evidence-ref" href="https://www.federalregister.gov/documents/2026/07/28/2026-15181/notice-of-actions-in-section-301-investigations-of-acts-policies-and-practices-of-various-economies">[미 연방관보]</a> <a class="evidence-ref" href="https://www.easyfish.net/en/how-u-s-tariffs-are-reshaping-the-tilapia-supply-chain/">[시장분석]</a></td></tr>
+              <tr><td>중국</td><td>중국의 2025년 수산물 수입액이 11.5% 증가했고, 2026년 한·중 합의로 냉장 병어 등 자연산 수산물의 신규 수출경로가 열렸다. 제주 자연산·해조류도 등록시설과 품목 확대를 전제로 고급 신선시장에 진입할 수 있다. <a class="evidence-ref" href="https://seafood.media/fis/worldnews/worldnews.asp?id=137521&amp;l=e&amp;ndb=1">[중국 교역통계 보도]</a> <a class="evidence-ref" href="https://www.mof.go.kr/doc/ko/selectDoc.do?bbsSeq=10&amp;docSeq=64423&amp;menuSeq=971">[해양수산부]</a></td></tr>
+              <tr><td>베트남</td><td>인구 약 1억 명, 높은 성장률과 확대되는 중산층, K-Food 친숙도를 감안하면 전복죽·해조 스낵·양념 넙치 등 상온·간편식이 유망하다. 베트남을 ASEAN 재수출 거점으로 활용하는 방안도 가능하다. <a class="evidence-ref" href="https://www.ajupress.com/view/20260422161670014">[아주프레스]</a></td></tr>
+              <tr><td>일본</td><td>한국 수산식품의 최대 기존시장으로서 바이어·물류망이 이미 형성돼 있다. 활어 중심 거래에 냉장필레·소포장 전복·제주 원산지 스토리를 추가하면 신규시장보다 낮은 진입비용으로 객단가를 높일 수 있다. <a class="evidence-ref" href="https://www.donga.com/en/article/all/20260116/6060796/1">[동아일보]</a></td></tr>
+              <tr><td>태국</td><td>THAIFEX 2026 한국관에서 5건의 수출계약과 11건의 MOU가 체결돼 실수요가 확인됐다. 제주산은 매운맛 조제품, 전복·해조 간편식 등 현지 외식·대형유통 규격으로 진입하는 것이 유효하다. <a class="evidence-ref" href="https://thailandedition.com/i/korean-seafood-success-thaifex-2026-00a16a223d901c88a0b4820f">[현지보도]</a></td></tr>
+              <tr><td>EU</td><td>EU는 2024년 역외 수산물 590만 톤·299억 유로를 수입했고 자급률은 38.1%에 그쳐 수입수요가 구조적으로 크다. 승인시설·추적성을 확보하면 제주산 프리미엄 양식·해조 제품의 틈새시장 여지가 있다. <a class="evidence-ref" href="https://oceans-and-fisheries.ec.europa.eu/news/eu-fish-market-report-2025-reflects-challenging-market-conditions-2025-12-01_en">[EU 집행위]</a></td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="swot-card t">
+          <div class="swot-head">
+            <div class="swot-letter">T</div>
+            <div><h3>위협</h3><p>통상 불확실성·수입경쟁·수요 둔화</p></div>
+          </div>
+          <table class="swot-table">
+            <thead><tr><th>권역</th><th>제주 수산물 수출입 관련 판단</th></tr></thead>
+            <tbody>
+              <tr><td>미국</td><td>새 301조 관세도 소송이 제기돼 세율·환급·계약가격의 불확실성이 지속된다. 여기에 MMPA·FDA 서류가 미비하면 관세차익과 무관하게 통관이 지연될 수 있어 장기 고정가격 계약은 위험하다. <a class="evidence-ref" href="https://www.theguardian.com/us-news/2026/jul/24/american-businesses-lawsuit-trump-tariffs">[가디언]</a></td></tr>
+              <tr><td>중국</td><td>중국은 수산물 수입을 늘리는 동시에 연간 201.7억 달러를 수출하는 대형 공급국이다. 외교·검역 사안에 따라 일본산 수입을 재중단한 사례도 있어, 제주산도 가격경쟁과 비관세 조치의 급변 가능성을 함께 관리해야 한다. <a class="evidence-ref" href="https://seafood.media/fis/worldnews/worldnews.asp?id=137521&amp;l=e&amp;ndb=1">[교역통계]</a> <a class="evidence-ref" href="https://www.theguardian.com/world/2025/nov/19/china-suspends-seafood-imports-from-japan-as-taiwan-row-escalates">[가디언]</a></td></tr>
+              <tr><td>베트남</td><td>베트남은 새우·메기 등 저가 대량공급 역량이 크다. 미국의 베트남산 12.5% 추가관세로 물량이 한국·아시아로 전환되면 국내 외식·가공 원료시장에서 제주산과의 간접 가격경쟁이 심화될 수 있다. <a class="evidence-ref" href="https://vasep.com.vn/thong-ke-thuong-mai/xnk-thuy-san-the-gioi/nhap-khau-tom-cua-han-quoc-t1-t5-2026-26918.html">[VASEP]</a> <a class="evidence-ref" href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/421d887">[미 CBP]</a></td></tr>
+              <tr><td>일본</td><td>한국의 일본산 수산물 수입액이 2025년 27.2% 증가한 2.47억 달러로 후쿠시마 사고 이전 수준을 회복했다. 방어·가리비·도미의 유입 확대와 수입규제 완화 논의는 제주산 내수시장 경쟁을 높일 수 있다. <a class="evidence-ref" href="https://japan-forward.com/south-koreas-japanese-seafood-imports-rebound-to-pre-fukushima-levels/">[시장보도]</a></td></tr>
+              <tr><td>태국</td><td>태국의 참치가공·새우·외식용 수산물은 규모와 가격경쟁력이 높다. 미국의 태국산 12.5% 추가관세에 따른 아시아 역내 물량 전환과 향후 한·태국 CEPA 개방 확대가 겹치면 국내 수입경쟁이 커질 수 있다. <a class="evidence-ref" href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/421d887">[미 CBP]</a></td></tr>
+              <tr><td>EU</td><td>EU의 2024년 가정 내 신선 수산물 소비량은 5% 감소했고 2020~2024년 가격은 25% 이상 상승했다. 동시에 CATCH 시스템 오류로 실제 화물이 항만에 체류한 사례가 있어 수요 둔화와 통관손실이 병존한다. <a class="evidence-ref" href="https://oceans-and-fisheries.ec.europa.eu/news/eu-fish-market-report-2025-reflects-challenging-market-conditions-2025-12-01_en">[EU 집행위]</a> <a class="evidence-ref" href="https://www.ft.com/content/53a977de-ddaf-4b2c-b19a-e2e08af38e0a">[FT]</a></td></tr>
+            </tbody>
+          </table>
+        </article>
+      </div>
+
+      <div class="swot-action">
+        <strong>SWOT 기반 우선 실행과제</strong>
+        <p>① 미국은 중국산과의 실제 대체 가능성이 높은 HS 세번·제품형태를 선별해 ‘한국산 12.5% 대 중국산 누적관세’ 착지가격을 비교하고, ② 중국·EU는 시설등록·추적성의 공동대응체계를 구축하며, ③ 일본은 활어 의존도를 낮춘 냉장필레·소포장 전환, ④ 베트남·태국은 상온 간편식과 현지 유통사 공동기획을 우선 추진할 필요가 있다.</p>
+      </div>
+
+      <p class="mini">SWOT는 공개자료에 기초한 정책판단이며, 국가 전체 교역동향을 제주 개별 업체의 수출성과로 직접 환산한 것은 아니다. 미국 관세는 소송·제외목록 변경 가능성이 있으므로 계약·선적 시점별 재확인이 필요하다.</p>
+      <div class="footer-note">제주특별자치도 수산물 주요 교역권역별 FTA·관세 현황 | SWOT 보강 기준일 2026년 7월 30일</div>
     </section>
   </main>
 </article>
