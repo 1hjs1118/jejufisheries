@@ -9,6 +9,7 @@
       --navy:#12324a;--blue:#176b87;--sea:#1aa6a6;--pale:#edf7f7;
       --ink:#17242d;--muted:#5c6b75;--line:#d9e3e8;--paper:#fff;
       --warn:#fff6df;--warn-line:#e8bf57;--good:#e9f7ef;--bad:#fff0ed;
+      --good-line:#4d9d72;--revise:#fff3e8;--revise-line:#dc8a43;--check:#f1f3f5;
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -39,6 +40,14 @@
     .callout{margin:20px 0;padding:18px 20px;border-left:4px solid var(--warn-line);background:var(--warn);border-radius:4px 10px 10px 4px}
     .callout strong{color:#654900}
     .decision{background:var(--pale);border:1px solid #b9dedf;border-radius:12px;padding:20px 22px}
+    .definition{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+    .definition>div{border:1px solid var(--line);border-radius:10px;padding:14px 15px;background:#fbfdfd}
+    .definition strong{display:block;color:var(--navy);margin-bottom:4px}
+    .status{display:inline-block;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+    .status.ok{background:var(--good);color:#14623f}
+    .status.revised{background:var(--revise);color:#8c4c16}
+    .status.check{background:var(--check);color:#56636c}
+    .route-note{margin:14px 0;padding:12px 14px;border-left:3px solid var(--blue);background:#f3f8fa;font-size:13px}
     table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0 22px;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
     th{background:#eaf2f5;color:#234553;font-weight:800;text-align:left}
     th,td{padding:12px 13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);vertical-align:top}
@@ -77,7 +86,7 @@
     @media(max-width:850px){
       header,main{padding-left:24px;padding-right:24px}
       .summary-grid{grid-template-columns:1fr 1fr}
-      .two-col,.issue-grid{grid-template-columns:1fr}
+      .two-col,.issue-grid,.definition{grid-template-columns:1fr}
       h1{font-size:28px}
     }
     @media(max-width:520px){
@@ -106,14 +115,14 @@
     <h1>제주 주요 수산물 유통경로</h1>
     <div class="subtitle">광어·갈치·옥돔·활소라·전복류의 생산·집하·가격형성·가공·운송·판매 과정을 내수용과 수출용으로 구분하여 종합 정리</div>
     <div class="meta">
-      <span>기준시점 2026. 7.</span>
+      <span>검증 기준일 2026. 7. 30.</span>
       <span>대상품목 광어·갈치·옥돔·활소라·전복류</span>
       <span>작성목적 정책·유통구조 검토용</span>
     </div>
   </header>
 
   <nav aria-label="보고서 목차">
-    <a href="#summary">종합 요약</a><a href="#method">분석기준</a>
+    <a href="#summary">종합 요약</a><a href="#method">분석기준</a><a href="#audit">검증결과</a>
     <a href="#flounder">광어</a><a href="#hairtail">갈치</a><a href="#tilefish">옥돔</a>
     <a href="#conch">활소라</a><a href="#abalone">전복류</a>
     <a href="#issues">핵심 쟁점</a><a href="#jeju">제주 시사점</a><a href="#sources">근거자료</a>
@@ -122,10 +131,10 @@
   <main>
     <section id="summary">
       <h2>Ⅰ. 종합 요약</h2>
-      <p class="lead">다섯 품목은 모두 제주산 수산물이지만 생산방식과 상품상태가 달라 최초 출하주체, 가격형성 방식 및 적정 물류수단이 서로 다르다. 광어는 양식장 주문출하, 갈치·옥돔은 수협 위판, 활소라·전복류는 해녀·마을어장과 어촌계 집하가 유통의 출발점이다.</p>
+      <p class="lead">다섯 품목은 생산방식뿐 아니라 <strong>거래가 수협을 통과하는지</strong>에 따라 가격형성과 통계 포착 범위가 달라진다. 광어는 양식장–유통업체 간 주문·협의거래, 갈치·옥돔은 산지 수협 위판이 대표적이다. 활소라는 어촌계 집하 후 수협 계통판매가 중심이나 비계통 물량도 존재한다. 전복은 반드시 <strong>해녀가 마을어장에서 채취한 전복</strong>과 <strong>양식전복</strong>을 분리해야 하며, 전자는 어촌계·수협 계통경로가 중심이고 후자는 산지수집상·유통업체와의 비계통 사적거래가 중심인 별도 구조다.</p>
       <div class="summary-grid">
         <div class="metric"><b>5개</b><span>분석 대상 주요 수산물</span></div>
-        <div class="metric"><b>3개 유형</b><span>양식장·수협 위판·마을어장 집하</span></div>
+        <div class="metric"><b>4개 구조</b><span>양식협의·위판·계통판매·비계통거래</span></div>
         <div class="metric"><b>2개 경로</b><span>내수용·수출용 분리 분석</span></div>
         <div class="metric"><b>활·냉장·냉동</b><span>상품상태별 물류구조 상이</span></div>
       </div>
@@ -133,14 +142,14 @@
       <table>
         <thead><tr><th>품목</th><th>산지 출하·가격형성</th><th>내수 대표경로</th><th>수출 대표경로</th><th>핵심 관리요소</th></tr></thead>
         <tbody>
-          <tr><td><strong>광어</strong></td><td>양식장–출하업체 주문·계약</td><td>활어차·카페리→도매·횟집 / 필렛 가공</td><td>부산→시모노세키 활어수출, 냉장·냉동 가공품</td><td>수온·산소, 생존율, 검역·잔류물질</td></tr>
-          <tr><td><strong>갈치</strong></td><td>수협 위판</td><td>선어 항공배송 / 손질·냉동 유통</td><td>냉동·절단제품의 바이어 주문수출</td><td>선도, 표피상태, 규격, 항공·냉동비</td></tr>
-          <tr><td><strong>옥돔</strong></td><td>수협 위판</td><td>생물 / 염장·반건조·냉동 선물세트</td><td>반건조·냉동 가공품</td><td>어종·원산지, 염도·건조, 산패</td></tr>
-          <tr><td><strong>활소라</strong></td><td>수협 위판·수출계약</td><td>활물·자숙·냉동 직판</td><td>일본 활물수출</td><td>TAC·금어기, 생존율, 운반선</td></tr>
-          <tr><td><strong>전복류</strong></td><td>어촌계·수협 계통출하 또는 직거래</td><td>활전복 / 자숙·냉동·HMR</td><td>일본 활전복 물류망, 냉동·조제품</td><td>소량분산, 원산지, 폐사·감량</td></tr>
+          <tr><td><strong>광어</strong></td><td>양식장–출하·유통업체 협의거래<br><span class="mini">공개자료에 경로별 비중 없음</span></td><td>활어차·카페리→도매·횟집 / 필렛 가공</td><td>전국산 활광어의 부산–일본 운송망을 이용할 수 있으나 제주산 물량은 별도 확인</td><td>수온·산소, 생존율, 검역·잔류물질</td></tr>
+          <tr><td><strong>갈치</strong></td><td>산지 수협 위판 중심<br><span class="mini">전 물량 의무위판으로 해석 금지</span></td><td>선어 항공배송 / 손질·냉동 유통</td><td>냉동·절단제품의 바이어 주문수출 가능; 정기망은 미확인</td><td>선도, 표피상태, 규격, 항공·냉동비</td></tr>
+          <tr><td><strong>옥돔</strong></td><td>산지 수협 위판 중심<br><span class="mini">낙찰 이후 가공·직배송으로 분기</span></td><td>생물 / 염장·반건조·냉동 선물세트</td><td>반건조·냉동 주문수출 가능; 최근 실적은 미확인</td><td>어종·원산지, 염도·건조, 산패</td></tr>
+          <tr><td><strong>활소라</strong></td><td>어촌계 집하–수협 계통판매 중심<br><span class="mini">2022 하반기~2023 상반기 비계통 215톤(총생산의 12.1%)</span></td><td>활물·자숙·냉동 직판</td><td>일본 활물수출 비중이 높고 운송망 집중</td><td>TAC·금어기, 생존율, 계통·비계통 기록</td></tr>
+          <tr><td><strong>전복류</strong></td><td>해녀채취: 어촌계·수협 계통 중심<br>양식: 비계통 사적거래 중심</td><td>활전복 / 자숙·냉동·HMR</td><td>전국 활전복의 일본 물류사례는 있으나 제주산 정기수출은 미확인</td><td>생산방식·종별 분리, 원산지, 폐사·감량</td></tr>
         </tbody>
       </table>
-      <div class="callout"><strong>중요:</strong> 아래 ‘확인 사례’는 사업자·물량·운송구간이 공개자료에서 확인되는 경우를 의미한다. 개별 업체 계약이 공개되지 않은 구간은 공식자료, 산업연구 및 복수 사례를 결합한 대표경로이며 모든 업체가 동일한 방식으로 유통한다는 뜻은 아니다.</div>
+      <div class="callout"><strong>핵심 해석:</strong> 계통출하는 ‘수협·어촌계의 정산·판매체계에 포착되는 거래’를 뜻하며 공개경매인 위판과 같은 말이 아니다. 공동판매·계약판매도 포함될 수 있다. 또한 TAC는 어획량을 관리하는 제도이므로 TAC 대상이라는 사실만으로 전 물량의 계통출하 또는 위판 의무를 뜻하지 않는다.</div>
     </section>
 
     <section id="method">
@@ -156,19 +165,26 @@
           <tr><td>생산·집하</td><td>양식장, 어선, 해녀·마을어장, 어촌계 및 수협 위판장</td><td>최초 출하주체와 계통·비계통 출하를 구분</td></tr>
           <tr><td>상품상태</td><td>활어·활패류, 선어·냉장, 냉동, 반건조, 자숙·조제품</td><td>상태별로 필요한 전처리와 운송수단을 별도 표시</td></tr>
           <tr><td>가격형성</td><td>주문·계약, 위판경매, 수출계약, 직거래</td><td>산지가격 결정주체와 생산자 교섭력을 함께 검토</td></tr>
-          <tr><td>수출요건</td><td>수산생물 검역, 수출수산물 검사, 시설·표시 및 바이어 규격</td><td>관세와 별개의 시장접근 요건으로 표시</td></tr>
+          <tr><td>수출요건</td><td>수산생물 검역, 수출수산물 검사, 시설·표시 및 바이어 규격</td><td>수입국 요구·고시·협정에 따른 적용 여부를 각각 표시</td></tr>
           <tr><td>추적관리</td><td>생산자·위판·매입·가공·선적 로트와 원산지 증빙</td><td>제주 외 항만 통관물량은 원산지자료와 교차 확인</td></tr>
         </tbody>
       </table>
+      <div class="definition">
+        <div><strong>계통판매·출하</strong><span class="mini">수협·어촌계의 판매·정산체계를 거쳐 거래량·가격이 조직 통계에 포착되는 경로. 위판, 공동판매, 계약판매 등이 품목·조합에 따라 포함될 수 있다.</span></div>
+        <div><strong>비계통거래</strong><span class="mini">생산자와 산지수집상·유통업체·가공업체·음식점·소비자 간 사적거래 등 수협 정산체계 밖의 경로. ‘불법’과 같은 뜻이 아니다.</span></div>
+        <div><strong>근거 수준</strong><span class="mini">공식 통계·법령은 ‘확인’, 특정 사업자 사례는 ‘사례’, 공개자료에 비중이 없거나 제주산 여부가 불명확한 내용은 ‘추가확인’으로 구분했다.</span></div>
+      </div>
     </section>
+
 
     <section id="flounder" class="country">
       <div class="country-head"><h3>1. 제주산 광어</h3><div class="tags"><span class="tag">육상수조식 양식</span><span class="tag">활어·필렛</span><span class="tag gray">주문형 출하</span></div></div>
       <div class="country-body">
+        <div class="route-note"><strong>출하·가격형성:</strong> 산지 위판보다 양식장과 출하·유통업체가 규격·물량·가격을 협의해 매입하는 경로가 대표적이다. 제주 양식경영 연구도 출하 시 유통업자에게 지급하는 판매비를 별도 비용으로 파악하지만, 공개자료만으로 직거래·조직출하 등 경로별 비중까지 확정할 수는 없다.</div>
         <div class="two-col">
           <div class="panel"><h4>내수용 유통경로</h4>
             <ul>
-              <li><strong>대표경로:</strong> 양식장 선별·절식 → 계량·매입 → 활어차 → 제주항 카페리 → 육지 활어도매 → 횟집·소매점.</li>
+              <li><strong>대표경로:</strong> 양식장 주문확인 → 규격선별·절식 → 출하업체 계량·매입 → 활어차 → 제주항 카페리 → 육지 활어도매 → 횟집·소매점.</li>
               <li>주문규격에 맞춰 크기, 외관, 상처 및 활력을 선별하고 운송 전 절식해 수질오염을 줄인다.</li>
               <li>해수탱크의 수온·용존산소·적재밀도를 관리하며 육지 도착 후 활어시장과 외식업체로 분산한다.</li>
               <li><strong>가공분기:</strong> 방혈·세척·필렛·진공포장 후 냉장 숙성회, 냉동 횟감 및 어묵으로 유통한다.</li>
@@ -176,22 +192,23 @@
           </div>
           <div class="panel"><h4>수출용 유통경로</h4>
             <ul>
-              <li><strong>활광어:</strong> 제주 양식장 → 수출업체 → 부산 집결 → 일본 활어차 환적 → 시모노세키 → 일본 도매·외식업체.</li>
-              <li>수출 전 생산·검사기록, 잔류물질, 수산생물 검역과 일본 측 통관요건을 확인한다.</li>
+              <li><strong>가능경로:</strong> 제주 양식장 → 수출업체 → 국내 카페리·육상운송 → 부산 집결 → 활광어를 실은 일본 운반차량을 선박에 선적 → 시모노세키·하카타 → 현지 도매·외식업체.</li>
+              <li>수출 전 생산·검사기록과 잔류물질 기준을 관리하고, 목적국이 요구하는 수산생물 검역 및 식품검사 적용 여부를 각각 확인한다.</li>
               <li><strong>가공품:</strong> 냉장·냉동 필렛과 광어어묵은 항공 또는 냉동물류로 미국·오세아니아 등에 공급한다.</li>
-              <li>활어 수출은 생존율, 가공수출은 HACCP 수준의 공정·콜드체인·표시관리가 핵심이다.</li>
+              <li>활어 수출은 생존율, 가공수출은 식품안전 공정·콜드체인·표시관리가 핵심이다. 제주산 정기물량은 수출신고와 원산지자료를 연결해 별도 확인해야 한다.</li>
             </ul>
           </div>
         </div>
         <h4>확인 사례</h4>
-        <p>제주·완도 활광어는 부산에서 일본 활어차로 환적한 뒤 시모노세키항을 거쳐 오사카·도쿄·지바 등으로 공급된다. 2025년 수협 오사카무역사업소의 활광어 취급실적은 약 60톤·13억원으로 보도됐다. 2021년 제주수협유통은 광어어묵 약 6톤을 미국 시카고·볼티모어로 수출했다.</p>
-        <p class="mini"><a href="https://www.naeil.com/news/read/541675">한·일 활광어 운송경로</a> · <a href="https://v.daum.net/v/20260601175008458">오사카사업소 수출실적</a> · <a href="https://www.headlinejeju.co.kr/news/articleView.html?idxno=458645">광어 가공품 미국 수출</a></p>
+        <p>수협 공식자료에서 한국산 활광어는 부산항에서 활어를 적재한 일본 운반차량을 선박에 싣고 시모노세키·하카타항으로 운송하는 구조가 확인된다. 수협 오사카무역사업소의 첫해 취급실적 약 60톤·13억원은 <strong>한국산 합계</strong>이며 제주산 실적은 아니다. 반면 2021년 제주수협유통의 광어어묵 약 6톤 미국 수출은 제주 사업자의 가공품 사례로 확인된다.</p>
+        <p class="mini"><a href="https://www.suhyup.co.kr/bbs/suhyup/64/16267/artclView.do">수협, 한국산 활수산물 일본 운송구조</a> · <a href="https://v.daum.net/v/20260601175008458">오사카사업소 한국산 수출실적</a> · <a href="https://www.headlinejeju.co.kr/news/articleView.html?idxno=458645">제주 광어 가공품 미국 수출</a></p>
       </div>
     </section>
 
     <section id="hairtail" class="country">
       <div class="country-head"><h3>2. 제주산 갈치</h3><div class="tags"><span class="tag">연근해 어획</span><span class="tag">수협 위판</span><span class="tag orange">선어·냉동</span></div></div>
       <div class="country-body">
+        <div class="route-note"><strong>출하·가격형성:</strong> 산지 수협 위판이 대표적인 상업 유통의 출발점이다. 다만 ‘위판 중심’은 모든 어획물의 의무위판을 뜻하지 않으며, 낙찰 이후 중도매인·산지유통업체·가공업체·소매기업의 경로로 갈라진다. 월별 어획량·위판액은 산지가격 동향을 보여주지만 경로별 점유율을 뜻하지 않는다.</div>
         <div class="two-col">
           <div class="panel"><h4>내수용 유통경로</h4>
             <ul>
@@ -203,15 +220,15 @@
           </div>
           <div class="panel"><h4>수출용 유통경로</h4>
             <ul>
-              <li><strong>대표경로:</strong> 수협 위판 → 수출업체 매입 → 통갈치·절단 규격화 → 진공포장·급속냉동 → 검사·통관 → 냉동 컨테이너 → 현지 마트·식당.</li>
-              <li>정기 대량수출은 냉동제품이 중심이며 소량 고가 선어는 항공운송이 가능하다.</li>
+              <li><strong>가능경로:</strong> 수협 위판 → 수출업체 매입 → 통갈치·절단 규격화 → 진공포장·급속냉동 → 목적국별 검사·통관 → 냉동 컨테이너 → 현지 마트·식당.</li>
+              <li>장거리 대량수출에는 냉동제품이 적합하고 소량 고가 선어는 항공운송이 가능하지만, 이는 상품특성에 따른 경로 판단이지 제주산 정기수출 실적을 의미하지 않는다.</li>
               <li>국가별 식품표시, 위생증명 및 수입자 요구 규격을 반영해 수출 로트를 구성한다.</li>
-              <li>공개자료상 제주 갈치 단독의 대규모·정기 수출망은 뚜렷하지 않아 업체 선적자료 확인이 필요하다.</li>
+              <li>공개자료상 제주 갈치 단독의 최근 대규모·정기 수출망은 확인되지 않아 수출업체 선적·원산지자료가 필요하다.</li>
             </ul>
           </div>
         </div>
         <h4>확인 사례</h4>
-        <p>2025년 제주 현지업체는 오전 6시경 한림수협·서귀포지역 위판장에서 갈치를 낙찰받아 오전 중 검사·손질·진공포장하고 오후 항공편으로 김포·김해공항에 보내 익일 오전 7시까지 배송했다. 2017년 괌과의 복합 수산물 수출계약에는 갈치가 포함됐으나 총 100만 달러는 8개 품목 합계로 갈치 단일 실적은 아니다.</p>
+        <p>2025년 특정 소매기업의 제주 협력업체는 오전 6시경 한림수협·서귀포지역 위판장에서 갈치를 낙찰받아 오전 중 검사·손질·진공포장하고 오후 항공편으로 김포·김해공항에 보내 익일 오전 7시까지 배송했다. 이는 빠른 직배송이 가능한 <strong>사업자 사례</strong>이지 전체 갈치 유통의 표준시간은 아니다. 2017년 괌 복합 수산물 계약은 8개 품목의 과거 묶음계약으로, 갈치 단일 실적이나 현재의 정기망을 증명하지 않는다.</p>
         <p class="mini"><a href="https://news.coupang.com/archives/55419/">제주 위판–항공–새벽배송 사례</a> · <a href="https://www.jejudomin.co.kr/news/articleView.html?idxno=82088">괌 복합 수산물 수출계약</a></p>
       </div>
     </section>
@@ -219,6 +236,7 @@
     <section id="tilefish" class="country">
       <div class="country-head"><h3>3. 제주산 옥돔</h3><div class="tags"><span class="tag">연근해 어획</span><span class="tag">수협 위판</span><span class="tag orange">반건조·선물상품</span></div></div>
       <div class="country-body">
+        <div class="route-note"><strong>출하·가격형성:</strong> 갈치와 마찬가지로 산지 수협 위판이 대표경로이나, 낙찰 뒤 생물 직배송과 산지가공으로 분기한다. 특히 반건조품은 원료의 어종·산지 확인, 가공수율, 염도·수분, 냉동보관 조건이 최종 판매가격과 반품위험을 좌우한다.</div>
         <div class="two-col">
           <div class="panel"><h4>내수용 유통경로</h4>
             <ul>
@@ -230,76 +248,82 @@
           </div>
           <div class="panel"><h4>수출용 유통경로</h4>
             <ul>
-              <li><strong>대표경로:</strong> 수협 위판 → 수출가공업체 → 어종·원산지 확인 → 손질·염장·반건조 → 진공·급속냉동 → 수출표시·통관 → 한인·아시아계 시장.</li>
+              <li><strong>가능경로:</strong> 수협 위판 → 수출가공업체 → 어종·원산지 확인 → 손질·염장·반건조 → 진공·급속냉동 → 수출표시·통관 → 한인·아시아계 시장.</li>
               <li>소포장과 냉동으로 조리 편의성·보관성을 확보하고 염도·수분·산패를 관리한다.</li>
-              <li>원물보다 반건조·냉동 선물상품의 장거리 수출 적합성이 높다.</li>
+              <li>원물보다 반건조·냉동 상품의 장거리 유통 적합성이 높지만, 시장별 가격수용성과 유통기한 검증이 먼저 필요하다.</li>
               <li>바이어 주문형 가공수출 성격이 강해 최근 국가별 정기수출 실적은 별도 검증이 필요하다.</li>
             </ul>
           </div>
         </div>
         <h4>확인 사례</h4>
-        <p>제주 생물 옥돔도 오전 위판–당일 손질·포장–익일 새벽배송 경로로 판매된 사례가 확인된다. 옥돔은 2017년 괌 복합 수산물 계약에 포함됐으나 품목별 금액·물량과 최근 정기수출 지속 여부는 공개자료에서 확인되지 않는다.</p>
+        <p>제주 생물 옥돔도 오전 위판–당일 손질·포장–익일 새벽배송 경로로 판매된 특정 사업자 사례가 확인된다. 옥돔은 2017년 괌 복합 수산물 계약에 포함됐으나 품목별 금액·물량과 최근 정기수출 지속 여부는 공개자료에서 확인되지 않는다. 서귀포시 가공업체 목록은 가공기반의 존재를 보여줄 뿐 실제 옥돔 취급량이나 수출량을 뜻하지 않는다.</p>
         <p class="mini"><a href="https://news.coupang.com/archives/55419/">제주 생물 옥돔 익일배송</a> · <a href="https://www.data.go.kr/data/3083278/fileData.do">서귀포시 수산물 가공업체 현황</a></p>
       </div>
     </section>
 
     <section id="conch" class="country">
-      <div class="country-head"><h3>4. 제주산 활소라</h3><div class="tags"><span class="tag">해녀·잠수어업</span><span class="tag">TAC·금어기</span><span class="tag gray">일본 활물수출</span></div></div>
+      <div class="country-head"><h3>4. 제주산 활소라</h3><div class="tags"><span class="tag">해녀·잠수어업</span><span class="tag">계통·비계통 병존</span><span class="tag gray">일본 활물수출</span></div></div>
       <div class="country-body">
+        <div class="route-note"><strong>출하·가격형성:</strong> 어촌계 공동집하 후 수협의 위판·공동판매·계약판매 등 계통경로가 중심이다. 그러나 제주 소라 TAC 조사상 2022년 하반기~2023년 상반기 생산량 1,782톤 가운데 계통 1,567톤, 비계통 215톤이었다. 비계통량은 총생산의 12.1%이고 보고서가 제시한 계통량 대비 ‘비계통 출하율’은 13.7%다. 따라서 ‘전량 수협 위판’으로 표현하면 실제 구조와 통계 사각을 놓친다.</div>
         <div class="two-col">
           <div class="panel"><h4>내수용 유통경로</h4>
             <ul>
-              <li><strong>대표경로:</strong> 해녀 채취 → 어촌계 공동집하 → 크기·활력 선별 → 수협 계통출하 또는 직거래 → 활물·자숙·냉동 → 외식·시장·온라인.</li>
+              <li><strong>계통경로:</strong> 해녀 채취 → 어촌계 공동집하 → 크기·활력 선별 → 수협 위판·공동판매·계약판매 → 활물·자숙·냉동 → 외식·시장·온라인.</li>
+              <li><strong>비계통경로:</strong> 채취자·어촌계 → 지역상인·음식점·가공업체·직거래. 별도 거래량·가격기록이 없으면 생산통계와 가격분석에서 누락될 수 있다.</li>
               <li>공동작업장에서 규격미달, 패각 파손과 활력 저하 개체를 선별한다.</li>
-              <li>활물은 수조·보냉포장, 가공용은 자숙·탈각·내장 제거·급속냉동 방식으로 유통한다.</li>
+              <li>활물은 수조·보냉포장, 가공용은 자숙·탈각·내장 제거·급속냉동 방식으로 유통한다. 금어기와 TAC는 자원관리 기준이며 유통경로와 별개로 관리한다.</li>
               <li>기상·금어기·해녀 조업일수에 따라 생산량이 변동하므로 주문·재고 연계가 필요하다.</li>
             </ul>
           </div>
           <div class="panel"><h4>수출용 유통경로</h4>
             <ul>
-              <li><strong>직항형:</strong> 어촌계·수협 → 수출업체 매입 → 해상 수조·바닷속 상자 보관 → 활소라 운반선 → 일본 검역·통관 → 현지 수입상.</li>
-              <li><strong>대체경로:</strong> 제주에서 15㎏ 상자 포장 → 활어차·선박으로 완도 → 육로 부산항 → 일본행 선박.</li>
-              <li>살아 있는 패류이므로 수산생물 검역과 현지 통관, 운송 중 수온·습도·생존율 관리가 필요하다.</li>
+              <li><strong>기존 직항형:</strong> 어촌계·수협의 판매물량 → 수출업체 매입 → 규격선별·보관 → 활소라 운반선 → 일본 통관 → 현지 수입상.</li>
+              <li><strong>2025년 비상 대체경로:</strong> 제주 포장·반출 → 완도 → 육로 부산항 → 일본행 선박. 운송시간·비용·폐사율을 기존 직항과 비교해야 지속 가능한 상시경로인지 판단할 수 있다.</li>
+              <li>지정검역물에 해당하고 수입국이 요구하는 경우 수산생물 검역을 받고, 운송 중 수온·습도·생존율과 도착중량을 관리한다.</li>
               <li>자숙·탈각·냉동제품은 활물의 운송위험과 일본시장 의존도를 낮추는 대체경로다.</li>
             </ul>
           </div>
         </div>
         <h4>확인 사례</h4>
-        <p>2025년 말 제주 활소라 생산량의 약 70%가 일본에 수출되는 가운데 140톤급 운반선 운항이 중단됐다. 지역 수협과 계약한 수출업체 3곳이 선박 한 척에 의존한 구조였으며, 이후 제주–완도–부산–일본의 대체수출 경로가 마련됐다.</p>
+        <p>2025년 12월 보도 당시 제주 활소라 물량의 약 70%가 일본으로 수출되고, 지역 수협과 계약한 수출업체 3곳이 140톤급 운반선 한 척에 의존하는 구조가 확인됐다. 운항 중단 후 제주–완도–부산–일본 대체경로가 마련됐지만, 70%는 해당 시점의 보도치이며 장기 고정비율로 사용해서는 안 된다.</p>
         <p class="mini"><a href="https://www.jibs.co.kr/news/articles/articlesDetail/55715?feed=da&amp;kakao_from=mainnews">활소라 일본 수출중단</a> · <a href="https://www.jibs.co.kr/news/articles/articlesDetail/55770">완도·부산 경유 대체경로</a> · <a href="https://www.jeju.go.kr/jori/reference/report.htm?act=download&amp;no=1&amp;seq=1462321">제주 소라 TAC 연구보고서</a></p>
       </div>
     </section>
 
     <section id="abalone" class="country">
-      <div class="country-head"><h3>5. 제주산 전복류</h3><div class="tags"><span class="tag">전복·오분자기</span><span class="tag">마을어장·종자방류</span><span class="tag gray">활패류·가공품</span></div></div>
+      <div class="country-head"><h3>5. 제주산 전복류</h3><div class="tags"><span class="tag">해녀채취·양식 분리</span><span class="tag">계통·비계통 병존</span><span class="tag gray">활패류·가공품</span></div></div>
       <div class="country-body">
+        <div class="route-note"><strong>출하·가격형성:</strong> ‘전복’이라는 상품명만으로 하나의 경로를 적용하면 안 된다. 해녀가 마을어장에서 채취한 자연산·방류산 전복은 어촌계 공동집하와 수협 계통판매가 중심인 반면, 양식전복은 양식장과 산지수집상·유통업체가 규격·물량·가격을 협의하는 비계통 사적거래가 대부분인 것으로 알려져 있다. 다만 제주 양식전복의 비계통 비중을 수치로 확정할 공개통계는 확인되지 않았다.</div>
         <div class="two-col">
           <div class="panel"><h4>내수용 유통경로</h4>
             <ul>
-              <li><strong>대표경로:</strong> 마을어장 채취 → 어촌계 공동집하 → 크기·활력 선별 → 수협 계통출하·직거래 → 활물 또는 자숙·냉동 → 외식·직판·HMR.</li>
-              <li>생산자·마을어장·채취일을 확인하고 ㎏당 마릿수, 패각 손상과 부착력으로 선별한다.</li>
+              <li><strong>해녀채취 전복:</strong> 마을어장 채취 → 어촌계 공동집하·공동선별 → 수협 위판·공동판매·계약판매 또는 제한적 직거래 → 활물·가공 → 외식·직판·HMR.</li>
+              <li><strong>양식전복:</strong> 양식장 선별 → 산지수집상·전문유통업체·가공업체와 사적 매입계약 → 활물도매·온라인·외식 또는 자숙·냉동·HMR. 수협 위판을 필수 단계로 두지 않는 비계통 거래가 중심이다.</li>
+              <li>해녀채취품은 마을어장·채취일, 양식품은 양식장·출하일을 각각 기록하고 ㎏당 마릿수, 패각 손상과 부착력으로 선별한다.</li>
               <li>활전복은 습윤·저온 포장 또는 활어차로 운송하고, 가공품은 자숙·탈각·진공·급속냉동한다.</li>
-              <li>전복죽·전복밥·전복장·밀키트는 원료 함량과 제주산 증빙을 연결해야 한다.</li>
+              <li>전복죽·전복밥·전복장·밀키트는 원료 함량, 제주산 여부와 생산방식 로트를 연결해야 한다. 오분자기는 전복과 구별되는 품목이므로 매입·가공·표시자료에서 별도 집계하는 것이 안전하다.</li>
             </ul>
           </div>
           <div class="panel"><h4>수출용 유통경로</h4>
             <ul>
-              <li><strong>활전복:</strong> 제주 생산·집하 → 규격 선별·절식·정화 → 부산 집결 → 하카타·시모노세키 → 일본 검역·통관 → 현지 수조·판매.</li>
+              <li><strong>전국 참고경로:</strong> 생산지 집하 → 규격 선별·절식·정화 → 부산 집결 → 활전복을 적재한 일본 운반차량의 선박 선적 → 하카타·시모노세키 → 현지 통관·수조판매.</li>
+              <li>공개자료에서 제주산 활전복의 반복 선적과 생산방식별 물량이 확인되지 않으므로 위 경로를 제주산 정기수출망으로 단정하지 않는다.</li>
               <li>바이어가 요구하는 ㎏당 마릿수, 최소크기, 총물량과 허용 폐사율을 계약한다.</li>
-              <li>수산생물 검역증명과 생산·위판·매입기록을 구비해 원산지별 로트를 분리한다.</li>
+              <li>목적국이 요구하는 경우 수산생물 검역증명을 구비하고, 해녀채취·양식, 전복·오분자기, 제주산·타 지역산 로트를 분리한다.</li>
               <li>냉동 전복살·조제품은 자숙·탈각·IQF·수출표시 후 냉동 컨테이너로 운송한다.</li>
             </ul>
           </div>
         </div>
         <h4>확인 사례 및 자료상 한계</h4>
-        <p>2026년 제주도는 26개 어촌계에 전복 종자 48만7,000마리를 방류할 계획이며 상반기 16개 어촌계에 26만7,000마리를 우선 방류했다. 수협 오사카무역사업소의 첫해 한국산 활전복 수출은 38억원으로 보도됐으나 생산지별 실적은 공개되지 않아 이를 제주산 실적으로 간주할 수 없다.</p>
-        <p class="mini"><a href="https://www.fnnews.com/news/202604231639528149">제주 마을어장 전복 종자방류</a> · <a href="https://www.dailian.co.kr/news/view/1651072/">한국산 활전복 일본 유통사례</a> · <a href="https://www.jeju.go.kr/jori/news/report.htm?act=view&amp;page=1&amp;seq=2009940">전복류 종자생산 지원</a></p>
+        <p>2026년 제주도의 26개 어촌계 전복 종자 48만7,000마리 방류계획은 <strong>마을어장 자원조성</strong> 사업이며 양식전복 생산실적이 아니다. 수협 오사카무역사업소의 첫해 한국산 활전복 약 180톤·38억원도 생산지별 실적이 공개되지 않아 제주산으로 볼 수 없다. 전국 양식전복 가격전이 연구는 산지수집상·도매상 단계와 구매자 측 교섭력 문제를 지적하고 계통판매·직거래 개선을 제안하지만, 제주 내 비계통 비율을 제공하지는 않는다.</p>
+        <p class="mini"><a href="https://www.fnnews.com/news/202604231639528149">제주 마을어장 전복 종자방류</a> · <a href="https://www.suhyup.co.kr/bbs/suhyup/64/16267/artclView.do">수협, 한국산 활전복 일본 유통구조</a> · <a href="https://v.daum.net/v/20260601175008458">오사카사업소 한국산 수출실적</a> · <a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003097677">양식전복 산지–도매 가격전이 연구</a></p>
+        <div class="callout"><strong>현장검증 필요:</strong> 제주 양식전복의 계통·비계통 비중은 양식장 출하전표, 산지수집상 매입장, 수협 정산자료를 같은 기간·중량 기준으로 맞춰 산출해야 한다. 공개자료만으로 ‘대부분’의 정확한 수치를 제시하는 것은 부적절하다.</div>
       </div>
     </section>
 
     <section id="issues">
-      <h2>Ⅲ. 품목별 핵심 유통쟁점</h2>
-      <p class="lead">품목별 병목은 상품상태와 최초 출하구조에 따라 다르다. 활물은 생존율과 운송망, 선어는 속도와 저온관리, 가공품은 표준규격과 원산지·재고관리가 핵심이다.</p>
+      <h2>III. 품목별 핵심 유통쟁점</h2>
+      <p class="lead">품목별 병목은 상품상태뿐 아니라 거래기록이 계통에 포착되는지에 따라 다르다. 활물은 생존율과 운송망, 선어는 속도와 저온관리, 가공품은 표준규격과 원산지·재고관리, 비계통 거래는 가격·물량자료의 공백이 핵심이다.</p>
       <div class="issue-grid">
         <article class="issue-card">
           <h3><span>광어</span><span class="issue-date">활어·가공 이원화</span></h3>
@@ -318,13 +342,13 @@
         </article>
         <article class="issue-card">
           <h3><span>활소라</span><span class="issue-date">시장·운송 집중</span></h3>
-          <p><span class="issue-risk">위험:</span> 일본시장과 단일 운반선 의존, 금어기·기상에 따른 생산변동, 운송 지연 시 폐사.</p>
-          <div class="signal"><strong>대응방향:</strong> 대일 운송수단을 이원화하고 자숙·냉동 내수제품 및 일본 이외 시장을 병행 개발한다.</div>
+          <p><span class="issue-risk">위험:</span> 일본시장과 단일 운반선 의존, 금어기·기상에 따른 생산변동, 운송 지연 시 폐사, 비계통 물량의 가격·생산통계 누락.</p>
+          <div class="signal"><strong>대응방향:</strong> 대일 운송수단을 이원화하고 자숙·냉동 내수제품을 개발하는 한편, 비계통 거래도 TAC 생산량과 대조할 수 있는 간편 신고체계를 마련한다.</div>
         </article>
         <article class="issue-card">
-          <h3><span>전복류</span><span class="issue-date">소량·분산 생산</span></h3>
-          <p><span class="issue-risk">위험:</span> 수출규격 물량 확보 곤란, 타 지역산과의 혼합 가능성, 활물 폐사·감량.</p>
-          <div class="signal"><strong>대응방향:</strong> 어촌계 공동집하·수협 계통출하를 확대하고 제주산 원산지 증빙과 냉동·HMR 제품을 병행한다.</div>
+          <h3><span>전복류</span><span class="issue-date">생산방식 이원화</span></h3>
+          <p><span class="issue-risk">위험:</span> 해녀채취품과 양식품을 한 경로로 집계할 경우 실제 가격형성과 생산자 교섭력 차이를 놓친다. 비계통 양식거래는 공개가격·물량자료가 부족하고 타 지역산 혼합 가능성도 있다.</p>
+          <div class="signal"><strong>대응방향:</strong> 해녀채취품은 기존 공동집하·계통판매와 채취지 이력을 강화하고, 양식품은 직거래 유연성을 유지하면서 자발적 공동출하·표준등급·기준가격 정보공개를 도입한다.</div>
         </article>
         <article class="issue-card">
           <h3><span>공통</span><span class="issue-date">데이터 연결</span></h3>
@@ -339,15 +363,26 @@
       <table>
         <thead><tr><th>정책과제</th><th>주요 내용</th><th>우선 대상품목</th></tr></thead>
         <tbody>
-          <tr><td><strong>산지 유통조직화</strong></td><td>어촌계·수협 공동집하, 규격선별, 출하물량 조절 및 생산자 교섭력 강화</td><td>활소라·전복류·갈치·옥돔</td></tr>
+          <tr><td><strong>생산방식별 산지조직화</strong></td><td>활소라·해녀채취 전복은 어촌계·수협 공동집하와 판매기록을 강화하고, 양식전복은 자발적 공동출하·표준등급·가격정보를 지원</td><td>활소라·전복류</td></tr>
+          <tr><td><strong>계통·비계통 통계 연결</strong></td><td>수협 정산자료와 생산자·산지수집상 매입자료를 월별·중량 기준으로 대조하되, 비계통 거래 자체를 불법으로 취급하지 않고 통계 목적을 명확화</td><td>활소라·양식전복·광어</td></tr>
           <tr><td><strong>제주형 공동물류</strong></td><td>활어차·카페리·항공·냉동물류의 품목별 공동운송과 결항 시 대체경로 마련</td><td>광어·갈치·활소라·전복류</td></tr>
           <tr><td><strong>가공제품 다변화</strong></td><td>활어·선어 중심에서 필렛, 반건조, 자숙·냉동, HMR·조제품으로 판매기간 연장</td><td>전 품목</td></tr>
-          <tr><td><strong>원산지·로트관리</strong></td><td>생산자–위판–매입–가공–수출신고 자료를 연결하고 어종·제주산 증빙 확보</td><td>옥돔·전복류·가공품</td></tr>
-          <tr><td><strong>수출검역 지원</strong></td><td>수산생물 검역, 수출검사, 잔류물질, 시설·표시와 바이어 규격을 일괄 지원</td><td>광어·활소라·전복류</td></tr>
+          <tr><td><strong>원산지·로트관리</strong></td><td>생산자–위판·매입–가공–수출신고 자료를 연결하고 전복은 해녀채취·양식, 전복·오분자기를 별도 코드로 관리</td><td>옥돔·전복류·가공품</td></tr>
+          <tr><td><strong>목적국별 수출요건 지원</strong></td><td>수산생물 검역과 식품 수출검사를 구분하고 목적국·품목별 적용요건, 잔류물질, 시설·표시, 바이어 규격을 선적 전 점검</td><td>광어·활소라·전복류</td></tr>
           <tr><td><strong>수출시장 다변화</strong></td><td>일본 활물 중심 품목의 가공전환과 미국·동남아·한인시장 맞춤형 상품 개발</td><td>활소라·전복류·광어</td></tr>
         </tbody>
       </table>
-      <div class="decision"><strong>종합의견</strong><p>광어는 양식장 주문출하와 활어물류, 갈치·옥돔은 수협 위판과 선어·가공 유통, 활소라·전복류는 마을어장–어촌계 집하와 활패류 유통이 핵심이다. 따라서 단일 물류정책보다 품목별 상품상태와 가격형성 구조를 반영한 공동집하·저온물류·가공전환·수출검역 지원체계를 구축할 필요가 있다.</p></div>
+      <h3>공개자료 이후의 현장확인 항목</h3>
+      <table>
+        <thead><tr><th>품목</th><th>반드시 확보할 원자료</th><th>산출할 지표</th></tr></thead>
+        <tbody>
+          <tr><td><strong>광어</strong></td><td>양식장 출하전표, 출하업체 매입장, 활어·가공·수출 구분</td><td>구매자 유형별 물량·가격, 활어/가공 비중, 제주산 수출량</td></tr>
+          <tr><td><strong>갈치·옥돔</strong></td><td>수협 위판원장, 낙찰자 업종, 가공업체 매입장, 항공·선박 출고자료</td><td>위판 후 도매·가공·직배송 분기율, 규격별 가격·가공수율</td></tr>
+          <tr><td><strong>활소라</strong></td><td>어촌계 생산일지, 수협 계통판매, 비계통 신고, 수출계약·도착중량</td><td>계통·비계통 비중, 내수·수출 비중, 경로별 운임·폐사·감량률</td></tr>
+          <tr><td><strong>전복류</strong></td><td>해녀채취와 양식 출하를 분리한 전표, 산지수집상 매입장, 수협 정산, 종별·산지별 가공원료장</td><td>생산방식별 계통·비계통 비중, 구매자 집중도, 제주산·타지역산 혼합률</td></tr>
+        </tbody>
+      </table>
+      <div class="decision"><strong>종합의견</strong><p>광어는 양식장 협의거래와 활어물류, 갈치·옥돔은 수협 위판 후 선어·가공 분기, 활소라는 계통판매 중심과 비계통 물량의 병존, 전복류는 해녀채취품과 양식품의 서로 다른 가격형성 구조가 핵심이다. 따라서 ‘품목당 하나의 대표 화살표’보다 생산방식·거래체계·상품상태를 교차한 유통통계를 먼저 구축하고, 그 결과에 따라 공동집하·저온물류·가공전환·수출요건 지원을 설계해야 한다.</p></div>
     </section>
 
     <section id="sources">
@@ -355,23 +390,24 @@
       <ol class="sources">
         <li><a href="https://www.nfqs.go.kr/hpmg/quar/actionImportExportQuarantineForm.do?menuId=M0000192">국립수산물품질관리원, 수출입 수산생물 검역절차</a></li>
         <li><a href="https://www.nfqs.go.kr/hpmg/quar/actionExportInspectionForm.do?menuId=M0000195">국립수산물품질관리원, 수출수산물 검사절차</a></li>
+        <li><a href="https://www.law.go.kr/lsLinkCommonInfo.do?chrClsCd=010202&amp;lsJoLnkSeq=1028809297">국가법령정보센터, 수산생물질병 관리법 제31조(수출검역)</a></li>
+        <li><a href="https://www.mof.go.kr/doc/ko/selectDoc.do?bbsSeq=22&amp;docSeq=61650&amp;menuSeq=1009">해양수산부, 2024년 수산물 생산 및 유통산업 실태조사 결과</a></li>
         <li><a href="https://english.ksfme.or.kr/_PR/view/?aidx=27060&amp;bidx=2535">제주 광어양식 경제성 및 출하구조 연구</a></li>
-        <li><a href="https://www.naeil.com/news/read/541675">내일신문, 한국산 활광어 일본 운송경로</a></li>
+        <li><a href="https://www.suhyup.co.kr/bbs/suhyup/64/16267/artclView.do">수협중앙회, 한국산 활광어·활전복 일본 유통구조</a></li>
         <li><a href="https://www.headlinejeju.co.kr/news/articleView.html?idxno=458645">헤드라인제주, 제주 광어 가공품 미국 수출</a></li>
         <li><a href="https://jejumbc.com/NewsArticle/849309">제주MBC, 2026년 제주 갈치·옥돔 어획량·위판액</a></li>
         <li><a href="https://news.coupang.com/archives/55419/">쿠팡 뉴스룸, 제주 위판장–항공–새벽배송 사례</a></li>
         <li><a href="https://www.data.go.kr/data/3083278/fileData.do">공공데이터포털, 서귀포시 수산물 가공업체 현황</a></li>
         <li><a href="https://www.jejudomin.co.kr/news/articleView.html?idxno=82088">제주도민일보, 제주 수산물 괌 수출계약</a></li>
-        <li><a href="https://www.jeju.go.kr/jori/reference/report.htm?act=download&amp;no=1&amp;seq=1462321">제주특별자치도 해양수산연구원, 소라 TAC 연구보고서</a></li>
+        <li><a href="https://www.jeju.go.kr/jori/reference/report.htm?act=download&amp;no=1&amp;page=1&amp;seq=1462321">제주특별자치도 해양수산연구원, 2023년도 소라 TAC제도 이행방안 연구</a></li>
         <li><a href="https://www.jibs.co.kr/news/articles/articlesDetail/55715?feed=da&amp;kakao_from=mainnews">JIBS, 제주 활소라 일본 수출중단</a></li>
         <li><a href="https://www.jibs.co.kr/news/articles/articlesDetail/55770">JIBS, 활소라 완도·부산 경유 대체수출</a></li>
-        <li><a href="https://www.jeju.go.kr/jori/news/report.htm?act=view&amp;page=1&amp;seq=2009940">제주특별자치도 해양수산연구원, 전복류 종자생산 지원</a></li>
         <li><a href="https://www.fnnews.com/news/202604231639528149">파이낸셜뉴스, 2026년 제주 마을어장 전복 종자방류</a></li>
         <li><a href="https://www.kci.go.kr/kciportal/ci/sereArticleSearch/ciSereArtiView.kci?sereArticleSearchBean.artiId=ART003097677">한국학술지인용색인, 양식전복 산지–도매시장 가격전이 연구</a></li>
-        <li><a href="https://www.dailian.co.kr/news/view/1651072/">데일리안, 한국산 활전복 일본 유통사례</a></li>
+        <li><a href="https://v.daum.net/v/20260601175008458">MTN, 수협 오사카무역사업소 한국산 활전복·활광어 취급실적</a></li>
       </ol>
-      <p class="mini">본 보고서는 공개자료에 기초한 정책 검토용 요약자료이다. 실제 거래·수출 시에는 최신 계약조건, 품목별 HS 코드, 수입국 검역·위생·표시기준 및 원산지 요건을 별도로 확인해야 한다.</p>
-      <div class="footer-note">제주특별자치도 주요 수산물 유통경로 | 기준일 2026년 7월</div>
+      <p class="mini">본 보고서는 2026년 7월 30일까지 확인한 공개자료에 기초한 정책 검토용 자료이다. 보도자료의 특정 사업자·시점 사례와 공식 통계를 구분했으며, 공개되지 않은 거래비중은 추정치로 채우지 않았다. 실제 거래·수출 시에는 최신 계약조건, 품목별 HS 코드, 수입국 검역·위생·표시기준 및 원산지 요건을 별도로 확인해야 한다.</p>
+      <div class="footer-note">제주특별자치도 주요 수산물 유통경로 | 검증 기준일 2026년 7월 30일</div>
     </section>
   </main>
 </article>
