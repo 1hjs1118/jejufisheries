@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>제주 수산물 주요 교역권역별 FTA·관세 현황</title>
+  <style>
+    :root{
+      --navy:#12324a;--blue:#176b87;--sea:#1aa6a6;--pale:#edf7f7;
+      --ink:#17242d;--muted:#5c6b75;--line:#d9e3e8;--paper:#fff;
+      --warn:#fff6df;--warn-line:#e8bf57;--good:#e9f7ef;--bad:#fff0ed;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;background:#f3f6f8;color:var(--ink);font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo",Arial,sans-serif;line-height:1.62}
+    a{color:#0b6482;text-decoration:none}
+    a:hover{text-decoration:underline}
+    .page{width:min(1180px,calc(100% - 32px));margin:24px auto 64px;background:var(--paper);box-shadow:0 12px 36px rgba(25,49,65,.09)}
+    header{padding:54px 62px 44px;background:linear-gradient(125deg,var(--navy),#15566e 65%,var(--sea));color:#fff;position:relative;overflow:hidden}
+    header:after{content:"";position:absolute;width:360px;height:360px;border:72px solid rgba(255,255,255,.07);border-radius:50%;right:-120px;top:-170px}
+    .eyebrow{font-size:13px;letter-spacing:.16em;font-weight:700;opacity:.83}
+    h1{font-size:34px;line-height:1.25;margin:12px 0 14px;letter-spacing:-.035em}
+    .subtitle{max-width:760px;font-size:16px;opacity:.9}
+    .meta{display:flex;gap:20px;flex-wrap:wrap;margin-top:28px;font-size:13px;opacity:.86}
+    nav{position:sticky;top:0;z-index:5;display:flex;gap:8px;overflow:auto;padding:12px 18px;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);backdrop-filter:blur(8px)}
+    nav a{flex:0 0 auto;padding:7px 11px;border-radius:20px;color:#35505f;font-size:13px;font-weight:700}
+    nav a:hover{background:var(--pale);text-decoration:none}
+    main{padding:42px 62px 64px}
+    section{scroll-margin-top:72px;margin:0 0 52px}
+    h2{font-size:25px;line-height:1.3;margin:0 0 22px;color:var(--navy);letter-spacing:-.025em;border-left:5px solid var(--sea);padding-left:13px}
+    h3{font-size:19px;margin:28px 0 13px;color:#174d63}
+    h4{font-size:16px;margin:20px 0 8px}
+    p{margin:8px 0}
+    .lead{font-size:17px;color:#314651}
+    .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:24px 0}
+    .metric{border:1px solid var(--line);border-radius:12px;padding:17px;background:#fbfdfd}
+    .metric b{display:block;font-size:24px;color:var(--blue);line-height:1.15}
+    .metric span{font-size:13px;color:var(--muted)}
+    .callout{margin:20px 0;padding:18px 20px;border-left:4px solid var(--warn-line);background:var(--warn);border-radius:4px 10px 10px 4px}
+    .callout strong{color:#654900}
+    .decision{background:var(--pale);border:1px solid #b9dedf;border-radius:12px;padding:20px 22px}
+    table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0 22px;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
+    th{background:#eaf2f5;color:#234553;font-weight:800;text-align:left}
+    th,td{padding:12px 13px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);vertical-align:top}
+    tr:last-child td{border-bottom:0}
+    th:last-child,td:last-child{border-right:0}
+    tbody tr:nth-child(even){background:#fbfcfd}
+    .country{border:1px solid var(--line);border-radius:14px;margin:0 0 26px;overflow:hidden}
+    .country-head{display:flex;justify-content:space-between;gap:18px;align-items:center;padding:19px 22px;background:#f4f9fa;border-bottom:1px solid var(--line)}
+    .country-head h3{margin:0;color:var(--navy);font-size:21px}
+    .tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+    .tag{font-size:12px;font-weight:800;border-radius:999px;padding:4px 9px;background:#dceff1;color:#13566c}
+    .tag.gray{background:#edf0f2;color:#5c6971}
+    .tag.orange{background:#fff0d4;color:#805500}
+    .country-body{padding:5px 22px 20px}
+    .two-col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+    .issue-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+    .issue-card{border:1px solid var(--line);border-radius:12px;padding:18px 19px;background:#fff}
+    .issue-card h3{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:0 0 10px;font-size:18px}
+    .issue-date{font-size:11px;font-weight:800;color:#526772;background:#eef3f5;border-radius:999px;padding:4px 8px;white-space:nowrap}
+    .issue-card .signal{margin:11px 0;padding:10px 12px;background:#f2f9f9;border-left:3px solid var(--sea);font-size:13px}
+    .issue-card .source-link{font-size:12px;font-weight:700}
+    .issue-risk{color:#9b3f33;font-weight:800}
+    .issue-opportunity{color:#14724f;font-weight:800}
+    .panel{border:1px solid var(--line);border-radius:10px;padding:15px 16px;background:#fff}
+    .panel h4{margin-top:0;color:#24576a}
+    ul{margin:8px 0 8px 20px;padding:0}
+    li{margin:5px 0}
+    .rate-zero{font-weight:800;color:#14724f}
+    .rate-open{font-weight:800;color:#8a5d00}
+    .rate-keep{font-weight:800;color:#a13d31}
+    .mini{font-size:12px;color:var(--muted)}
+    .sources{font-size:13px}
+    .sources li{margin:8px 0}
+    .footer-note{margin-top:36px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted)}
+    .print-btn{position:fixed;right:22px;bottom:22px;border:0;border-radius:999px;background:var(--navy);color:#fff;padding:12px 17px;font-weight:800;box-shadow:0 5px 18px rgba(18,50,74,.25);cursor:pointer}
+    @media(max-width:850px){
+      header,main{padding-left:24px;padding-right:24px}
+      .summary-grid{grid-template-columns:1fr 1fr}
+      .two-col,.issue-grid{grid-template-columns:1fr}
+      h1{font-size:28px}
+    }
+    @media(max-width:520px){
+      .page{width:100%;margin:0;box-shadow:none}
+      .summary-grid{grid-template-columns:1fr}
+      .country-head{display:block}.tags{justify-content:flex-start;margin-top:10px}
+      th,td{padding:9px 8px;font-size:12px}
+    }
+    @media print{
+      @page{size:A4;margin:14mm}
+      body{background:#fff;font-size:10.5pt}
+      .page{width:100%;margin:0;box-shadow:none}
+      header{padding:24px 28px;background:#fff!important;color:#111;border-bottom:3px solid #12324a}
+      header:after,nav,.print-btn{display:none}
+      main{padding:22px 4px}
+      section{margin-bottom:30px}
+      .country{break-inside:avoid}
+      a{color:#111}
+    }
+  </style>
+</head>
+<body>
+<article class="page">
+  <header>
+    <div class="eyebrow">제주특별자치도 수산물 수출입 검토자료</div>
+    <h1>주요 교역국·권역별 수산물 FTA 및 관세 현황</h1>
+    <div class="subtitle">미국·중국·베트남·일본·태국·EU의 발효 협정, 수산물 상호 양허구조, 2026년 관세 적용원칙 및 비관세 수출입 요건을 종합 정리</div>
+    <div class="meta">
+      <span>기준시점 2026. 7.</span>
+      <span>대상 HS 제3류·제1212호·제1604호·제1605호 중심</span>
+      <span>작성목적 정책·시장 검토용</span>
+    </div>
+  </header>
+
+  <nav aria-label="보고서 목차">
+    <a href="#summary">종합 요약</a><a href="#method">관세 판단기준</a>
+    <a href="#us">미국</a><a href="#cn">중국</a><a href="#vn">베트남</a>
+    <a href="#jp">일본</a><a href="#th">태국</a><a href="#eu">EU</a>
+    <a href="#issues">최신 이슈</a><a href="#jeju">제주 시사점</a><a href="#sources">근거자료</a>
+  </nav>
+
+  <main>
+    <section id="summary">
+      <h2>Ⅰ. 종합 요약</h2>
+      <p class="lead">6개 대상국·권역 모두 특혜관세협정이 발효되어 있으나, 수산물의 개방수준은 미국·EU가 높고 중국·베트남·일본은 상대적으로 민감품목 보호가 강하다. 중국·베트남·태국은 복수 협정이 중첩되므로 품목별로 가장 유리한 협정을 선택해야 한다.</p>
+      <div class="summary-grid">
+        <div class="metric"><b>6개</b><span>분석 대상국·권역</span></div>
+        <div class="metric"><b>4개</b><span>복수협정 비교 대상: 중국·베트남·태국 및 RCEP 관련</span></div>
+        <div class="metric"><b>0% 또는 잔존</b><span>품목·가공상태별 세율 상이</span></div>
+        <div class="metric"><b>HS 단위</b><span>최종세율 확정에 필요한 기준</span></div>
+      </div>
+
+      <table>
+        <thead><tr><th>대상</th><th>발효 협정</th><th>한국산 수출 관세구조</th><th>한국 수입 관세구조</th><th>핵심 판단</th></tr></thead>
+        <tbody>
+          <tr><td><strong>미국</strong></td><td>한·미 FTA</td><td class="rate-zero">양허 완료 품목 0%</td><td class="rate-zero">수산물 전 품목 최종 자유화</td><td>관세보다 FDA·HACCP·MMPA 대응 중요</td></tr>
+          <tr><td><strong>중국</strong></td><td>한·중 FTA, RCEP</td><td>중국 측 수산물 최종 100% 자유화</td><td class="rate-keep">한국 측 민감품목 다수 제외·장기철폐</td><td>두 협정 중 낮은 세율과 유리한 원산지기준 선택</td></tr>
+          <tr><td><strong>베트남</strong></td><td>한·ASEAN, 한·베트남, RCEP</td><td>베트남 측 수산물 최종 100% 자유화</td><td class="rate-keep">한국 측 개방률 82%/61.9%, 주요품목 제외</td><td>3개 협정 비교, 새우 TRQ 주의</td></tr>
+          <tr><td><strong>일본</strong></td><td>RCEP</td><td class="rate-open">단계철폐·부분감축·제외 혼재</td><td class="rate-open">단계철폐·제외 혼재</td><td>2026년은 RCEP 5년차, 일본 세번별 확인 필수</td></tr>
+          <tr><td><strong>태국</strong></td><td>한·ASEAN, RCEP</td><td>일반품목은 상당수 0%, 민감품목 잔존</td><td>협정별 일반·민감·TRQ 구조</td><td>한·태국 CEPA는 협상 중으로 미적용</td></tr>
+          <tr><td><strong>EU</strong></td><td>한·EU FTA</td><td class="rate-zero">대부분 양허 완료·0%</td><td>한국 측 개방률 99.3%/99.7%</td><td>승인시설·위생증명·IUU 요건이 실무상 핵심</td></tr>
+        </tbody>
+      </table>
+      <div class="callout"><strong>중요:</strong> “수산물 관세율”은 국가별 단일 숫자로 표시할 수 없다. 같은 넙치라도 활어·신선냉장·냉동·필레·조제품의 HS 코드가 다르며, 2026년 협정세율도 각각 달라진다. 이 보고서의 관세현황은 협정별 구조와 적용상태를 제시한 것이며, 실제 신고세율은 HS 10단위와 원산지증명서를 기준으로 최종 확인해야 한다.</div>
+    </section>
+
+    <section id="method">
+      <h2>Ⅱ. 최종 관세 판단기준</h2>
+      <div class="decision">
+        <strong>적용세율 판단식</strong>
+        <p>최종 적용세율 = 기본세율·WTO 세율·적용 가능한 FTA/RCEP 협정세율 중 수입자가 적법하게 선택할 수 있는 최저세율</p>
+        <p class="mini">단, 해당 협정의 품목별 원산지결정기준 충족, 직접운송 또는 경유요건, 유효한 원산지증명서 구비가 전제된다. 복수 협정의 인하폭을 합산할 수는 없다.</p>
+      </div>
+      <table>
+        <thead><tr><th>구분</th><th>확인사항</th><th>보고서 반영원칙</th></tr></thead>
+        <tbody>
+          <tr><td>품목분류</td><td>어종, 활·신선·냉장·냉동·건조·필레·조제품 여부</td><td>HS 제3류, 제1212호, 제1604·1605호를 별도 검토</td></tr>
+          <tr><td>협정 선택</td><td>중국 2개, 베트남 3개, 태국 2개 협정 비교</td><td>낮은 세율뿐 아니라 원산지기준·증명방식까지 비교</td></tr>
+          <tr><td>양허유형</td><td>즉시철폐, 단계철폐, 부분감축, 양허제외, TRQ</td><td>‘최종 자유화’와 ‘2026년 현재세율’을 구분</td></tr>
+          <tr><td>비관세조치</td><td>시설등록, 위생증명, 검역, HACCP, IUU·어획증명</td><td>시장접근요건이며 관세인하와는 별개로 표시</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="us" class="country">
+      <div class="country-head"><h3>1. 미국</h3><div class="tags"><span class="tag">한·미 FTA</span><span class="tag gray">2012.3.15 발효</span></div></div>
+      <div class="country-body">
+        <div class="two-col">
+          <div class="panel"><h4>FTA·상호 양허</h4>
+            <ul>
+              <li>수산물 개방률은 한국 측 기준 품목 수·수입액 모두 <strong>100%</strong>로 제시됨.</li>
+              <li>양국 양허표에 따라 즉시 또는 단계적으로 관세를 철폐했으며, 2026년에는 대부분의 단계철폐가 완료된 상태로 판단됨.</li>
+              <li>품목별 원산지기준을 충족한 수산물·수산가공품에 특혜관세 적용.</li>
+            </ul>
+          </div>
+          <div class="panel"><h4>2026년 관세·비관세 현황</h4>
+            <ul>
+              <li><span class="rate-zero">관세:</span> 양허 완료 품목은 원칙적으로 0%. 개별 세번 및 무역구제조치 여부 별도 확인.</li>
+              <li><strong>수출요건:</strong> 미국 FDA 식품시설 등록, 사전신고, 수산물 HACCP 준수.</li>
+              <li><strong>MMPA:</strong> 2026년부터 대상 어업·품목은 해양포유류 보호 동등성 및 수출확인서 요구 가능.</li>
+            </ul>
+          </div>
+        </div>
+        <h4>제주 관련 판단</h4>
+        <p>넙치·전복·조제수산물은 관세장벽이 낮아 가격보다 냉장유통, FDA 요건, 영문표시 및 바이어 규격 대응이 수출 성패를 좌우한다.</p>
+      </div>
+    </section>
+
+    <section id="cn" class="country">
+      <div class="country-head"><h3>2. 중국</h3><div class="tags"><span class="tag">한·중 FTA</span><span class="tag">RCEP</span><span class="tag gray">2015.12.20 / 2022.2.1</span></div></div>
+      <div class="country-body">
+        <div class="two-col">
+          <div class="panel"><h4>FTA·상호 양허</h4>
+            <ul>
+              <li><strong>한국의 중국산 수입:</strong> 수산물 개방률 품목 수 86%, 당시 수입액 35% 수준.</li>
+              <li>오징어·넙치·멸치·갈치·고등어·꽃게·전복·조기, 돔·민어·뱀장어·농어, 대게·소라·홍어 등 주요 품목 대부분을 초민감품목으로 보호.</li>
+              <li><strong>중국의 한국산 수입:</strong> 수산물 최종 100% 자유화. 김·미역·넙치·전복 등 주요 수출품목의 시장접근 개선.</li>
+            </ul>
+          </div>
+          <div class="panel"><h4>2026년 관세·추가약정</h4>
+            <ul>
+              <li><span class="rate-open">관세:</span> 한·중 FTA와 RCEP 중 낮은 세율 적용. 15·20년 철폐품목은 2026년에도 인하 진행 중일 수 있음.</li>
+              <li>양허제외 품목은 종전 관세 유지. 불법조업 관련 민감품목의 특혜 제한 취지 반영.</li>
+              <li><strong>위생관리:</strong> 2023년 수출입 수산물 위생관리 고시 및 2026년 자연산 수산물 위생·검역 약정은 시설등록·위생증명 요건으로서 관세와 별개.</li>
+            </ul>
+          </div>
+        </div>
+        <h4>제주 관련 판단</h4>
+        <p>중국 수출은 넙치·전복·해조류의 관세혜택과 2026년 자연산 냉장 수산물 수출허용 확대가 기회요인이다. 반면 중국산 갈치·조기·넙치 등은 한국 양허제외 여부를 우선 확인해야 한다.</p>
+      </div>
+    </section>
+
+    <section id="vn" class="country">
+      <div class="country-head"><h3>3. 베트남</h3><div class="tags"><span class="tag">한·ASEAN</span><span class="tag">한·베트남</span><span class="tag">RCEP</span></div></div>
+      <div class="country-body">
+        <div class="two-col">
+          <div class="panel"><h4>FTA·상호 양허</h4>
+            <ul>
+              <li><strong>한국의 베트남산 수입:</strong> 품목 수 82%, 당시 수입액 61.9% 자유화.</li>
+              <li>오징어·넙치·멸치·갈치 등 주요 생산품목과 뱀장어·민어·꽁치, 고등어·홍어·꽃게 등은 대부분 양허제외.</li>
+              <li>새우는 일정 물량에 TRQ를 적용하고 한도 밖 물량은 기본관세 20% 구조.</li>
+              <li><strong>베트남의 한국산 수입:</strong> 수산물 전 품목 최종 100% 자유화. 황다랑어·가다랑어 등 일부 품목 무관세 수출기반 확보.</li>
+            </ul>
+          </div>
+          <div class="panel"><h4>2026년 관세·추가약정</h4>
+            <ul>
+              <li><span class="rate-open">관세:</span> 한·ASEAN, 한·베트남 FTA, RCEP 중 최저세율 선택. 협정별 원산지기준 차이 병행 비교.</li>
+              <li>양허제외 품목은 기본·조정관세가 유지될 수 있으며, TRQ는 추천·물량관리 절차 필요.</li>
+              <li><strong>위생관리:</strong> 2022년 수산물 위생·식품안전관리 및 검역 고시는 시설·검역·증명 절차이며 추가 관세양허는 아님.</li>
+            </ul>
+          </div>
+        </div>
+        <h4>제주 관련 판단</h4>
+        <p>베트남은 제주산 가공수산물의 성장시장이나, 베트남산 새우·오징어·갈치 등의 국내 유입은 품목별 양허제외와 TRQ를 구분해야 한다.</p>
+      </div>
+    </section>
+
+    <section id="jp" class="country">
+      <div class="country-head"><h3>4. 일본</h3><div class="tags"><span class="tag">RCEP</span><span class="tag gray">2022.2.1 발효</span></div></div>
+      <div class="country-body">
+        <div class="two-col">
+          <div class="panel"><h4>FTA·상호 양허</h4>
+            <ul>
+              <li>한·일 양자 FTA는 없으며, 수산물 특혜관세는 RCEP이 유일함.</li>
+              <li>양국 수산물 양허표에는 즉시철폐·단계철폐·부분감축·양허제외가 혼재.</li>
+              <li>민감 수산물은 장기철폐 또는 제외되어 미국·EU보다 시장개방 수준이 낮음.</li>
+            </ul>
+          </div>
+          <div class="panel"><h4>2026년 관세·비관세 현황</h4>
+            <ul>
+              <li><span class="rate-open">관세:</span> 2026년은 RCEP 5년차 세율 적용. 일본 9단위 세번과 한국 HSK 10단위를 각각 대조해야 함.</li>
+              <li>RCEP 원산지 누적은 가공수산물 공급망에 유리할 수 있으나, 일본의 관세차별·추가요건 대상 여부 확인 필요.</li>
+              <li><strong>수입요건:</strong> 일본 식품위생법상 검사·표시·잔류물질 기준 및 어획증명 등 비관세 요건 별도.</li>
+            </ul>
+          </div>
+        </div>
+        <h4>제주 관련 판단</h4>
+        <p>일본은 거리·신선도 측면에서 제주산 활넙치·전복에 유리하지만, 관세가 완전히 철폐되지 않은 품목이 있어 형태별 세번 분석이 가장 중요하다.</p>
+      </div>
+    </section>
+
+    <section id="th" class="country">
+      <div class="country-head"><h3>5. 태국</h3><div class="tags"><span class="tag">한·ASEAN</span><span class="tag">RCEP</span><span class="tag orange">한·태국 CEPA 협상 중</span></div></div>
+      <div class="country-body">
+        <div class="two-col">
+          <div class="panel"><h4>FTA·상호 양허</h4>
+            <ul>
+              <li>현재 발효 협정은 한·ASEAN FTA와 RCEP이며, 한·태국 CEPA는 아직 적용되지 않음.</li>
+              <li>일반품목은 한·ASEAN FTA 이행으로 상당수 관세가 철폐됐으나, 민감·초민감 수산물과 TRQ 품목은 별도 관리.</li>
+              <li>RCEP은 일부 품목에서 관세 또는 원산지기준상 대안이 될 수 있음.</li>
+            </ul>
+          </div>
+          <div class="panel"><h4>2026년 관세·추가약정</h4>
+            <ul>
+              <li><span class="rate-open">관세:</span> 두 협정의 태국 양허표·한국 양허표를 비교해 최저세율 선택.</li>
+              <li>새우·참치가공품·연체동물 등 태국 주력품목은 HS 코드별 민감·TRQ 여부를 우선 확인.</li>
+              <li><strong>위생관리:</strong> 「대한민국과 태국 간 수출·입 수산물·수산제품의 품질관리 및 위생안전」이 2023년 고시됐으나 관세와는 별개.</li>
+            </ul>
+          </div>
+        </div>
+        <h4>제주 관련 판단</h4>
+        <p>태국은 외식·가공용 수산물의 경쟁력이 높아 수입영향 점검이 필요하다. 제주산은 프리미엄 활·냉장품과 간편식·조제품 중심으로 차별화할 필요가 있다.</p>
+      </div>
+    </section>
+
+    <section id="eu" class="country">
+      <div class="country-head"><h3>6. 유럽연합(EU 27개국)</h3><div class="tags"><span class="tag">한·EU FTA</span><span class="tag gray">2011.7.1 잠정적용</span></div></div>
+      <div class="country-body">
+        <div class="two-col">
+          <div class="panel"><h4>FTA·상호 양허</h4>
+            <ul>
+              <li>전체 상품의 98% 이상을 자유화하며, 일부 민감 농수산물에는 7년 이상의 장기 이행기간 또는 예외 적용.</li>
+              <li>한국 측 수산물 개방률은 품목 수 99.3%, 당시 수입액 99.7%로 제시됨.</li>
+              <li>발효 후 장기간 경과하여 2026년에는 대부분 수산물 단계철폐가 완료.</li>
+            </ul>
+          </div>
+          <div class="panel"><h4>2026년 관세·비관세 현황</h4>
+            <ul>
+              <li><span class="rate-zero">관세:</span> 대부분 0%이나 양허제외·TRQ·특정 조제품은 개별 세번 확인.</li>
+              <li><strong>원산지증명:</strong> 한·EU FTA는 인증수출자 제도와 원산지신고문안 관리가 중요.</li>
+              <li><strong>수출요건:</strong> EU 승인 생산·가공시설, 위생증명서, 잔류물질 관리, IUU 어획증명 및 표시기준 준수.</li>
+            </ul>
+          </div>
+        </div>
+        <h4>제주 관련 판단</h4>
+        <p>관세보다 승인시설과 콜드체인, 지속가능성·추적성 인증이 핵심 장벽이다. 제주산 넙치·전복·해조류 가공품은 고부가 시장을 목표로 시설승인과 인증비용을 공동 지원할 필요가 있다.</p>
+      </div>
+    </section>
+
+    <section id="issues">
+      <h2>Ⅲ. 2026년 3~7월 국가별 수산물 수출입 주요 이슈</h2>
+      <p class="lead">2026년 3월 1일부터 7월 30일까지 공개된 언론보도와 정부·업계 공지를 검색해, 양국 간 교역에 직접 영향을 주는 제도·시장 동향을 선별했다. 기사 게시일과 제도 시행일이 다를 때에는 이를 구분했으며, 기사만으로 확정할 수 없는 전망은 ‘시사점’으로 표시했다.</p>
+      <table>
+        <thead><tr><th>국가·권역</th><th>기간 내 핵심 이슈</th><th>영향 방향</th><th>제주 우선 대응</th></tr></thead>
+        <tbody>
+          <tr><td><strong>미국</strong></td><td>MMPA 수출확인서(COA)·어업정보 제출이 2026년 통관의 상시 요건으로 정착</td><td><span class="issue-risk">수출 행정부담↑</span></td><td>어종·어구·선박·양식시설 데이터의 선적 전 검증</td></tr>
+          <tr><td><strong>중국</strong></td><td>7월 6일 야생 수산물 검사·위생요건 고시 제정</td><td><span class="issue-opportunity">시장접근 확대</span> / 등록부담↑</td><td>생산·가공·저장시설 등록과 화물별 위생증명 체계 구축</td></tr>
+          <tr><td><strong>베트남</strong></td><td>한국의 베트남산 새우 수입동향이 월별로 집중 모니터링되고, 베트남 새우·메기 수출 증가세 보도</td><td><span class="issue-risk">수입경쟁↑</span></td><td>새우 TRQ·원산지·수입단가 모니터링, 제주산 제품 차별화</td></tr>
+          <tr><td><strong>일본</strong></td><td>6월 일본이 한국에 일본산 수산물 수입규제 해제 실무협의 제안</td><td>규제 불확실성↑</td><td>8개 현 수입금지 유지 여부와 국내산 대체효과 점검</td></tr>
+          <tr><td><strong>태국</strong></td><td>6~7월 THAIFEX·동남아 판촉을 통한 K-수산물 수출 확대 움직임</td><td><span class="issue-opportunity">수출기회↑</span></td><td>프리미엄 냉장품·간편식의 현지 유통·외식 채널 진입</td></tr>
+          <tr><td><strong>EU</strong></td><td>3·4·7월 CATCH 전자 어획증명 입력항목·의무화 단계 확대</td><td><span class="issue-risk">통관지연 위험↑</span></td><td>소형어선 포함 선박·어구·어획구역 추적정보 전산화</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout"><strong>해석상 주의:</strong> 아래 이슈는 FTA 양허관세의 변경을 뜻하지 않는다. 대부분 위생·검역·자원보호·추적성 또는 시장경쟁 문제이므로, FTA 특혜세율을 충족하더라도 별도의 통관거절·검사강화·서류보완 위험이 남는다.</div>
+
+      <div class="issue-grid">
+        <article class="issue-card">
+          <h3><span>미국</span><span class="issue-date">2026.3~7 현재 시행 중</span></h3>
+          <p><strong>MMPA 통관자료 부담의 상시화.</strong> 미국의 해양포유류보호법 수입규제가 2026년 1월 1일부터 적용되면서, 규제 대상 어업에서 생산된 수산물은 수출국 당국이 인증한 COA가 필요하다. 미국 세관의 2월 3일 후속안내는 HTS 번호, 영문 어종·제품형태, 중량, 어구, 선적국, 선박명·번호를 요구하고, 양식품은 어구란에 ‘AQ’와 시설 정보를 적도록 명확히 했다. COA는 반출 전에 ACE 전자시스템으로 제출해야 하며 미국 수입자 최종확인도 필요하다.</p>
+          <div class="signal"><strong>제주 시사점:</strong> 활·냉장 넙치 등 양식품은 비교가능성 판정과 품목별 적용목록을 먼저 확인하고, 양식시설명·국가·품목코드를 선적서류와 일치시켜야 한다. 제주 연근해 어획물은 선박·어구 데이터가 누락되면 FTA 0%와 무관하게 통관이 지연될 수 있다. 3~7월에 제도가 새로 발표된 것은 아니지만, 이 기간 실제 수출계약에 계속 적용되는 핵심 현안이다.</div>
+          <a class="source-link" href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/4075785">미국 CBP 후속안내(2026.2.3, 시행요건 확인) →</a>
+        </article>
+
+        <article class="issue-card">
+          <h3><span>중국</span><span class="issue-date">고시 2026.7.6</span></h3>
+          <p><strong>야생 수산물의 한·중 상호 수출입 절차가 구체화.</strong> 식약처 고시 제2026-48호는 한국에서 중국으로 수출하는 식용 야생 수생동물·가공품과 해조류·가공품의 범위를 정하고, 생산·가공·저장시설의 승인·감독 및 중국 측 요구 시 사전등록을 의무화했다. 화물별로 한·중 언어와 영어를 병기한 위생증명서를 붙이고, 적법한 포획과 전 과정 이력추적성도 확보해야 한다.</p>
+          <div class="signal"><strong>제주 시사점:</strong> 자연산 냉장어류와 해조류의 중국 시장접근이 넓어지는 반면, 미등록 시설 제품은 수출할 수 없다. 제주도 차원의 대상시설 일괄 점검, 영문·중문 증명서 데이터 표준화, 반복 부적합 시설의 개선지원이 필요하다.</div>
+          <a class="source-link" href="https://www.mfds.go.kr/brd/m_207/view.do?itm_seq_1=0&amp;itm_seq_2=0&amp;multi_itm_seq=0&amp;page=1&amp;seq=15176">식품의약품안전처 제정고시(2026.7.7 등록) →</a>
+        </article>
+
+        <article class="issue-card">
+          <h3><span>베트남</span><span class="issue-date">2026.6~7 보도·통계</span></h3>
+          <p><strong>새우 중심의 대한국 공급경쟁.</strong> 베트남 수산물수출생산자협회(VASEP)는 2026년 한국의 새우 수입통계를 1~3월, 1~4월, 1~5월 누계로 연속 공개했다. 6월 국내 보도도 대외 압력 속에서 베트남 새우·메기 수출이 두 자릿수 증가했다고 전했다. 이는 베트남산 새우가 한국 시장에서 가격·공급 경쟁을 이어가는 신호로 볼 수 있으나, 해당 기사만으로 제주 품목의 직접 피해 규모를 확정할 수는 없다.</p>
+          <div class="signal"><strong>제주 시사점:</strong> 베트남산 새우는 한·베트남 FTA TRQ와 한·ASEAN·RCEP 적용 여부를 구분해 월별 수입량·단가를 추적할 필요가 있다. 제주산 넙치·전복·소라와 직접 대체관계가 약한 품목은 ‘수입증가’ 자체보다 외식·가공업체의 원료 전환 여부를 중심으로 점검하는 것이 적절하다.</div>
+          <a class="source-link" href="https://vasep.com.vn/thong-ke-thuong-mai/xnk-thuy-san-the-gioi/nhap-khau-tom-cua-han-quoc-t1-t5-2026-26918.html">VASEP, 한국의 새우 수입 2026년 1~5월 →</a>
+        </article>
+
+        <article class="issue-card">
+          <h3><span>일본</span><span class="issue-date">보도 2026.6.8</span></h3>
+          <p><strong>일본산 수산물 수입규제 해제 협의 제안.</strong> 뉴시스는 일본 정부가 수입규제 철폐를 논의할 한·일 실무급 정례협의체 구성을 한국에 요청했다고 보도했다. 한국은 2013년부터 후쿠시마·이바라키·군마·미야기·이와테·도치기·지바·아오모리 8개 현의 모든 수산물 수입을 금지하고, 다른 지역 제품에도 방사성물질 검사증명서를 요구하고 있다. 한국 정부가 명확한 답변을 주지 않아 협의 개시나 수입 재개는 확정되지 않았다.</p>
+          <div class="signal"><strong>제주 시사점:</strong> 현행 규제가 유지되는 동안에는 RCEP 관세와 별개로 일본산 8개 현 제품의 시장진입이 제한된다. 향후 협의가 열리면 일본산 활·냉장어류·패류와 제주산의 품목별 대체 가능성, 안전성 검증 및 원산지 표시를 함께 분석해야 한다.</div>
+          <a class="source-link" href="https://www.newsis.com/view/NISX20260608_0003660085">뉴시스, 일본의 실무협의 제안 보도(2026.6.8) →</a>
+        </article>
+
+        <article class="issue-card">
+          <h3><span>태국</span><span class="issue-date">보도 2026.6~7</span></h3>
+          <p><strong>동남아 유통·외식시장 대상 K-수산물 판촉 확대.</strong> 6월 태국 현지 수산식품 박람회에서 전남 수산가공식품이 380만 달러 규모의 수출상담 성과를 냈다는 보도가 나왔고, 7월 수협도 동남아 시장에서 K-수산물 수출을 확대하는 지원에 나섰다. 이는 태국 시장에서 한국산 조미김·가공품·간편식의 바이어 수요가 확인되고 있음을 보여준다.</p>
+          <div class="signal"><strong>제주 시사점:</strong> 한·ASEAN FTA와 RCEP 중 유리한 원산지기준을 선택하되, 단순 박람회 상담액을 확정 수출액으로 해석해서는 안 된다. 제주산은 항공 냉장품보다 보관성이 높은 전복·해조류 가공품과 외식업용 규격으로 초기 진입비용을 낮추는 전략이 현실적이다.</div>
+          <a class="source-link" href="https://www.mk.co.kr/news/society/12064021">매일경제, 태국 박람회 수출상담 보도(2026.6.7) →</a>
+        </article>
+
+        <article class="issue-card">
+          <h3><span>EU</span><span class="issue-date">2026.3.23~7.10</span></h3>
+          <p><strong>CATCH 전자 어획증명 입력요건 단계적 강화.</strong> 3월 23일부터 개정 EU 어획증명서 사용이 요구됐고, 4월 10일부터 선박명·등록번호·허가기간·모항·호출부호·IMO·RFMO·선상가공 정보가 의무화됐다. 7월 10일부터는 어구, 세분화된 어획구역, 선장 또는 면허보유자 서명 등 추가항목도 필수화됐다. 7월 보도에서는 서류 문제로 화물이 지연되자 EU가 미국산에 한시적 유예를 연장한 사례가 전해져, 초기 전산·서류부담이 실제 통관차질로 이어질 수 있음을 보여줬다.</p>
+          <div class="signal"><strong>제주 시사점:</strong> 자연산 수산물은 소형어선까지 선박·어구·어획구역 데이터를 수출 lot와 연결해야 한다. EU가 미국산에 부여한 한시 유예가 한국산에도 적용된다고 볼 근거는 없으므로, 한국 수출자는 7월 10일 완성형 입력요건을 기준으로 준비하는 것이 안전하다.</div>
+          <a class="source-link" href="https://content.govdelivery.com/accounts/USNOAAFISHERIES/bulletins/4120c17">NOAA, EU CATCH 추가 입력요건 안내(2026.4.9) →</a>
+        </article>
+      </div>
+    </section>
+
+    <section id="jeju">
+      <h2>Ⅳ. 제주 수산물 정책 시사점</h2>
+      <table>
+        <thead><tr><th>정책과제</th><th>주요 내용</th><th>우선 대상시장</th></tr></thead>
+        <tbody>
+          <tr><td><strong>HS 기반 관세 DB</strong></td><td>넙치·갈치·참조기·고등어·소라·전복·김·미역을 활/냉장/냉동/필레/조제품으로 세분화하여 2026년 협정세율 수록</td><td>중국·베트남·일본·태국</td></tr>
+          <tr><td><strong>복수협정 선택지원</strong></td><td>수출자별 원재료 구성과 직접운송 경로를 반영해 FTA/RCEP 최적 협정 추천</td><td>중국·베트남·태국</td></tr>
+          <tr><td><strong>위생·검역 패키지</strong></td><td>중국 시설등록·lot별 위생증명, 미국 MMPA COA, EU CATCH, HACCP·잔류물질 관리를 통합 지원</td><td>전 시장</td></tr>
+          <tr><td><strong>어획·시설 데이터화</strong></td><td>선박·어구·어획구역·양식시설 정보를 수출 lot와 연결하고 상대국 전자통관용 데이터로 표준화</td><td>미국·EU·중국</td></tr>
+          <tr><td><strong>민감품목 모니터링</strong></td><td>갈치·조기·고등어·오징어·넙치·전복·소라 및 새우의 양허제외·TRQ·수입증가 점검</td><td>중국·베트남·태국</td></tr>
+          <tr><td><strong>고부가 수출전환</strong></td><td>활어 중심에서 냉장필레·간편식·조제품·프리미엄 해조류로 제품군 확대</td><td>미국·EU·일본·중국</td></tr>
+        </tbody>
+      </table>
+      <div class="decision"><strong>종합의견</strong><p>미국·EU는 관세철폐 효과가 상당 부분 실현되어 비관세 요건과 상품 차별화가 핵심이다. 중국·베트남은 한국산 수산물의 수출시장 개방은 높은 반면 한국은 주요 생산품목을 보호하는 비대칭 양허구조가 특징이다. 일본은 RCEP 장기철폐·제외품목이 많아 세번별 접근이 필요하며, 태국은 한·ASEAN FTA와 RCEP의 비교 적용 및 향후 한·태국 CEPA 협상동향을 지속 관리할 필요가 있다.</p></div>
+    </section>
+
+    <section id="sources">
+      <h2>Ⅴ. 주요 근거자료</h2>
+      <ol class="sources">
+        <li><a href="https://www.customs.go.kr/ftaportalkor/cm/cntnts/cntntsView.do?mi=3310&amp;cntntsId=986">관세청 FTA 포털, FTA 발효현황</a></li>
+        <li><a href="https://okfta.kita.net/ftaList">한국무역협회 FTA 통합플랫폼, FTA 협정문</a></li>
+        <li><a href="https://www.mof.go.kr/doc/ko/selectDoc.do?bbsSeq=10&amp;docSeq=2432&amp;menuSeq=971">해양수산부, 한·중 FTA 수산부문 협상 결과</a></li>
+        <li><a href="https://www.mof.go.kr/doc/ko/selectDoc.do?bbsSeq=10&amp;docSeq=2495&amp;menuSeq=971">해양수산부, 한·베트남 FTA 수산분야 협상 결과</a></li>
+        <li><a href="https://www.mof.go.kr/doc/ko/selectDoc.do?bbsSeq=10&amp;docSeq=64423&amp;menuSeq=971">해양수산부, 2026년 한·중 자연산 수산물 위생·검역 합의</a></li>
+        <li><a href="https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000219394">국가법령정보센터, 대한민국과 중국 간 수출·입 수산물 위생관리</a></li>
+        <li><a href="https://law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2100000212307">국가법령정보센터, 대한민국과 베트남 간 수산물 위생·식품안전관리 및 검역</a></li>
+        <li><a href="https://www.mof.go.kr/doc/ko/selectDoc.do?bbsSeq=35&amp;docSeq=49146&amp;menuSeq=886">해양수산부, 대한민국과 태국 간 수출·입 수산물·수산제품 품질관리 및 위생안전</a></li>
+        <li><a href="https://eur-lex.europa.eu/legal-content/EN/LSU/?uri=CELEX%3A22011A0514%2801%29">EUR-Lex, EU–대한민국 FTA 개요 및 이행</a></li>
+        <li><a href="https://www.customs.go.kr/download/ftaportalkor/_down/trty/rcep_01.pdf">관세청, RCEP 협정문</a></li>
+        <li><a href="https://content.govdelivery.com/accounts/USDHSCBP/bulletins/4075785">미국 CBP, MMPA 수산물 수입규제 및 COA 제출 후속안내(2026.2.3)</a></li>
+        <li><a href="https://www.mfds.go.kr/brd/m_207/view.do?itm_seq_1=0&amp;itm_seq_2=0&amp;multi_itm_seq=0&amp;page=1&amp;seq=15176">식품의약품안전처, 한·중 수출입 야생 수산물 검사 및 위생요건 제정고시(2026.7.7 등록)</a></li>
+        <li><a href="https://vasep.com.vn/thong-ke-thuong-mai/xnk-thuy-san-the-gioi/nhap-khau-tom-cua-han-quoc-t1-t5-2026-26918.html">VASEP, 한국의 새우 수입 2026년 1~5월 누계(2026.7)</a></li>
+        <li><a href="https://www.newsis.com/view/NISX20260608_0003660085">뉴시스, 일본의 일본산 수산물 수입재개 실무협의 제안 보도(2026.6.8)</a></li>
+        <li><a href="https://www.mk.co.kr/news/society/12064021">매일경제, 전남 수산가공식품 태국 수출상담 성과 보도(2026.6.7)</a></li>
+        <li><a href="https://www.fisheriesnews.co.kr/news/articleView.html?idxno=84104">수산신문, 수협의 동남아 K-수산물 수출 확대 지원 보도(2026.6)</a></li>
+        <li><a href="https://content.govdelivery.com/accounts/USNOAAFISHERIES/bulletins/40dc348">NOAA, EU 개정 어획증명서·CATCH 적용일 안내(2026.3)</a></li>
+        <li><a href="https://content.govdelivery.com/accounts/USNOAAFISHERIES/bulletins/4120c17">NOAA, EU CATCH 단계별 추가 입력요건 안내(2026.4.9)</a></li>
+        <li><a href="https://www.ft.com/content/aba8d356-489a-469b-bb49-b54e74acc3a0">Financial Times, EU CATCH 전환기 통관차질 및 미국산 한시유예 보도(2026.7.12)</a></li>
+      </ol>
+      <p class="mini">본 보고서는 정책 검토용 요약자료이다. 실제 수출입 신고 전에는 관세청 UNI-PASS, 상대국 최신 관세율표 및 품목분류 사전심사 등을 통해 적용세율을 재확인해야 한다.</p>
+      <div class="footer-note">제주특별자치도 수산물 주요 교역권역별 FTA·관세 현황 | 기준일 2026년 7월</div>
+    </section>
+  </main>
+</article>
+<button class="print-btn" onclick="window.print()" aria-label="보고서 인쇄">인쇄 / PDF 저장</button>
+</body>
+</html>

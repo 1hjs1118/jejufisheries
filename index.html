@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="제주 수산물 수출입 통계와 주요 교역권역별 FTA·관세 현황을 한 곳에서 열람하는 통합 포털">
+  <meta name="theme-color" content="#071b2f">
+  <title>제주 수산물 통계·FTA 통합 포털</title>
+  <style>
+    :root{--navy:#071b2f;--navy2:#103b59;--sea:#0d9f9a;--ink:#172b3a;--muted:#627584;--line:#dce6eb;--paper:#fff;--wash:#f3f7f9;--shadow:0 18px 48px rgba(7,29,48,.12)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--wash);font-family:Pretendard,"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",Arial,sans-serif;line-height:1.55}button,a{font:inherit}button{color:inherit}
+    .hero{position:relative;overflow:hidden;min-height:338px;color:#fff;background:radial-gradient(circle at 78% 10%,rgba(56,189,248,.24),transparent 30%),radial-gradient(circle at 91% 80%,rgba(43,196,189,.18),transparent 27%),linear-gradient(132deg,#061525,var(--navy2))}
+    .hero:after{content:"";position:absolute;right:-8%;bottom:-130px;width:560px;height:280px;border:1px solid rgba(255,255,255,.1);border-radius:50%;box-shadow:0 -40px 0 rgba(255,255,255,.025),0 -80px 0 rgba(255,255,255,.02);transform:rotate(-8deg)}
+    .hero-inner,.content,.viewer-shell{width:min(1180px,calc(100% - 40px));margin-inline:auto}.brand{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;min-height:72px;border-bottom:1px solid rgba(255,255,255,.12)}
+    .brand-name{display:flex;align-items:center;gap:12px;color:#fff;font-weight:800;letter-spacing:-.02em;text-decoration:none}.brand-mark{display:grid;width:34px;height:34px;place-items:center;border:1px solid rgba(255,255,255,.34);border-radius:10px;color:#c7fbf7;background:rgba(255,255,255,.08);font-size:11px}.brand-meta{color:rgba(255,255,255,.66);font-size:12px;letter-spacing:.04em}
+    .hero-copy{position:relative;z-index:1;max-width:780px;padding:58px 0 68px}.eyebrow{display:inline-flex;align-items:center;gap:8px;margin:0 0 15px;color:#9fe6e2;font-size:13px;font-weight:800;letter-spacing:.08em}.eyebrow:before{content:"";width:7px;height:7px;border-radius:50%;background:#2bc4bd;box-shadow:0 0 0 5px rgba(43,196,189,.12)}
+    h1{margin:0;font-size:clamp(32px,4vw,52px);line-height:1.14;letter-spacing:-.045em}.hero-copy>p:last-child{max-width:670px;margin:18px 0 0;color:rgba(255,255,255,.72);font-size:16px}
+    .content{padding:54px 0 68px}.section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}.section-kicker{margin:0 0 5px;color:var(--sea);font-size:12px;font-weight:900;letter-spacing:.11em}h2{margin:0;color:#102b40;font-size:clamp(24px,3vw,32px);letter-spacing:-.035em}.section-note{margin:0 0 3px;color:var(--muted);font-size:13px}
+    .report-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.report-card{position:relative;display:flex;min-height:222px;padding:27px;overflow:hidden;text-align:left;border:1px solid var(--line);border-radius:18px;background:var(--paper);cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}.report-card:after{content:attr(data-number);position:absolute;right:18px;bottom:-25px;color:#edf3f6;font-size:100px;font-weight:900;line-height:1;letter-spacing:-.08em;pointer-events:none}
+    .report-card:hover,.report-card:focus-visible{transform:translateY(-3px);border-color:#9ecfd0;box-shadow:var(--shadow);outline:none}.card-inner{position:relative;z-index:1;display:flex;flex-direction:column;width:100%}.card-tag{align-self:flex-start;padding:5px 9px;border-radius:999px;color:#087c79;background:#e7f7f6;font-size:11px;font-weight:900}.report-card h3{margin:18px 0 8px;color:#132e43;font-size:21px;line-height:1.35;letter-spacing:-.025em}.report-card p{max-width:84%;margin:0;color:var(--muted);font-size:14px}.card-action{display:inline-flex;align-items:center;gap:7px;margin-top:auto;padding-top:22px;color:#096f78;font-size:13px;font-weight:900}.card-action:after{content:"→";transition:transform .2s}.report-card:hover .card-action:after{transform:translateX(4px)}
+    .viewer{display:none;padding:24px 0 40px;background:#e9eff2;border-top:1px solid #d4e0e5}.viewer.is-visible{display:block}.viewer-toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:62px;padding:11px 15px 11px 20px;color:#fff;background:#0a2036;border-radius:14px 14px 0 0}.viewer-title{min-width:0;margin:0;overflow:hidden;font-size:15px;font-weight:800;text-overflow:ellipsis;white-space:nowrap}.viewer-actions{display:flex;flex-shrink:0;gap:8px}
+    .viewer-button{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 13px;border:1px solid rgba(255,255,255,.2);border-radius:9px;color:#fff;background:rgba(255,255,255,.08);font-size:12px;font-weight:800;text-decoration:none;cursor:pointer}.viewer-button:hover,.viewer-button:focus-visible{background:rgba(255,255,255,.16);outline:2px solid #38bdf8;outline-offset:1px}.report-frame{display:block;width:100%;height:max(720px,calc(100vh - 112px));border:0;background:#fff;box-shadow:var(--shadow)}
+    footer{padding:25px 20px;color:#768894;background:#f8fafb;border-top:1px solid var(--line);text-align:center;font-size:12px}
+    @media(max-width:760px){.hero-inner,.content,.viewer-shell{width:min(100% - 28px,1180px)}.brand-meta{display:none}.hero{min-height:315px}.hero-copy{padding:49px 0 58px}.content{padding:40px 0 50px}.section-head{align-items:start;flex-direction:column;gap:7px}.report-grid{grid-template-columns:1fr}.report-card{min-height:205px;padding:23px}.viewer{padding-top:14px}.viewer-toolbar{align-items:stretch;flex-direction:column;padding:14px}.viewer-actions{width:100%}.viewer-button{flex:1}.report-frame{height:calc(100vh - 155px);min-height:620px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <header class="hero"><div class="hero-inner">
+    <nav class="brand" aria-label="홈"><a class="brand-name" href="./index.html"><span class="brand-mark" aria-hidden="true">JEJU</span><span>제주 수산물 수출입 대쉬보드</span></a><span class="brand-meta">JEJU MARINE &amp; FISHERIES IMPORT & EXPORT</span></nav>
+    <div class="hero-copy"><p class="eyebrow">월별·국가별·수출품목별 데이터 및 주요 FTA·관세 현황</p><h1>제주 수산물<br>수출입 현황(2026.6)</h1>
+  </div></header>
+  <main>
+    <section class="content" id="reports" aria-labelledby="reports-title">
+      <div class="section-head"><div><p class="section-kicker"></p><h2 id="reports-title"></h2></div><p class="section-note"></p></div>
+      <div class="report-grid">
+        <button class="report-card" type="button" data-number="01" data-file="제주 수산물 국가별 수출 통계.html" data-title="제주 수산물 국가별 수출입 통계"><span class="card-inner"><span class="card-tag">국가별 통계</span><h3>제주 수산물 국가별 수출입 통계</h3><p>미국·중국·일본·베트남·EU·태국 등 주요 교역권역의 월별 수출입 변동을 비교합니다.</p><span class="card-action">자료 열람</span></span></button>
+        <button class="report-card" type="button" data-number="02" data-file="fta-report.html" data-title="제주 수산물 주요 교역권역별 FTA·관세 현황"><span class="card-inner"><span class="card-tag">FTA·관세</span><h3>주요 교역권역별 FTA·관세 현황</h3><p>미국·중국·베트남·일본·태국·EU의 수산물 FTA, 양허 및 주요 통상 이슈를 정리했습니다.</p><span class="card-action">자료 열람</span></span></button>
+        <button class="report-card" type="button" data-number="03" data-file="제주넙치류수출 동향(1901~2606).html" data-title="제주 넙치류 수출 동향"><span class="card-inner"><span class="card-tag">넙치류 분석</span><h3>제주 넙치류 수출 동향</h3><p>2019년 1월부터 2026년 6월까지 제주 넙치류 수출 실적과 주요 시장의 변화를 분석합니다.</p><span class="card-action">자료 열람</span></span></button>
+        <button class="report-card" type="button" data-number="04" data-file="제주수산물수출입 현황(1901~2606, 활어, 선어, 냉동).html" data-title="제주 수산물 수출입 현황"><span class="card-inner"><span class="card-tag">품목별 통계</span><h3>제주 수산물 수출입 현황</h3><p>2019년 1월부터 2026년 6월까지 활어·선어·냉동 수산물의 교역 흐름을 확인합니다.</p><span class="card-action">자료 열람</span></span></button>
+      </div>
+    </section>
+    <section class="viewer" id="viewer" aria-live="polite" aria-label="선택한 분석자료"><div class="viewer-shell">
+      <div class="viewer-toolbar"><p class="viewer-title" id="viewer-title">분석자료</p><div class="viewer-actions"><a class="viewer-button" id="open-new" href="#" target="_blank" rel="noopener">새 창에서 열기</a><button class="viewer-button" id="close-viewer" type="button">닫기</button></div></div>
+      <iframe class="report-frame" id="report-frame" title="선택한 분석자료" loading="lazy"></iframe>
+    </div></section>
+  </main>
+  <footer>제주특별자치도 수산물 통계·정책자료 통합 열람 페이지</footer>
+  <script>
+    (()=>{const cards=[...document.querySelectorAll(".report-card")],viewer=document.getElementById("viewer"),frame=document.getElementById("report-frame"),title=document.getElementById("viewer-title"),openNew=document.getElementById("open-new"),close=document.getElementById("close-viewer");
+    function openReport(file,reportTitle,updateHash=true){frame.src=file;frame.title=reportTitle;title.textContent=reportTitle;openNew.href=file;viewer.classList.add("is-visible");if(updateHash)history.replaceState(null,"","#report="+encodeURIComponent(file));requestAnimationFrame(()=>viewer.scrollIntoView({behavior:"smooth",block:"start"}))}
+    function closeReport(){viewer.classList.remove("is-visible");frame.removeAttribute("src");history.replaceState(null,"",location.pathname+location.search);document.getElementById("reports-title").scrollIntoView({behavior:"smooth",block:"start"})}
+    cards.forEach(card=>card.addEventListener("click",()=>openReport(card.dataset.file,card.dataset.title)));close.addEventListener("click",closeReport);const match=location.hash.match(/^#report=(.+)$/);if(match){const requested=decodeURIComponent(match[1]),card=cards.find(item=>item.dataset.file===requested);if(card)openReport(card.dataset.file,card.dataset.title,false)}})();
+  </script>
+</body>
+</html>

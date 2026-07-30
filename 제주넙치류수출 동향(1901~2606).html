@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>제주특별자치도 넙치류 수출 동향 대시보드</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg:#08111f; --panel:#111d2f; --panel2:#18263b; --line:#2c3c54;
+      --text:#eef5ff; --muted:#9aa9bd; --cyan:#38bdf8; --blue:#818cf8;
+      --green:#34d399; --amber:#fbbf24; --red:#fb7185; --white:#f8fafc;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body {
+      margin:0; min-height:100vh; background:
+        radial-gradient(circle at 12% 0%, rgba(14,165,233,.14), transparent 31rem),
+        radial-gradient(circle at 88% 8%, rgba(99,102,241,.12), transparent 28rem),
+        var(--bg);
+      color:var(--text); font-family:Pretendard,"Noto Sans KR",-apple-system,BlinkMacSystemFont,sans-serif;
+      line-height:1.55;
+    }
+    button, select { font:inherit; }
+    .header {
+      border-bottom:1px solid var(--line); background:rgba(8,17,31,.88);
+      backdrop-filter:blur(12px); position:sticky; top:0; z-index:20;
+    }
+    .header-inner { max-width:1440px; margin:auto; padding:22px 24px 18px; }
+    h1 { margin:0 0 5px; font-size:1.55rem; letter-spacing:-.025em; }
+    .subtitle { margin:0; color:var(--muted); font-size:.88rem; }
+    .badges { display:flex; gap:7px; flex-wrap:wrap; margin-top:11px; }
+    .badge {
+      display:inline-flex; align-items:center; gap:6px; padding:4px 10px;
+      color:#bfe9fb; background:rgba(56,189,248,.1); border:1px solid rgba(56,189,248,.28);
+      border-radius:999px; font-size:.73rem;
+    }
+    .container { max-width:1440px; margin:auto; padding:24px; }
+    .notice {
+      padding:15px 17px; border:1px solid rgba(251,191,36,.35); border-radius:12px;
+      background:rgba(251,191,36,.08); color:#dfd3b1; font-size:.83rem; margin-bottom:18px;
+    }
+    .notice strong { color:#fde68a; }
+    .panel {
+      background:linear-gradient(180deg,rgba(17,29,47,.97),rgba(14,25,41,.97));
+      border:1px solid var(--line); border-radius:15px; padding:20px; margin-bottom:18px;
+      box-shadow:0 12px 34px rgba(0,0,0,.13);
+    }
+    .panel h2 {
+      display:flex; align-items:center; gap:9px; margin:0 0 15px;
+      font-size:1rem; letter-spacing:-.01em;
+    }
+    .dot { width:8px; height:8px; border-radius:50%; background:var(--cyan); box-shadow:0 0 0 5px rgba(56,189,248,.1); }
+    .filters {
+      display:grid; grid-template-columns:repeat(5,minmax(145px,1fr)); gap:11px; align-items:end;
+    }
+    .field label { display:block; color:var(--muted); font-size:.73rem; margin:0 0 5px; }
+    select, button {
+      width:100%; min-height:40px; border-radius:9px; border:1px solid var(--line);
+      background:var(--panel2); color:var(--text); padding:8px 11px; outline:none;
+    }
+    select:focus, button:focus-visible { border-color:var(--cyan); box-shadow:0 0 0 3px rgba(56,189,248,.12); }
+    button { cursor:pointer; font-weight:700; }
+    .primary { border:0; background:linear-gradient(135deg,#0284c7,#4f46e5); }
+    .secondary { background:#20314b; }
+    .cards {
+      display:grid; grid-template-columns:repeat(5,minmax(180px,1fr)); gap:12px; margin:18px 0;
+    }
+    .card {
+      position:relative; overflow:hidden; min-height:116px; padding:16px 17px;
+      background:var(--panel); border:1px solid var(--line); border-radius:13px;
+    }
+    .card::before { content:""; position:absolute; inset:0 0 auto; height:3px; background:var(--cyan); }
+    .card:nth-child(2)::before { background:var(--green); }
+    .card:nth-child(3)::before { background:var(--amber); }
+    .card:nth-child(4)::before { background:var(--blue); }
+    .card:nth-child(5)::before { background:var(--red); }
+    .card .label { color:var(--muted); font-size:.74rem; }
+    .card .value { margin-top:5px; font-size:1.42rem; font-weight:800; letter-spacing:-.025em; }
+    .card .sub { margin-top:5px; color:var(--muted); font-size:.71rem; }
+    .chart-grid { display:grid; grid-template-columns:1.55fr 1fr; gap:18px; }
+    .chart-wrap { position:relative; min-height:340px; }
+    .chart-note { margin:10px 0 0; color:var(--muted); font-size:.72rem; }
+    .legend {
+      display:flex; flex-wrap:wrap; gap:8px 15px; color:var(--muted); font-size:.73rem; margin:-4px 0 12px;
+    }
+    .legend span::before { content:""; display:inline-block; width:9px; height:9px; border-radius:2px; margin-right:5px; }
+    .legend .direct::before { background:var(--cyan); }
+    .legend .pdf::before { background:var(--green); }
+    .legend .derived::before { background:var(--amber); }
+    .legend .corrected::before { background:var(--red); }
+    .legend .missing::before { background:#526176; }
+    .table-wrap { overflow:auto; max-height:520px; border:1px solid var(--line); border-radius:10px; }
+    table { width:100%; border-collapse:collapse; font-size:.8rem; }
+    th,td { padding:9px 11px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; }
+    th { position:sticky; top:0; z-index:2; background:#1c2b42; color:#b7c4d4; font-size:.72rem; }
+    th:first-child,td:first-child { text-align:left; }
+    tr:hover td { background:rgba(56,189,248,.045); }
+    .pill {
+      display:inline-flex; align-items:center; padding:2px 7px; border-radius:999px;
+      font-size:.67rem; font-weight:700; border:1px solid currentColor;
+    }
+    .pill.direct { color:#7dd3fc; background:rgba(56,189,248,.08); }
+    .pill.pdf { color:#6ee7b7; background:rgba(52,211,153,.08); }
+    .pill.derived { color:#fde68a; background:rgba(251,191,36,.08); }
+    .pill.corrected { color:#fda4af; background:rgba(251,113,133,.08); }
+    .pill.missing { color:#94a3b8; background:rgba(148,163,184,.08); }
+    .up { color:var(--green); } .down { color:var(--red); } .neutral { color:var(--muted); }
+    .notes { display:grid; gap:10px; }
+    .note {
+      padding:13px 15px; border-radius:11px; border:1px solid var(--line);
+      background:rgba(24,38,59,.72);
+    }
+    .note-head { display:flex; justify-content:space-between; gap:12px; align-items:center; margin-bottom:5px; }
+    .note-title { font-size:.83rem; font-weight:800; }
+    .note p { margin:0; color:#c4cfdd; font-size:.79rem; }
+    .source { color:#7dd3fc; font-size:.7rem; text-decoration:none; white-space:nowrap; }
+    .source:hover { text-decoration:underline; }
+    .empty { text-align:center; color:var(--muted); padding:32px 10px; font-size:.82rem; }
+    .method {
+      display:grid; grid-template-columns:repeat(2,1fr); gap:12px; color:#c3cfdd; font-size:.78rem;
+    }
+    .method div { padding:13px 14px; border:1px solid var(--line); border-radius:10px; background:rgba(24,38,59,.55); }
+    .method strong { display:block; color:var(--white); margin-bottom:3px; }
+    .footer { max-width:1440px; margin:auto; padding:4px 24px 30px; color:var(--muted); font-size:.72rem; text-align:center; }
+    @media(max-width:1100px) {
+      .cards { grid-template-columns:repeat(3,1fr); }
+      .filters { grid-template-columns:repeat(3,1fr); }
+      .chart-grid { grid-template-columns:1fr; }
+    }
+    @media(max-width:680px) {
+      .header-inner,.container { padding-left:15px; padding-right:15px; }
+      h1 { font-size:1.2rem; }
+      .filters,.cards,.method { grid-template-columns:1fr; }
+      .panel { padding:15px; }
+      .chart-wrap { min-height:290px; }
+      .note-head { align-items:flex-start; flex-direction:column; gap:3px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-inner">
+      <h1>제주특별자치도 넙치류 수출 동향</h1>
+      <p class="subtitle">한국무역협회 제주지부 「제주 수출입동향」 기반 · 정책 수립 참고용</p>
+      <div class="badges">
+        <span class="badge">대상기간 2019.01~2026.06</span>
+        <span class="badge">금액 단위: 만 달러</span>
+        <span class="badge">월별 본문 74건 및 첨부 PDF 86건 대조</span>
+        <span class="badge">직접값·누계차감 구분</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="notice">
+      <strong>자료 이용 유의:</strong> 2019~2026년은 한국무역협회 제주지부 첨부 PDF의 월별·상반기·연간 품목표를 추가 반영했습니다.
+      보고서가 나중에 실적을 정정한 경우 더 최신 보고서의 전년동월 수치를 우선했으며, 6월·12월 일부는 상반기·연간 누계에서
+      확인된 월을 차감해 산출했습니다. ‘누계차감’ 값은 직접 기재값과 구분해 표시하므로 정책 검토 시 원문 통계와 재확인해야 합니다.
+    </div>
+
+    <section class="panel">
+      <h2><span class="dot"></span> 조회 조건</h2>
+      <div class="filters">
+        <div class="field">
+          <label for="startPeriod">시작 기간</label>
+          <select id="startPeriod"></select>
+        </div>
+        <div class="field">
+          <label for="endPeriod">종료 기간</label>
+          <select id="endPeriod"></select>
+        </div>
+        <div class="field">
+          <label for="statusFilter">자료 구분</label>
+          <select id="statusFilter">
+            <option value="ALL">전체</option>
+            <option value="direct">본문 직접 확인</option>
+            <option value="pdf">PDF 표 직접 확인</option>
+            <option value="derived">누계차감 산출</option>
+            <option value="missing">월별 수치 미확인</option>
+          </select>
+        </div>
+        <button class="primary" id="applyBtn">조건 적용</button>
+        <button class="secondary" id="downloadBtn">조회 결과 CSV</button>
+      </div>
+    </section>
+
+    <section class="cards" id="summaryCards"></section>
+
+    <div class="chart-grid">
+      <section class="panel">
+        <h2><span class="dot"></span> 월별 넙치류 수출액 추이</h2>
+        <div class="legend">
+          <span class="direct">본문 직접 확인</span>
+          <span class="pdf">PDF 표 직접 확인</span>
+          <span class="derived">누계차감 산출</span>
+          <span class="missing">월별 수치 미확인</span>
+        </div>
+        <div class="chart-wrap"><canvas id="monthlyChart"></canvas></div>
+      </section>
+      <section class="panel">
+        <h2><span class="dot"></span> 연도별 넙치류 수출액 합계</h2>
+        <div class="chart-wrap"><canvas id="annualChart"></canvas></div>
+        <p class="chart-note">※ 2019~2025년은 1~12월 연간 합계이며, 2026년은 1~6월 누계입니다.</p>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2><span class="dot"></span> 연도별 합계 비교</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>연도</th><th>집계기간</th><th>수출액 합계</th><th>전년 동기대비</th><th>반영 월수</th><th>집계구분</th>
+            </tr>
+          </thead>
+          <tbody id="annualTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2><span class="dot"></span> 선택 기간 수산물 수출 분석·참고사항</h2>
+      <div class="notes" id="notes"></div>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    정책 검토 시 원문 및 공식 무역통계와 재확인 필요 · 무역수지 및 수입액은 본 대시보드 범위에서 제외
+  </footer>
+
+  <script>
+    const SOURCE_BASE = 'https://domestic.kita.net/jj/tradeTrend/tradeTrend/tradeTrendDetail.do?postIndex=';
+    const STATUS = {
+      direct:{label:'본문 직접 확인', cls:'direct'},
+      pdf:{label:'PDF 표 직접 확인', cls:'pdf'},
+      derived:{label:'누계차감 산출', cls:'derived'},
+      corrected:{label:'본문 표기 보정', cls:'corrected'},
+      missing:{label:'월별 수치 미확인', cls:'missing'}
+    };
+
+    const VALUES = {
+      '2019-01':{v:192.9,s:'pdf',yoy:0.7,why:'2020.1 PDF 표의 2019년 1월 전년동월 값(1,929천 달러)'},
+      '2019-02':{v:181.3,s:'pdf',yoy:5.9,why:'2020.2 PDF 표의 2019년 2월 전년동월 값(1,813천 달러)'},
+      '2019-03':{v:149.7,s:'pdf',yoy:-11.1,why:'2020.3 PDF 표의 2019년 3월 전년동월 값(1,497천 달러)'},
+      '2019-04':{v:177.7,s:'pdf',yoy:-1.0,why:'2019.4 PDF 표의 당월 값(1,777천 달러)'},
+      '2019-05':{v:152.5,s:'pdf',yoy:-11.5,why:'2020.5 PDF 표의 2019년 5월 전년동월 값(1,525천 달러)'},
+      '2019-06':{v:135.8,s:'derived',yoy:null,why:'2020 상반기 PDF의 2019 상반기 누계 989.9−1~5월 854.1'},
+      '2019-07':{v:171.0,s:'pdf',yoy:6.4,why:'2020.7 PDF 표의 2019년 7월 전년동월 값(1,710천 달러)'},
+      '2019-08':{v:194.7,s:'pdf',yoy:-6.8,why:'2020.8 PDF 표의 2019년 8월 전년동월 값(1,947천 달러)'},
+      '2019-09':{v:207.4,s:'pdf',yoy:9.5,why:'2020.9 PDF 표의 2019년 9월 전년동월 값(2,074천 달러)'},
+      '2019-10':{v:192.5,s:'pdf',yoy:-12.4,why:'2020.10 PDF 표의 2019년 10월 전년동월 값(1,925천 달러)'},
+      '2019-11':{v:168.8,s:'pdf',yoy:-13.1,why:'2020.11 PDF 표의 2019년 11월 전년동월 값(1,688천 달러)'},
+      '2019-12':{v:229.6,s:'derived',yoy:null,why:'2020 연간평가 PDF의 2019 연간 2,153.9−1~11월 1,924.3'},
+
+      '2020-01':{v:151.6,s:'pdf',yoy:-21.4,why:'2021.1 PDF 표의 2020년 1월 전년동월 값(1,516천 달러)'},
+      '2020-02':{v:139.0,s:'pdf',yoy:-23.4,why:'2021.2 PDF 표의 2020년 2월 전년동월 값(1,390천 달러)'},
+      '2020-03':{v:92.9,s:'pdf',yoy:-37.9,why:'2021.3 PDF 표의 2020년 3월 전년동월 값(929천 달러)'},
+      '2020-04':{v:48.0,s:'pdf',yoy:-73.0,why:'2021.4 PDF 표의 2020년 4월 전년동월 값(480천 달러)'},
+      '2020-05':{v:95.6,s:'pdf',yoy:-37.3,why:'2021.5 PDF 표의 2020년 5월 전년동월 값(956천 달러)'},
+      '2020-06':{v:129.6,s:'derived',yoy:null,why:'2021 상반기 PDF의 2020 상반기 누계 656.7−1~5월 527.1'},
+      '2020-07':{v:151.3,s:'pdf',yoy:-11.5,why:'2021.7 PDF 표의 2020년 7월 전년동월 값(1,513천 달러)'},
+      '2020-08':{v:172.1,s:'pdf',yoy:-10.9,why:'2021.8 PDF 표의 2020년 8월 전년동월 값(1,721천 달러)'},
+      '2020-09':{v:224.5,s:'pdf',yoy:8.2,why:'2021.9 PDF 표의 2020년 9월 전년동월 값(2,245천 달러)'},
+      '2020-10':{v:198.0,s:'pdf',yoy:2.9,why:'2021.10 PDF 표의 2020년 10월 전년동월 값(1,980천 달러)'},
+      '2020-11':{v:196.6,s:'pdf',yoy:16.5,why:'2021.11 PDF 표의 2020년 11월 전년동월 값(1,966천 달러)'},
+      '2020-12':{v:309.1,s:'derived',yoy:null,why:'2021 연간평가 PDF의 2020 연간 1,908.3−1~11월 1,599.2'},
+
+      '2021-01':{v:148.6,s:'pdf',yoy:-2.0,why:'2022.1 PDF 표의 2021년 1월 전년동월 값(1,486천 달러)'},
+      '2021-02':{v:170.6,s:'pdf',yoy:22.8,why:'2022.2 PDF 표의 2021년 2월 전년동월 값(1,706천 달러)'},
+      '2021-03':{v:204.5,s:'pdf',yoy:120.1,why:'2022.3 PDF 표의 2021년 3월 전년동월 값(2,045천 달러)'},
+      '2021-04':{v:161.3,s:'pdf',yoy:235.9,why:'2022.4 PDF 표의 2021년 4월 전년동월 값(1,613천 달러)'},
+      '2021-05':{v:150.3,s:'pdf',yoy:57.3,why:'2022.5 PDF 표의 2021년 5월 전년동월 값(1,503천 달러)'},
+      '2021-06':{v:138.0,s:'derived',yoy:null,why:'2022 상반기 PDF의 2021 상반기 누계 973.3−1~5월 835.3'},
+      '2021-07':{v:182.7,s:'pdf',yoy:20.8,why:'2022.7 PDF 표의 2021년 7월 전년동월 값(1,827천 달러)'},
+      '2021-08':{v:227.1,s:'pdf',yoy:31.9,why:'2022.8 PDF 표의 2021년 8월 전년동월 값(2,271천 달러)'},
+      '2021-09':{v:202.4,s:'pdf',yoy:-9.8,why:'2022.9 PDF 표의 2021년 9월 전년동월 값(2,024천 달러)'},
+      '2021-10':{v:275.5,s:'pdf',yoy:39.2,why:'2022.10 PDF 표의 2021년 10월 전년동월 값(2,755천 달러)'},
+      '2021-11':{v:266.4,s:'pdf',yoy:35.5,why:'2021.11 PDF 표의 당월 값(2,664천 달러)'},
+      '2021-12':{v:352.9,s:'derived',yoy:null,why:'2022 연간평가 PDF의 2021 연간 2,480.3−1~11월 2,127.4'},
+
+      '2022-01':{v:188.2,s:'pdf',yoy:26.7,why:'2022.1 PDF 표의 당월 값(1,882천 달러)'},
+      '2022-02':{v:180.6,s:'pdf',yoy:5.8,why:'2022.2 PDF 표의 당월 값(1,806천 달러)'},
+      '2022-03':{v:193.8,s:'pdf',yoy:-5.2,why:'2022.3 PDF 표의 당월 값(1,938천 달러)'},
+      '2022-04':{v:184.9,s:'pdf',yoy:14.7,why:'2022.4 PDF 표의 당월 값(1,849천 달러)'},
+      '2022-05':{v:198.9,s:'pdf',yoy:32.3,why:'2022.5 PDF 표의 당월 값(1,989천 달러)'},
+      '2022-06':{v:197.4,s:'derived',yoy:null,why:'2022 상반기 PDF의 누계 1,143.8−1~5월 946.4'},
+      '2022-07':{v:200.1,s:'pdf',yoy:9.5,why:'2022.7 PDF 표의 당월 값(2,001천 달러)'},
+      '2022-08':{v:216.9,s:'pdf',yoy:-4.5,why:'2022.8 PDF 표의 당월 값(2,169천 달러)'},
+      '2022-09':{v:232.4,s:'pdf',yoy:14.8,why:'2022.9 PDF 표의 당월 값(2,324천 달러)'},
+      '2022-10':{v:214.9,s:'pdf',yoy:-22.0,why:'2022.10 PDF 표의 당월 값(2,149천 달러)'},
+      '2022-11':{v:235.9,s:'direct',yoy:null,why:'2023.11 본문 전년동월 비교값'},
+      '2022-12':{v:287.3,s:'direct',yoy:null,why:'2023.12 본문 전년동월 비교값'},
+
+      '2023-01':{v:213.9,s:'pdf',yoy:13.6,why:'2023.1 PDF 본문의 넙치 수출액',src:'1831110'},
+      '2023-02':{v:176.4,s:'pdf',yoy:-2.3,why:'2023.2 PDF 품목별 수출표의 당월 값'},
+      '2023-03':{v:192.1,s:'pdf',yoy:-0.3,why:'2023.3 PDF 본문의 넙치 수출액',src:'1832693'},
+      '2023-04':{v:170.4,s:'pdf',yoy:-7.9,why:'2023.4 PDF 본문의 넙치 수출액',src:'1833554'},
+      '2023-05':{v:183.8,s:'pdf',yoy:-7.7,why:'2023.5 PDF 본문의 넙치 수출액'},
+      '2023-06':{v:180.3,s:'pdf',yoy:-9.3,why:'2023 상반기 PDF 품목별 수출표의 6월 값'},
+      '2023-07':{v:186.2,s:'pdf',yoy:-7.0,why:'2023.7 PDF 본문의 넙치 수출액'},
+      '2023-08':{v:221.2,s:'pdf',yoy:1.0,why:'2023.8 PDF 본문의 넙치 수출액',src:'1836760'},
+      '2023-09':{v:213.5,s:'pdf',yoy:-8.7,why:'2023.9 PDF 본문의 넙치 수출액',src:'1837174'},
+      '2023-10':{v:216.3,s:'pdf',yoy:0.7,why:'2023.10 PDF 본문의 넙치 수출액',src:'1837911'},
+      '2023-11':{v:237.1,s:'pdf',yoy:0.5,why:'2023.11 PDF 본문의 넙치 수출액',src:'1838889'},
+      '2023-12':{v:268.6,s:'pdf',yoy:-6.5,why:'2023.12 PDF 본문의 넙치 수출액',src:'1839790'},
+
+      '2024-01':{v:203.0,s:'pdf',yoy:-5.1,why:'2024.1 PDF 본문의 넙치 수출액',src:'1841134'},
+      '2024-02':{v:204.5,s:'pdf',yoy:15.4,why:'2024.2 PDF 본문의 넙치 수출액',src:'1842450'},
+      '2024-03':{v:176.0,s:'pdf',yoy:-8.4,why:'2024.3 PDF 본문의 넙치 수출액',src:'1843675'},
+      '2024-04':{v:185.4,s:'pdf',yoy:8.4,why:'2024.4 PDF 본문의 넙치 수출액',src:'1844726'},
+      '2024-05':{v:203.4,s:'pdf',yoy:9.9,why:'2024.5 PDF 본문의 넙치 수출액',src:'1845866'},
+      '2024-06':{v:184.1,s:'pdf',yoy:1.4,why:'2024 상반기 PDF 품목별 수출표의 6월 값'},
+      '2024-07':{v:212.5,s:'pdf',yoy:13.8,why:'2024.7 PDF 본문의 넙치 수출액',src:'1848267'},
+      '2024-08':{v:228.9,s:'pdf',yoy:3.2,why:'2024.8 PDF 본문의 넙치 수출액',src:'1849411'},
+      '2024-09':{v:253.9,s:'pdf',yoy:19.8,why:'2024.9 PDF 본문의 넙치 수출액',src:'1850214'},
+      '2024-10':{v:247.5,s:'pdf',yoy:14.3,why:'2024.10 PDF 본문의 넙치 수출액',src:'1851363'},
+      '2024-11':{v:261.5,s:'pdf',yoy:10.2,why:'2024.11 PDF 본문의 넙치 수출액',src:'1852237'},
+      '2024-12':{v:328.6,s:'derived',yoy:22.3,why:'2024 연간 PDF의 넙치 합계 2,689.3−1~11월 2,360.7'},
+
+      '2025-01':{v:232.7,s:'pdf',yoy:14.2,why:'2025.1 PDF 본문의 넙치 수출액',src:'1854714'},
+      '2025-02':{v:193.0,s:'pdf',yoy:-6.1,why:'2025.2 PDF 본문의 넙치 수출액',src:'1855947'},
+      '2025-03':{v:224.6,s:'pdf',yoy:27.4,why:'2025.3 PDF 본문의 넙치 수출액',src:'1857351'},
+      '2025-04':{v:212.0,s:'pdf',yoy:13.1,why:'2025.4 PDF 본문의 넙치 수출액',src:'1858474'},
+      '2025-05':{v:192.5,s:'pdf',yoy:-5.6,why:'2025.5 PDF 본문의 넙치 수출액',src:'1859476'},
+      '2025-06':{v:215.0,s:'derived',yoy:16.8,why:'2025 상반기 PDF의 누계 1,269.8−1~5월 1,054.8'},
+      '2025-07':{v:246.0,s:'pdf',yoy:15.8,why:'2025.7 PDF 본문의 넙치 수출액',src:'1861433'},
+      '2025-08':{v:273.1,s:'pdf',yoy:19.2,why:'2025.8 PDF 본문의 넙치 수출액',src:'1862408'},
+      '2025-09':{v:264.4,s:'pdf',yoy:4.1,why:'2025.9 PDF 본문의 넙치 수출액',src:'1863166'},
+      '2025-10':{v:285.2,s:'pdf',yoy:14.6,why:'2025.10 PDF 본문의 넙치 수출액',src:'1864235'},
+      '2025-11':{v:253.0,s:'pdf',yoy:-3.3,why:'2025.11 PDF의 2,530천 달러를 만 달러로 환산',src:'1865092'},
+      '2025-12':{v:330.5,s:'derived',yoy:0.6,why:'2025 연간 PDF의 넙치 합계 2,922.0−1~11월 2,591.5'},
+
+      '2026-01':{v:240.5,s:'pdf',yoy:4.1,why:'2026.1 PDF 본문의 넙치 수출액',src:'1867049'},
+      '2026-02':{v:218.5,s:'pdf',yoy:13.3,why:'2026.2 PDF 본문의 넙치 수출액',src:'1867961'},
+      '2026-03':{v:231.4,s:'direct',yoy:2.8,why:'2026.3 게시글 본문의 넙치 수출액',src:'1868736'},
+      '2026-04':{v:242.4,s:'pdf',yoy:14.0,why:'2026.4 PDF 본문의 넙치 수출액',src:'1869821'},
+      '2026-05':{v:190.0,s:'pdf',yoy:-1.5,why:'2026.5 PDF 본문의 넙치 수출액',src:'1870784'},
+      '2026-06':{v:228.9,s:'derived',yoy:6.5,why:'2026 상반기 PDF의 누계 1,351.7−1~5월 1,122.8',src:'1871599'}
+    };
+
+    const NOTES = [
+      ['2019-06',null,'2019년 상반기 보고서는 넙치류 수출 992.7만 달러(−3.7%)를 제시했고 일본·미국 감소를 언급했다. 다음 해 상반기 비교표에서는 2019년 누계가 989.9만 달러로 정정돼 월 산출에는 최신값을 사용했다.'],
+      ['2020-04',null,'보고서는 2020년 4월 넙치류 수출금액과 물량이 약 20년 전 수준으로 급락했다고 분석했다.'],
+      ['2020-06',null,'2020년 상반기 넙치류 수출은 656.7만 달러로 33.7% 감소했다. 일본·미국 수출 부진이 주요 배경으로 제시됐다.'],
+      ['2020-08',null,'4월 급락 뒤 6~8월 금액과 물량이 조금씩 회복됐지만 전년 수준에는 미치지 못했고, 가격 상승에 비해 물량 회복이 더뎠다고 평가했다.'],
+      ['2021-06',null,'2021년 상반기 넙치류 수출은 973.3만 달러로 48.2% 증가했다. 미국·베트남 호조와 일본 감소가 함께 나타났다.'],
+      ['2022-06',null,'2022년 상반기 넙치류 수출은 1,143.8만 달러로 17.5% 증가해 4년 만에 상반기 1천만 달러를 넘었다.'],
+      ['2022-12',null,'2022년 연간 넙치 수출은 2,535.4만 달러로 2.2% 증가했다. 일본·베트남 수출은 견조했지만 북미 수출은 감소했다. 공표 월값 합계와 연간값의 4.1만 달러 차이는 특정 월에 배분하지 않았다.'],
+      ['2023-01','1831110','넙치(213.9만 달러, +13.6%)가 24개월 연속 증가했고 기타어류(48.6만 달러, +108.4%)와 기타연체동물(34.5만 달러, +91.1%)도 선전했으나 게는 18.7% 감소했다.'],
+      ['2023-02',null,'넙치 수출은 176.4만 달러로 2.3% 감소했으나 기타어류(37.4만 달러, +554.2%)와 소라·조개 등 기타연체동물(29.6만 달러, 신규)이 호조를 보였다.'],
+      ['2023-03','1832693','넙치(192.1만 달러, -0.3%)는 보합권이었고 기타연체동물(53.3만 달러, +54.1%)과 기타어류(26.0만 달러, +30.6%)가 증가했다.'],
+      ['2023-04','1833554','넙치·기타연체동물·기타어류가 모두 감소하면서 수산물 수출은 256.0만 달러로 24.8% 줄어 1분기 호조가 약화됐다.'],
+      ['2023-05',null,'넙치·게·기타어류가 부진했으나 기타연체동물은 582.9% 증가했다. 전체 수산물 수출은 300.0만 달러로 13.9% 감소했지만 4월보다 감소폭은 축소됐다.'],
+      ['2023-06',null,'상반기 넙치 수출은 1,119.3만 달러로 2.2% 감소하고 기타어류도 12.1% 줄었다. 반면 기타연체동물은 95.6%, 건조수산물은 159.7% 증가했다.'],
+      ['2023-07',null,'넙치·조개·기타어류 부진으로 수산물 수출은 244.9만 달러로 23.5% 감소했다. 기타수산가공품·어육·갈치는 증가했다.'],
+      ['2023-08','1836760','넙치·기타어류·기타수산가공품은 증가했으나 조개와 기타수산물 부진으로 전체 수산물 수출은 287.7만 달러로 4.0% 감소했다.'],
+      ['2023-09','1837174','넙치·기타어류·조개 등 주요 품목이 부진해 수산물 수출은 277.3만 달러로 22.4% 감소했으나 건조수산물 신규 수출이 발생했다.'],
+      ['2023-10','1837911','넙치·기타연체동물·기타어류는 증가했지만 조개·게 부진으로 수산물 수출은 375.5만 달러로 7.6% 감소했다. 수산물통조림 신규 수출과 갈치·건조수산물 급증이 확인됐다.'],
+      ['2023-11','1838889','넙치가 견조한 가운데 미국 대상 수산가공품이 급증하면서 수산물 수출은 402.9만 달러로 5.4% 증가했다.'],
+      ['2023-12','1839790','어육과 기타수산가공품은 증가했으나 넙치·게·조개 감소로 수산물 수출은 471.2만 달러로 5.7% 줄었다.'],
+      ['2024-01','1841134','조개·어육은 증가했으나 넙치·게·수산가공품 부진으로 수산물 수출은 322.1만 달러로 18.6% 감소했다.'],
+      ['2024-02','1842450','넙치·게·조개가 모두 증가세로 전환하면서 수산물 수출은 335.3만 달러로 5.4% 증가했다.'],
+      ['2024-03','1843675','게와 갈치는 증가했으나 넙치와 연체동물 부진으로 수산물 수출은 264.5만 달러로 23.0% 감소했다.'],
+      ['2024-04','1844726','넙치·건조수산물·조개가 호조를 보이면서 수산물 수출은 287.6만 달러로 12.0% 증가했다.'],
+      ['2024-05','1845866','넙치·기타어류·건조수산물 증가가 조개·게 감소를 상쇄해 수산물 수출은 301.5만 달러로 0.1% 증가했다. 건조수산물의 중국 수출이 16개월 만에 재개됐다.'],
+      ['2024-06',null,'상반기 넙치 수출은 1,159.1만 달러로 3.4%, 조개는 114.6만 달러로 11.6% 증가했으나 기타어류는 130.9만 달러로 25.5% 감소했다. 6월 넙치 수출은 184.1만 달러였다.'],
+      ['2024-07','1848267','넙치·조개·기타어류가 동반 증가하면서 수산물 수출은 270.0만 달러로 10.0% 늘었다.'],
+      ['2024-08','1849411','넙치·수산가공품·조개·건조수산물이 고르게 증가해 수산물 수출은 306.8만 달러로 6.4% 증가했다.'],
+      ['2024-09','1850214','넙치 수출 호조가 조개·수산가공품 부진을 상쇄하면서 수산물 수출은 290.3만 달러로 4.9% 증가했다.'],
+      ['2024-10','1851363','넙치와 조개는 증가했지만 기타어류와 소라가 크게 감소해 수산물 수출은 317.5만 달러로 15.5% 줄었다.'],
+      ['2024-11','1852237','넙치와 조개는 증가했지만 나머지 품목 부진으로 수산물 수출은 381.7만 달러로 5.4% 감소했다.'],
+      ['2024-12',null,'연간 넙치(+9.2%)와 조개(+33.1%)는 증가했으나 기타어류(-16.5%), 기타연체동물(-38.2%), 게(-55.6%)가 부진해 전체 수산물 수출은 3,795만 달러로 2.9% 감소했다.'],
+      ['2025-01','1854714','넙치·수산가공품·갈치 증가에 힘입어 수산물 수출은 336.4만 달러로 4.3% 증가했다.'],
+      ['2025-02','1855947','수산가공품이 급증했지만 최대 품목인 넙치가 부진해 수산물 수출은 260.6만 달러로 22.6% 감소했다.'],
+      ['2025-03','1857351','넙치와 조개가 호조를 이끌면서 수산물 수출은 305.0만 달러로 15.2% 증가했다.'],
+      ['2025-04','1858474','넙치·기타연체동물·조개가 모두 증가하면서 수산물 수출은 323.0만 달러로 11.5% 늘었다.'],
+      ['2025-05','1859476','수산가공품과 연체동물은 증가했으나 넙치를 포함한 어류 부진으로 수산물 수출은 261.5만 달러로 8.8% 감소했다.'],
+      ['2025-06',null,'상반기 넙치 수출은 1,269.8만 달러로 9.4%, 조개는 127.6만 달러로 11.4% 증가했다. 일본 대상 넙치는 4.4% 감소했지만 미국 대상 넙치는 17.0% 증가했다.'],
+      ['2025-07','1861433','넙치를 포함한 어류와 수산가공품이 크게 증가해 연체동물 부진을 상쇄하면서 수산물 수출은 349.0만 달러로 29.3% 증가했다.'],
+      ['2025-08','1862408','어류와 연체동물이 동반 호조를 보이면서 수산물 수출은 370.4만 달러로 20.6% 증가했다.'],
+      ['2025-09','1863166','어류·연체동물·수산가공품이 모두 증가하면서 수산물 수출은 387.8만 달러로 33.7% 늘었다.'],
+      ['2025-10','1864235','넙치의 견조한 성장과 기타수산가공품 급증으로 수산물 수출은 402.1만 달러로 26.1% 증가했다.'],
+      ['2025-11','1865092','기타수산가공품은 232.5% 증가했지만 넙치가 3.3% 감소해 수산물 수출은 380.0만 달러로 0.4% 줄었다.'],
+      ['2025-12',null,'연간 넙치는 2,922만 달러로 8.7%, 기타연체동물은 202만 달러로 6.7% 증가했으나 조개는 256만 달러로 9.8% 감소해 넙치 의존 구조가 지속됐다.'],
+      ['2026-01','1867049','넙치·수산가공품·갈치가 증가하면서 수산물 수출은 392.8만 달러로 17.4% 늘었다. 다만 미국 대상 넙치는 19.6% 감소했다.'],
+      ['2026-02','1867961','넙치와 연체동물 등 주력 품목 증가로 수산물 수출은 332.5만 달러로 27.6% 증가했다.'],
+      ['2026-03','1868736','넙치가 소폭 증가하고 기타수산가공품이 급증하면서 전체 수산물 수출이 개선됐다.'],
+      ['2026-04','1869821','넙치와 기타수산가공품 증가에 힘입어 수산물 수출은 375.2만 달러로 16.0% 증가했다. 기타수산가공품은 베트남·미국을 중심으로 확대됐다.'],
+      ['2026-05','1870784','넙치는 소폭 감소했지만 기타수산가공품이 1,210.4% 급증해 수산물 수출은 289.8만 달러로 10.6% 증가했다.'],
+      ['2026-06','1871599','상반기 넙치는 1,351.7만 달러로 6.4%, 기타수산가공품은 181.2만 달러로 344.7% 증가했다. 일본 대상 넙치 수출이 23.7% 증가해 전체 실적을 견인했다.']
+    ].map(([ym,src,text])=>({ym,src,text}));
+
+    const ALL_MONTHS = [];
+    for (let y=2019;y<=2026;y++) {
+      const max = y===2026 ? 6 : 12;
+      for (let m=1;m<=max;m++) {
+        const ym = `${y}-${String(m).padStart(2,'0')}`;
+        ALL_MONTHS.push({ym,y,m,...(VALUES[ym] || {v:null,s:'missing',yoy:null,why:'본문과 확보된 첨부자료에서 월별 넙치류 수출액 미확인',src:null})});
+      }
+    }
+
+    const fmt = n => n==null ? '-' : Number(n).toLocaleString('ko-KR',{minimumFractionDigits:1,maximumFractionDigits:1});
+    const pct = n => n==null ? '-' : `${n>0?'+':''}${n.toFixed(1)}%`;
+    const yoyClass = n => n==null ? 'neutral' : n>0 ? 'up' : n<0 ? 'down' : 'neutral';
+    const statusPill = s => `<span class="pill ${STATUS[s].cls}">${STATUS[s].label}</span>`;
+    const ymLabel = ym => `${ym.slice(0,4)}년 ${Number(ym.slice(5))}월`;
+
+    let monthlyChart, annualChart;
+
+    function fillPeriodSelects() {
+      const options = ALL_MONTHS.map(r=>`<option value="${r.ym}">${ymLabel(r.ym)}</option>`).join('');
+      document.getElementById('startPeriod').innerHTML=options;
+      document.getElementById('endPeriod').innerHTML=options;
+      document.getElementById('startPeriod').value='2019-01';
+      document.getElementById('endPeriod').value='2026-06';
+    }
+
+    function selectedRows(ignoreStatus=false) {
+      const start=document.getElementById('startPeriod').value;
+      const end=document.getElementById('endPeriod').value;
+      const sf=document.getElementById('statusFilter').value;
+      let rows=ALL_MONTHS.filter(r=>r.ym>=start&&r.ym<=end);
+      if(!ignoreStatus&&sf!=='ALL') rows=rows.filter(r=>r.s===sf);
+      return rows;
+    }
+
+    function renderSummary(rows) {
+      const known=rows.filter(r=>r.v!=null);
+      const total=known.reduce((a,b)=>a+b.v,0);
+      const avg=known.length?total/known.length:null;
+      const peak=known.length?known.reduce((a,b)=>a.v>b.v?a:b):null;
+      const direct=known.filter(r=>r.s==='direct'||r.s==='pdf').length;
+      const derived=known.filter(r=>r.s==='derived').length;
+      const completeness=rows.length?known.length/rows.length*100:0;
+      const cards=[
+        ['확인 가능 합계',known.length?`${fmt(total)} 만 달러`:'-','미확인 월 제외 부분합계'],
+        ['월평균',fmt(avg)+(avg==null?'':' 만 달러'),`${known.length}개월 기준`],
+        ['최고 월',peak?fmt(peak.v)+' 만 달러':'-',peak?ymLabel(peak.ym):'확인값 없음'],
+        ['직접 확인',`${direct}개월`,`누계차감 산출 ${derived}개월`],
+        ['자료 완전성',`${completeness.toFixed(1)}%`,`전체 ${rows.length}개월 중 ${known.length}개월 확인`]
+      ];
+      document.getElementById('summaryCards').innerHTML=cards.map(c=>`
+        <div class="card"><div class="label">${c[0]}</div><div class="value">${c[1]}</div><div class="sub">${c[2]}</div></div>
+      `).join('');
+    }
+
+    function renderMonthly(rows) {
+      const colors=rows.map(r=>r.s==='direct'?'#38bdf8':r.s==='pdf'?'#34d399':r.s==='derived'?'#fbbf24':r.s==='corrected'?'#fb7185':'#526176');
+      if(monthlyChart)monthlyChart.destroy();
+      monthlyChart=new Chart(document.getElementById('monthlyChart'),{
+        type:'line',
+        data:{labels:rows.map(r=>r.ym),datasets:[{
+          label:'넙치류 수출액(만 달러)',data:rows.map(r=>r.v),borderColor:'#7dd3fc',
+          backgroundColor:'rgba(56,189,248,.08)',pointBackgroundColor:colors,pointBorderColor:colors,
+          pointRadius:rows.length>55?2.5:4,pointHoverRadius:6,borderWidth:2,tension:.22,spanGaps:false,fill:true
+        }]},
+        options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},
+          plugins:{legend:{labels:{color:'#9aa9bd'}},tooltip:{callbacks:{
+            afterLabel:ctx=>{const r=rows[ctx.dataIndex];return `${STATUS[r.s].label}${r.yoy==null?'':` · 전년 동기대비 ${pct(r.yoy)}`}`;}
+          }}},
+          scales:{x:{ticks:{color:'#9aa9bd',maxRotation:0,autoSkip:true,maxTicksLimit:18},grid:{color:'#23344a88'}},
+            y:{beginAtZero:true,ticks:{color:'#9aa9bd',callback:v=>fmt(v)},grid:{color:'#23344a88'},title:{display:true,text:'만 달러',color:'#9aa9bd'}}}
+        }
+      });
+    }
+
+    function annualData(rows) {
+      const minYear=Number(document.getElementById('startPeriod').value.slice(0,4));
+      const maxYear=Number(document.getElementById('endPeriod').value.slice(0,4));
+      const groups=[];
+      for(let y=minYear;y<=maxYear;y++){
+        const months=ALL_MONTHS.filter(r=>r.y===y);
+        const known=months.filter(r=>r.v!=null);
+        const partial=months.length<12;
+        groups.push({
+          y,months,known,partial,
+          period:partial?`1~${months.length}월 누계`:'1~12월',
+          total:known.reduce((a,b)=>a+b.v,0),
+          complete:months.length>0&&known.length===months.length
+        });
+      }
+      groups.forEach((g,i)=>{
+        if(!g.complete){g.change=null;return;}
+        if(g.partial){
+          const prior=ALL_MONTHS.filter(r=>r.y===g.y-1&&r.m<=g.months.length&&r.v!=null);
+          const priorTotal=prior.reduce((a,b)=>a+b.v,0);
+          g.change=prior.length===g.months.length&&priorTotal?(g.total-priorTotal)/priorTotal*100:null;
+          g.changeLabel='전년 동기간 대비';
+        }else{
+          const p=groups[i-1];
+          g.change=(p?.complete&&!p.partial&&p.total)?(g.total-p.total)/p.total*100:null;
+          g.changeLabel='전년 동기대비';
+        }
+      });
+      return groups;
+    }
+
+    function renderAnnual(rows) {
+      const groups=annualData(rows);
+      if(annualChart)annualChart.destroy();
+      annualChart=new Chart(document.getElementById('annualChart'),{
+        type:'bar',
+        data:{labels:groups.map(g=>g.partial?[String(g.y),'1~6월']:String(g.y)),datasets:[{
+          data:groups.map(g=>g.known.length?g.total:null),
+          backgroundColor:groups.map(g=>g.complete?'rgba(52,211,153,.78)':'rgba(251,191,36,.65)'),
+          borderRadius:6,label:'수출액 합계(만 달러)'
+        }]},
+        options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9aa9bd'}},
+          tooltip:{callbacks:{afterLabel:ctx=>{const g=groups[ctx.dataIndex];return `${g.period} · ${g.known.length}/${g.months.length}개월 반영${g.change==null?'':` · ${g.changeLabel} ${pct(g.change)}`}`;}}}},
+          scales:{x:{ticks:{color:'#9aa9bd'},grid:{display:false}},y:{beginAtZero:true,ticks:{color:'#9aa9bd',callback:v=>fmt(v)},grid:{color:'#23344a88'}}}}
+      });
+      document.getElementById('annualTableBody').innerHTML=groups.map(g=>`
+        <tr><td>${g.y}년</td><td>${g.period}</td>
+        <td>${g.known.length?fmt(g.total)+' 만 달러':'-'}</td><td class="${yoyClass(g.change)}">${pct(g.change)}</td>
+        <td>${g.known.length}/${g.months.length}개월</td><td>${g.complete?(g.partial?'<span class="pill derived">1~6월 집계</span>':'<span class="pill direct">연간 완료</span>'):'<span class="pill missing">일부 미확인</span>'}</td></tr>
+      `).join('');
+    }
+
+    function renderNotes(rows) {
+      const set=new Set(rows.map(r=>r.ym));
+      const notes=NOTES.filter(n=>set.has(n.ym));
+      document.getElementById('notes').innerHTML=notes.length?notes.map(n=>`
+        <article class="note"><div class="note-head"><div class="note-title">${ymLabel(n.ym)}</div>
+        ${n.src?`<a class="source" target="_blank" rel="noopener" href="${SOURCE_BASE+n.src}">한국무역협회 제주지부 원문</a>`:'<span class="source">첨부 PDF 분석</span>'}</div>
+        <p>${n.text}</p></article>
+      `).join(''):'<div class="empty">선택 기간의 게시글 본문에서 넙치류·수산물 관련 분석 문구가 확인되지 않았습니다.</div>';
+    }
+
+    function renderAll() {
+      const start=document.getElementById('startPeriod').value;
+      const end=document.getElementById('endPeriod').value;
+      if(start>end){alert('시작 기간은 종료 기간보다 늦을 수 없습니다.');return;}
+      const rows=selectedRows();
+      renderSummary(rows); renderMonthly(rows); renderAnnual(rows); renderNotes(rows);
+    }
+
+    function csvDownload() {
+      const rows=selectedRows();
+      const head=['기간','넙치류 수출액(만 달러)','전년 동월 대비(%)','자료 구분','산출·확인 근거'];
+      const body=rows.map(r=>[r.ym,r.v??'',r.yoy??'',STATUS[r.s].label,r.why]);
+      const csv=[head,...body].map(row=>row.map(v=>`"${String(v).replaceAll('"','""')}"`).join(',')).join('\n');
+      const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jeju_flounder_export_selected.csv';a.click();URL.revokeObjectURL(a.href);
+    }
+
+    fillPeriodSelects();
+    document.getElementById('applyBtn').addEventListener('click',renderAll);
+    document.getElementById('downloadBtn').addEventListener('click',csvDownload);
+    if(typeof Chart==='undefined'){
+      document.querySelector('.container').innerHTML='<section class="panel"><div class="empty">차트 구성요소를 불러오지 못했습니다. 인터넷 연결 후 새로고침해 주세요.</div></section>';
+    }else{renderAll();}
+  </script>
+</body>
+</html>
