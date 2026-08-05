@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="제주산 활어, 선어·냉장 수산물, 연체동물 및 수산가공품의 국가별 수출 인증·허가 요건 보고서">
+  <title>제주산 수산물 국가별 수출 인증·허가 실무 보고서</title>
+  <style>
+    :root {
+      --navy: #12324a;
+      --navy-2: #1c4b69;
+      --teal: #087f7b;
+      --teal-soft: #e9f7f5;
+      --blue-soft: #edf5fa;
+      --sand: #f8f5ee;
+      --ink: #17232c;
+      --muted: #5b6974;
+      --line: #d7e0e5;
+      --white: #ffffff;
+      --red: #a33a32;
+      --red-soft: #fff1ef;
+      --amber: #9a6512;
+      --amber-soft: #fff7e5;
+      --green: #27734f;
+      --green-soft: #edf8f1;
+      --shadow: 0 14px 36px rgba(25, 55, 75, .10);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #f3f7f9;
+      font-family: Pretendard, "Noto Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, -apple-system, sans-serif;
+      line-height: 1.72;
+      word-break: keep-all;
+    }
+    a { color: #08699b; text-underline-offset: 3px; }
+    a:hover { color: var(--teal); }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    :focus-visible { outline: 3px solid rgba(8,127,123,.34); outline-offset: 3px; }
+
+    .hero {
+      color: var(--white);
+      background:
+        radial-gradient(circle at 85% 10%, rgba(72,205,190,.34), transparent 28%),
+        linear-gradient(135deg, #0f2d43 0%, #15516b 55%, #087f7b 125%);
+      padding: 58px 24px 48px;
+    }
+    .hero-inner, .container { width: min(1180px, calc(100% - 36px)); margin: 0 auto; }
+    .eyebrow { margin: 0 0 10px; color: #b9f2eb; font-size: .87rem; font-weight: 800; letter-spacing: .13em; }
+    h1 { margin: 0; max-width: 900px; font-size: clamp(2rem, 5vw, 3.65rem); line-height: 1.16; letter-spacing: -.045em; }
+    .hero-lead { max-width: 880px; margin: 18px 0 0; color: #e6f3f7; font-size: 1.08rem; }
+    .meta-row { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 24px; }
+    .meta-pill { padding: 7px 12px; border: 1px solid rgba(255,255,255,.25); border-radius: 999px; background: rgba(255,255,255,.09); color: #f4fbfd; font-size: .86rem; }
+
+    .toc-wrap { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.94); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px); }
+    .toc { display: flex; gap: 8px; padding: 10px 0; overflow-x: auto; scrollbar-width: thin; }
+    .toc a { flex: 0 0 auto; padding: 7px 11px; border-radius: 9px; color: var(--navy); text-decoration: none; font-size: .88rem; font-weight: 750; }
+    .toc a:hover { background: var(--teal-soft); color: var(--teal); }
+
+    main { padding: 28px 0 70px; }
+    .panel { margin: 0 0 24px; padding: clamp(22px, 4vw, 36px); border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); box-shadow: 0 8px 24px rgba(20,55,75,.06); }
+    .section-kicker { margin: 0 0 4px; color: var(--teal); font-weight: 850; font-size: .84rem; letter-spacing: .08em; }
+    h2 { margin: 0 0 15px; color: var(--navy); font-size: clamp(1.55rem, 3vw, 2.2rem); line-height: 1.28; letter-spacing: -.025em; }
+    h3 { margin: 25px 0 10px; color: var(--navy); font-size: 1.24rem; }
+    h4 { margin: 20px 0 7px; color: var(--navy-2); font-size: 1.06rem; }
+    p { margin: 0 0 13px; }
+    ul, ol { margin: 8px 0 16px; padding-left: 1.35rem; }
+    li + li { margin-top: 5px; }
+    code { padding: .1em .36em; border-radius: 5px; background: #edf2f4; color: #193c50; }
+
+    .notice { margin: 16px 0; padding: 16px 18px; border-left: 5px solid var(--teal); border-radius: 10px; background: var(--teal-soft); }
+    .notice strong { color: #075e5b; }
+    .notice.warning { border-left-color: var(--amber); background: var(--amber-soft); }
+    .notice.warning strong { color: #7b4f0d; }
+    .notice.danger { border-left-color: var(--red); background: var(--red-soft); }
+    .notice.danger strong { color: #8b2f29; }
+    .notice.info { border-left-color: #2a7da8; background: var(--blue-soft); }
+
+    .legend { display: flex; flex-wrap: wrap; gap: 9px; margin: 16px 0 20px; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: .8rem; font-weight: 850; white-space: nowrap; }
+    .chip.mandatory { color: #8b2f29; background: var(--red-soft); }
+    .chip.conditional { color: #80530c; background: var(--amber-soft); }
+    .chip.recommended { color: var(--green); background: var(--green-soft); }
+    .chip.update { color: #0b617f; background: var(--blue-soft); }
+
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 22px 0; counter-reset: flow; }
+    .flow-item { position: relative; min-height: 118px; padding: 16px 14px; border: 1px solid var(--line); border-radius: 14px; background: #fbfdfe; }
+    .flow-item::before { counter-increment: flow; content: counter(flow); display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 9px; border-radius: 50%; background: var(--navy); color: white; font-size: .78rem; font-weight: 900; }
+    .flow-item strong { display: block; color: var(--navy); line-height: 1.35; }
+    .flow-item span { display: block; margin-top: 5px; color: var(--muted); font-size: .85rem; line-height: 1.45; }
+
+    .table-wrap { overflow-x: auto; margin: 14px 0 20px; border: 1px solid var(--line); border-radius: 13px; }
+    table { width: 100%; border-collapse: collapse; background: white; font-size: .91rem; }
+    th, td { padding: 12px 13px; border-bottom: 1px solid var(--line); vertical-align: top; text-align: left; }
+    th { color: white; background: var(--navy); font-size: .85rem; }
+    tr:last-child td { border-bottom: 0; }
+    tbody tr:nth-child(even) { background: #f8fbfc; }
+    td:first-child { font-weight: 800; color: var(--navy); }
+
+    .controls { margin: 0 0 22px; padding: 18px; border: 1px solid var(--line); border-radius: 15px; background: white; box-shadow: 0 8px 20px rgba(20,55,75,.05); }
+    .control-grid { display: grid; grid-template-columns: minmax(220px, 2fr) minmax(160px, .8fr) minmax(160px, .8fr); gap: 10px; }
+    .control-field label { display: block; margin-bottom: 5px; color: var(--muted); font-size: .79rem; font-weight: 800; }
+    .control-field input, .control-field select { width: 100%; height: 44px; padding: 0 12px; border: 1px solid #bacbd4; border-radius: 9px; background: white; color: var(--ink); }
+    .button-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .btn { padding: 8px 13px; border: 1px solid #b8cad3; border-radius: 9px; background: white; color: var(--navy); font-weight: 800; font-size: .86rem; }
+    .btn:hover { border-color: var(--teal); background: var(--teal-soft); color: var(--teal); }
+    .btn.primary { border-color: var(--teal); background: var(--teal); color: white; }
+    .search-status { margin: 10px 0 0; color: var(--muted); font-size: .84rem; }
+
+    .country-list { display: grid; gap: 16px; }
+    details.country { scroll-margin-top: 84px; border: 1px solid #cddae0; border-radius: var(--radius); background: white; box-shadow: 0 8px 22px rgba(24,55,75,.06); overflow: clip; }
+    details.country[open] { border-color: #96bcc8; box-shadow: var(--shadow); }
+    details.country > summary { display: flex; align-items: center; gap: 14px; min-height: 78px; padding: 17px 20px; list-style: none; cursor: pointer; background: linear-gradient(90deg, #fff, #f6fbfc); }
+    details.country > summary::-webkit-details-marker, details.subsection > summary::-webkit-details-marker { display: none; }
+    details.country > summary::after { content: "+"; margin-left: auto; color: var(--teal); font-size: 1.65rem; font-weight: 400; line-height: 1; }
+    details.country[open] > summary::after { content: "−"; }
+    .country-code { display: grid; place-items: center; flex: 0 0 46px; height: 46px; border-radius: 13px; background: var(--navy); color: white; font-weight: 900; letter-spacing: .04em; }
+    .country-title { min-width: 0; }
+    .country-title strong { display: block; color: var(--navy); font-size: 1.23rem; line-height: 1.35; }
+    .country-title small { display: block; margin-top: 3px; color: var(--muted); line-height: 1.4; }
+    .country-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; justify-content: flex-end; }
+    details.country > summary::after { margin-left: 0; }
+    .country-body { padding: 4px 22px 25px; border-top: 1px solid var(--line); }
+    .country-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 18px 0; }
+    .fact { padding: 13px; border: 1px solid var(--line); border-radius: 11px; background: #f9fcfd; }
+    .fact span { display: block; color: var(--muted); font-size: .76rem; font-weight: 850; }
+    .fact strong { display: block; margin-top: 4px; color: var(--navy); font-size: .91rem; line-height: 1.45; }
+
+    details.subsection { margin: 10px 0; border: 1px solid var(--line); border-radius: 12px; overflow: clip; }
+    details.subsection > summary { display: flex; align-items: center; gap: 9px; padding: 12px 15px; list-style: none; cursor: pointer; background: #f8fbfc; color: var(--navy); font-weight: 850; }
+    details.subsection > summary::after { content: "펼치기"; margin-left: auto; color: var(--muted); font-size: .76rem; font-weight: 700; }
+    details.subsection[open] > summary::after { content: "접기"; }
+    .sub-content { padding: 15px 17px 17px; border-top: 1px solid var(--line); }
+    .sub-content > :last-child { margin-bottom: 0; }
+    .number-list { list-style: none; padding: 0; counter-reset: number; }
+    .number-list > li { position: relative; padding-left: 36px; margin: 0 0 15px; }
+    .number-list > li::before { counter-increment: number; content: counter(number); position: absolute; left: 0; top: 0; display: grid; place-items: center; width: 25px; height: 25px; border-radius: 7px; background: var(--navy); color: white; font-size: .76rem; font-weight: 900; }
+    .number-list strong { color: var(--navy); }
+    .compact-list { columns: 2; column-gap: 28px; }
+    .compact-list li { break-inside: avoid; }
+    .filtered-out, .country-hidden { display: none !important; }
+
+    .sources { margin-top: 18px; padding: 16px 18px; border-radius: 12px; background: var(--sand); }
+    .sources strong { color: var(--navy); }
+    .sources ul { margin-bottom: 0; }
+    .sources a { overflow-wrap: anywhere; }
+
+    .check-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .check-card { padding: 17px; border: 1px solid var(--line); border-radius: 13px; background: #fbfdfe; }
+    .check-card h3 { margin: 0 0 8px; font-size: 1.04rem; }
+    .check-card ul { margin-bottom: 0; }
+    .checklist { list-style: none; padding: 0; }
+    .checklist li { position: relative; padding: 8px 0 8px 31px; border-bottom: 1px dashed #dbe4e8; }
+    .checklist li:last-child { border-bottom: 0; }
+    .checklist li::before { content: "□"; position: absolute; left: 2px; top: 6px; color: var(--teal); font-size: 1.15rem; font-weight: 900; }
+
+    .footer { margin-top: 25px; color: #62727c; font-size: .83rem; text-align: center; }
+    .back-top { position: fixed; right: 18px; bottom: 18px; display: none; width: 44px; height: 44px; border: 0; border-radius: 50%; background: var(--navy); color: white; box-shadow: var(--shadow); font-weight: 900; }
+    .back-top.show { display: block; }
+
+    @media (max-width: 920px) {
+      .flow { grid-template-columns: repeat(2, 1fr); }
+      .country-grid { grid-template-columns: repeat(2, 1fr); }
+      .control-grid { grid-template-columns: 1fr 1fr; }
+      .control-field:first-child { grid-column: 1 / -1; }
+      .country-badges { display: none; }
+    }
+    @media (max-width: 620px) {
+      .hero { padding-top: 42px; }
+      .hero-inner, .container { width: min(100% - 24px, 1180px); }
+      .panel { padding: 20px 17px; }
+      .flow, .country-grid, .check-grid, .control-grid { grid-template-columns: 1fr; }
+      .control-field:first-child { grid-column: auto; }
+      details.country > summary { padding: 14px; }
+      .country-body { padding: 3px 14px 20px; }
+      .country-code { flex-basis: 40px; height: 40px; }
+      .compact-list { columns: 1; }
+      th, td { padding: 10px; }
+    }
+
+    @media print {
+      @page { size: A4; margin: 14mm; }
+      body { background: white; font-size: 10pt; }
+      .hero { padding: 25px 0; background: white !important; color: black; border-bottom: 3px solid var(--navy); }
+      .hero-inner, .container { width: 100%; }
+      .hero h1, .hero-lead, .meta-pill, .eyebrow { color: black; }
+      .meta-pill { border-color: #777; background: white; }
+      .toc-wrap, .controls, .back-top, .button-row { display: none !important; }
+      main { padding: 12px 0; }
+      .panel, details.country { box-shadow: none; break-inside: avoid-page; }
+      details.country > summary, details.subsection > summary { background: white; }
+      details.country > summary::after, details.subsection > summary::after { display: none; }
+      .country-body, .sub-content { display: block !important; }
+      a { color: black; text-decoration: none; }
+      a::after { content: " (" attr(href) ")"; font-size: 7.5pt; overflow-wrap: anywhere; }
+      .toc a::after, a[href^="#"]::after { content: ""; }
+      .sources { background: white; border: 1px solid #bbb; }
+    }
+  </style>
+</head>
+<body data-level-filter="all">
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="eyebrow">EXPORT COMPLIANCE REFERENCE · 2026</p>
+      <h1>제주산 수산물<br>국가별 수출 인증·허가</h1>
+      <p class="hero-lead">활어, 선어·냉장 수산물, 연체동물(소라·전복 등), 수산가공품(전복장 등)의 8개 시장 진입요건을 필수·조건부·권장으로 구분한 실무 참고자료입니다.</p>
+      <div class="meta-row">
+        <span class="meta-pill">조사 기준일 2026.08.05</span>
+        <span class="meta-pill">대상: 미국·일본·베트남·태국·중국·싱가포르·인도네시아·EU</span>
+        <span class="meta-pill">공식 정부·관할기관 자료 중심</span>
+        <span class="meta-pill">독립 실행형 HTML</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="toc-wrap">
+    <nav class="toc container" aria-label="보고서 목차">
+      <a href="#overview">핵심요약</a>
+      <a href="#common">한국 측 공통</a>
+      <a href="#product-branches">품목별 분기</a>
+      <a href="#countries">국가별 상세</a>
+      <a href="#country-us">미국</a>
+      <a href="#country-jp">일본</a>
+      <a href="#country-vn">베트남</a>
+      <a href="#country-th">태국</a>
+      <a href="#country-cn">중국</a>
+      <a href="#country-sg">싱가포르</a>
+      <a href="#country-id">인도네시아</a>
+      <a href="#country-eu">EU</a>
+      <a href="#certifications">인증 비교</a>
+      <a href="#checklist">실행 체크리스트</a>
+    </nav>
+  </div>
+
+  <main class="container">
+    <section class="panel" id="overview">
+      <p class="section-kicker">EXECUTIVE SUMMARY</p>
+      <h2>한 장의 인증서가 아니라, 다섯 단계의 적합성 체계가 필요합니다</h2>
+      <div class="notice">
+        <strong>핵심 판단:</strong> 수산물 수출은 HACCP·ISO 인증만으로 성립하지 않습니다. 상대국 승인시설, 한국 정부 위생·검역증명, 현지 수입자 허가, 건별 통관절차, 현지 표시기준이 함께 충족되어야 합니다.
+      </div>
+
+      <div class="legend" aria-label="요건 구분 범례">
+        <span class="chip mandatory">필수</span>
+        <span class="chip conditional">조건부</span>
+        <span class="chip recommended">권장</span>
+        <span class="chip update">2026 제도변경</span>
+      </div>
+
+      <div class="flow" aria-label="수출 적합성 5단계">
+        <div class="flow-item"><strong>품목 확정</strong><span>학명·HS코드·양식/자연산·온도대·가공공정</span></div>
+        <div class="flow-item"><strong>시설 적격성</strong><span>NFQS·FDA·GACC·EU·협약국 승인범위</span></div>
+        <div class="flow-item"><strong>정부 증명</strong><span>건별 위생·검역·어획·동물건강 증명</span></div>
+        <div class="flow-item"><strong>수입자 절차</strong><span>영업허가·제품등록·사전신고·통관허가</span></div>
+        <div class="flow-item"><strong>표시·검사</strong><span>현지어 라벨·잔류·미생물·콜드체인</span></div>
+      </div>
+
+      <h3>2026년 최우선 변화</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>시장</th><th>변경사항</th><th>실무 영향</th></tr></thead>
+          <tbody>
+            <tr><td>미국</td><td>MMPA 어업별 적격성 판정 시행</td><td>일부 한국 자연산 어업은 수입제한 또는 정부 적격성증명서 확인 필요</td></tr>
+            <tr><td>베트남</td><td>시행규칙 03/2026 적용</td><td>활·신선·냉장·냉동 수산동물·제품의 수입검역 등록과 서류체계 변경</td></tr>
+            <tr><td>중국</td><td>해관총서령 제280호, 2026.06.01 시행</td><td>해외 생산·가공·저장시설 등록과 정부 추천, 등록번호 관리 재정비</td></tr>
+            <tr><td>인도네시아</td><td>식품·음료 할랄 이행기한 2026.10.17</td><td>전복장 원재료·가공보조제까지 할랄 또는 비할랄 표시전략 확정 필요</td></tr>
+            <tr><td>EU</td><td>CATCH 전자 어획증명, 2026.01.10 의무화</td><td>자연산 해면어업 수산물의 어선·어획·양륙·가공 추적정보 전자 제출</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>국가별 한눈에 보기</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>시장</th><th>시설·시스템</th><th>선적·통관</th><th>핵심 조건부 사항</th></tr></thead>
+          <tbody>
+            <tr><td>미국</td><td>FDA 식품시설 등록·Seafood HACCP</td><td>Prior Notice·수입자 HACCP 검증</td><td>이매패류 승인해역, 전복 SIMP, LACF, MMPA</td></tr>
+            <tr><td>일본</td><td>일부 한·일 관리품목 시설등록</td><td>매 선적 식품수입신고</td><td>활넙치 Kudoa, 활수산동물 검역</td></tr>
+            <tr><td>베트남</td><td>NAFIQPM 승인 해외시설 목록</td><td>검역등록·정부증명서</td><td>전복장 등 복합 가공품 자기공표</td></tr>
+            <tr><td>태국</td><td>협약 대상시설·가공품 GMP 증빙</td><td>DOF 허가·Thai FDA·LPI</td><td>제품분류별 FDA 번호</td></tr>
+            <tr><td>중국</td><td>GACC 등록·한국 정부 추천</td><td>위생증명·수출입자 등록·세관신고</td><td>활수생동물 허용목록·검역허가</td></tr>
+            <tr><td>싱가포르</td><td>일반품 사전 해외시설 승인 없음</td><td>SFA 수입자 허가·CCP</td><td>굴·복어·게살 등 고위험품목 제한</td></tr>
+            <tr><td>인도네시아</td><td>협약시설 또는 BPOM 제품등록</td><td>KKP 검역 또는 BPOM ML·SKI</td><td>할랄·비할랄 표시</td></tr>
+            <tr><td>EU</td><td>EU 승인국·TRACES 승인시설</td><td>위생증명·TRACES·BCP·CHED-P</td><td>지정해역·CATCH·복합식품 판정</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="common">
+      <p class="section-kicker">COMMON REQUIREMENTS</p>
+      <h2>한국 측 공통 선행요건</h2>
+      <div class="notice warning">
+        <strong>시설등록 범위가 핵심입니다.</strong> 등록번호가 존재하더라도 실제 수출품목·가공활동·보관시설·선박이 승인범위에 포함되지 않으면 증명서 발급 또는 현지 통관이 거절될 수 있습니다.
+      </div>
+
+      <details class="subsection" open data-level="mandatory">
+        <summary><span class="chip mandatory">필수</span> NFQS 등록 생산·가공시설과 위생약정 범위</summary>
+        <div class="sub-content">
+          <ul>
+            <li><strong>미국:</strong> 신선·냉장·냉동 이매패류</li>
+            <li><strong>EU:</strong> 수산물·수산가공품, 이매패류·극피류·피낭류·해양복족류</li>
+            <li><strong>중국:</strong> 원료 수산동물, 식염 외 첨가물이 없는 단순가공품, 활수생동물</li>
+            <li><strong>일본:</strong> 생굴·피조개·기타 이매패류, 처리복어, 활넙치, 뱀장어</li>
+            <li><strong>베트남:</strong> 식용 원료수산물 및 첨가물 없는 단순가공품</li>
+            <li><strong>태국:</strong> 활수산동물·원료수산동물·첨가물 없는 단순가공품</li>
+            <li><strong>인도네시아:</strong> 식용 어류·갑각류·연체동물 및 첨가물 없는 단순가공품</li>
+          </ul>
+          <p>간장·당류·향신료를 사용하는 전복장은 여러 협약에서 정한 “단순가공품” 범위를 벗어날 가능성이 크므로 상대국의 일반 가공식품 또는 복합식품 절차를 추가 적용해야 합니다.</p>
+        </div>
+      </details>
+
+      <details class="subsection" data-level="mandatory">
+        <summary><span class="chip mandatory">필수</span> 수출검사·정부증명서 기본서류</summary>
+        <div class="sub-content">
+          <ul class="compact-list">
+            <li>수산물·수산가공품 검사신청서</li>
+            <li>생산·가공일지</li>
+            <li>원료 입고·출고·로트 추적성 자료</li>
+            <li>자체검사 또는 공인 시험성적서</li>
+            <li>송장·포장명세·선하증권 초안</li>
+            <li>양식용의약품 사용·휴약 기록</li>
+            <li>어획·양륙·어선 정보</li>
+            <li>포장표시 원고 및 시설 승인번호</li>
+            <li>CITES 대상 여부 확인자료</li>
+            <li>상대국 증명서 서식에 필요한 정보</li>
+          </ul>
+          <p>NFQS 안내상 통상 처리기간은 일반 검사 3일, 정밀검사 시 7일입니다. 실제 일정은 시험항목·보완·시설관할에 따라 달라질 수 있습니다.</p>
+        </div>
+      </details>
+
+      <details class="subsection" data-level="recommended">
+        <summary><span class="chip recommended">권장</span> 공통 시험·관리항목</summary>
+        <div class="sub-content">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>제품군</th><th>우선 위해요소</th><th>준비자료</th></tr></thead>
+              <tbody>
+                <tr><td>양식 활어·선어</td><td>동물용의약품, 질병, Kudoa, 온도·폐사</td><td>양식장 이력, 투약·휴약, 출하·운송 기록</td></tr>
+                <tr><td>히스타민 생성어종</td><td>온도이탈·히스타민</td><td>수확 후 냉각기록, 온도 로거, 검사성적</td></tr>
+                <tr><td>소라·전복 등 연체동물</td><td>패류독소, Vibrio, E. coli, 카드뮴</td><td>생산해역, 채취일, 정화·가공·로트 추적</td></tr>
+                <tr><td>냉장 RTE 가공품</td><td>Listeria, 교차오염, 유통기한</td><td>환경모니터링, 챌린지·보존시험, 냉장기록</td></tr>
+                <tr><td>진공·밀봉제품</td><td>Clostridium botulinum, 열처리 불충분</td><td>pH·수분활성, 열침투·살균공정 검증</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </details>
+
+      <div class="sources">
+        <strong>한국 측 공식자료</strong>
+        <ul>
+          <li><a href="https://www.nfqs.go.kr/hpmg/quar/actionExportInspectionForm.do?menuId=" target="_blank" rel="noopener">국립수산물품질관리원 — 수출 수산물 검사</a></li>
+          <li><a href="https://www.nfqs.go.kr/hpmg/quar/actionProductionFacilitynForm.do?menuId=M0000196" target="_blank" rel="noopener">국립수산물품질관리원 — 생산·가공시설 등록</a></li>
+          <li><a href="https://www.nfqs.go.kr/egcert/" target="_blank" rel="noopener">국립수산물품질관리원 — 전자민원시스템</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="panel" id="product-branches">
+      <p class="section-kicker">PRODUCT DECISION POINTS</p>
+      <h2>품목별로 먼저 확정해야 할 분류정보</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>품목</th><th>필수 입력정보</th><th>주요 규제 분기</th><th>대표 위해요소</th></tr></thead>
+          <tbody>
+            <tr><td>활어</td><td>정확한 학명, 식용/양식용, 도착 후 보관·배수 방식</td><td>수입허용종, 양식장·포장장 승인, 수생동물 건강증명</td><td>질병, 잔류약품, 폐사·운송수질</td></tr>
+            <tr><td>선어·냉장어류</td><td>자연산/양식, 내장 제거, 진공·가스포장, 소비형태</td><td>Seafood HACCP, Kudoa·기생충, MMPA·어획증명</td><td>온도, 히스타민, 기생충, 보툴리눔</td></tr>
+            <tr><td>소라</td><td>학명, 자연산/양식, 활·자숙·냉동, 채취해역</td><td>해양복족류/일반 연체동물 구분, 지정해역, CITES</td><td>카드뮴, 해양생물독소, Vibrio</td></tr>
+            <tr><td>전복</td><td>학명, 양식장, 활·냉동·가공형태, 수확자료</td><td>미국 SIMP, 활수산동물 검역, 시설 승인범위</td><td>잔류약품, 중금속, 미생물</td></tr>
+            <tr><td>전복장</td><td>pH·수분활성, 배합, 열처리, 밀봉, 냉장/상온, RTE</td><td>미국 LACF, EU 복합식품, 중국 품목등록, BPOM·할랄</td><td>보툴리눔, Listeria, 알레르기, 첨가물</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="notice danger">
+        <strong>학명은 필수 관리항목입니다.</strong> 소라·전복의 국내 통용명만으로는 수입허용종, CITES, 라벨, 검역 및 시험기준을 확정할 수 없습니다. 최신 분류체계에 따른 학명과 제품의 HS/HTS/CN 코드를 함께 관리해야 합니다.
+      </div>
+    </section>
+
+    <section id="countries" aria-labelledby="countries-title">
+      <div class="panel">
+        <p class="section-kicker">COUNTRY GUIDE</p>
+        <h2 id="countries-title">국가별 상세요건</h2>
+        <p>아래 검색·필터를 사용하거나 국가명을 클릭해 상세내용을 펼칠 수 있습니다. 법적 필수와 바이어 권장사항을 구분해서 확인하십시오.</p>
+        <div class="controls" role="search">
+          <div class="control-grid">
+            <div class="control-field">
+              <label for="searchInput">보고서 내 검색</label>
+              <input id="searchInput" type="search" placeholder="예: 전복장, 활어, Kudoa, 할랄, GACC, 라벨">
+            </div>
+            <div class="control-field">
+              <label for="countryFilter">국가 선택</label>
+              <select id="countryFilter">
+                <option value="all">전체 국가</option>
+                <option value="us">미국</option><option value="jp">일본</option><option value="vn">베트남</option><option value="th">태국</option>
+                <option value="cn">중국</option><option value="sg">싱가포르</option><option value="id">인도네시아</option><option value="eu">EU</option>
+              </select>
+            </div>
+            <div class="control-field">
+              <label for="levelFilter">요건 구분</label>
+              <select id="levelFilter">
+                <option value="all">전체 요건</option>
+                <option value="mandatory">필수만</option>
+                <option value="conditional">조건부만</option>
+                <option value="recommended">권장만</option>
+                <option value="label">표시사항만</option>
+              </select>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="btn" type="button" id="expandAll">전체 펼치기</button>
+            <button class="btn" type="button" id="collapseAll">전체 접기</button>
+            <button class="btn" type="button" id="resetFilters">검색 초기화</button>
+            <button class="btn" type="button" id="printReport">인쇄·PDF 저장</button>
+            <button class="btn primary" type="button" id="saveHtml">HTML 다시 저장</button>
+          </div>
+          <p class="search-status" id="searchStatus" aria-live="polite">8개 시장이 표시되어 있습니다.</p>
+        </div>
+      </div>
+
+      <div class="country-list">
+        <details class="country" id="country-us" data-country="us" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 미국">
+          <summary>
+            <span class="country-code">US</span>
+            <span class="country-title"><strong>미국</strong><small>FDA 등록·Seafood HACCP·전복 SIMP·자연산 MMPA</small></span>
+            <span class="country-badges"><span class="chip mandatory">FDA·HACCP</span><span class="chip conditional">SIMP·MMPA</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>FDA · NOAA · USDA APHIS · CBP</strong></div>
+              <div class="fact"><span>현지 수입자</span><strong>Seafood HACCP 수입자 검증·Prior Notice</strong></div>
+              <div class="fact"><span>정부증명</span><strong>일반품 일률 요구 없음, 패류·동물건강·MMPA 조건부</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>전복 SIMP, LACF 공정신고, 어업별 MMPA</strong></div>
+            </div>
+            <div class="notice warning"><strong>미국은 FDA 식품시설 등록증 자체를 제품 승인으로 보지 않습니다.</strong> 시설등록, 제품·공정별 Seafood HACCP, 미국 수입자의 검증, 건별 사전신고가 각각 필요합니다.</div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> 기본 진입요건</summary>
+              <div class="sub-content">
+                <ol class="number-list">
+                  <li><strong>FDA Food Facility Registration:</strong> 미국 소비용 식품을 제조·가공·포장·보관하는 해외시설은 FDA에 등록하고 U.S. Agent를 지정합니다. 짝수 해 갱신이 적용되므로 2026년 갱신상태를 확인합니다.</li>
+                  <li><strong>Seafood HACCP, 21 CFR Part 123:</strong> 제품·공정별 위해요소 분석, HACCP 계획, 위생관리, 검증·시정·기록 및 훈련 요건을 운영합니다.</li>
+                  <li><strong>수입자의 affirmative steps:</strong> 미국 수입자는 외국 제조자의 Part 123 준수 여부를 영문 HACCP 계획, 로트기록, 정부·제3자 증명, 정기점검 또는 시험으로 검증합니다.</li>
+                  <li><strong>Prior Notice:</strong> 모든 식품 선적은 도착 전에 FDA에 건별 사전신고합니다.</li>
+                  <li><strong>일반 적합성:</strong> 식품은 비위생적·불량·허위표시 상태가 아니어야 하며 CBP 원산지 표시를 포함한 미국 표시기준을 충족해야 합니다.</li>
+                </ol>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 활어·패류·전복·전복장·자연산</summary>
+              <div class="sub-content">
+                <h4>활어</h4>
+                <p>어종이 USDA APHIS 관리 수생동물 질병 감수성 종이면 수입허가와 수출국 정부 건강증명서가 필요할 수 있습니다. 주정부의 생물반입·침입종 규제도 별도 확인합니다.</p>
+                <h4>이매패류</h4>
+                <p>신선·냉장·냉동 굴·조개·홍합 등은 미국이 인정한 한국 지정해역과 승인시설에서 생산되고 ICSSL 및 한국 정부 위생증명 체계에 부합해야 합니다. 소라·전복은 미국 연방상 “molluscan shellfish”에 자동 포함되지 않으므로 동일 요건을 기계적으로 적용하지 않습니다.</p>
+                <h4>전복 및 전복가공품 — SIMP</h4>
+                <p>전복은 NOAA Seafood Import Monitoring Program 대상입니다. 활·신선·냉장·냉동 및 대상 HTS 가공품에 대해 미국 수입자가 양식장·수확일·수확량·가공·환적·유통 추적정보를 신고·보관해야 하며, 양식 전복도 포함됩니다.</p>
+                <h4>상온 밀봉 전복장 — LACF/AF</h4>
+                <p>산성화식품 또는 저산성 통조림으로 판정되면 Food Canning Establishment 등록(FCE)과 제품·공정·용기규격별 SID가 추가됩니다. 냉장제품은 일반적으로 LACF 대상이 아니지만 보툴리눔과 시간·온도 관리가 Seafood HACCP에 반영되어야 합니다.</p>
+                <h4>자연산 — MMPA</h4>
+                <p>2026년부터 일부 한국 어업은 어종·어구·어장별 적격성 판정을 받지 못했습니다. 해당 수산물은 수입금지 또는 정부 발행 Certification of Admissibility 대상일 수 있으므로 NOAA의 어업 ID·HTS·어구 목록을 선적마다 대조합니다.</p>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> 영문 라벨·알레르기·원산지</summary>
+              <div class="sub-content">
+                <ul>
+                  <li>제품명·원재료·순중량·제조/유통 책임자·영양정보·날짜·보관조건</li>
+                  <li>어류와 갑각류 알레르기는 종명을 포함해 표시</li>
+                  <li>전복·소라 등 연체동물은 미국의 연방 주요 알레르기 9종은 아니지만 정확한 원재료명 필요</li>
+                  <li>CBP 기준 원산지 표시와 FDA의 허용 일반명 확인</li>
+                </ul>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 바이어·시장성 인증</summary>
+              <div class="sub-content"><ul><li>BRCGS·SQF·FSSC 22000 등 GFSI 인정규격</li><li>양식품 ASC 또는 BAP, 자연산 MSC</li><li>영문 리콜·식품방어·알레르기 관리계획</li><li>제조물책임보험, 타깃 유통망별 할랄·코셔</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>미국 공식자료</strong><ul>
+              <li><a href="https://www.fda.gov/food/food-imports-exports/importing-food-products-united-states" target="_blank" rel="noopener">FDA — Importing Food Products into the United States</a></li>
+              <li><a href="https://www.fda.gov/food/hazard-analysis-critical-control-point-haccp/seafood-haccp" target="_blank" rel="noopener">FDA — Seafood HACCP</a></li>
+              <li><a href="https://www.fda.gov/food/guidance-regulation-food-and-dietary-supplements/registration-food-facilities-and-other-submissions" target="_blank" rel="noopener">FDA — Food Facility Registration</a></li>
+              <li><a href="https://www.fda.gov/food/establishment-registration-process-filing-acidified-and-low-acid-canned-foods-lacf/establishment-registration-and-process-filing-acidified-and-low-acid-canned-foods-lacf-electronic" target="_blank" rel="noopener">FDA — Acidified and Low-Acid Canned Foods</a></li>
+              <li><a href="https://www.fisheries.noaa.gov/international/international-affairs/seafood-import-monitoring-program" target="_blank" rel="noopener">NOAA — Seafood Import Monitoring Program</a></li>
+              <li><a href="https://www.fisheries.noaa.gov/international-affairs/marine-mammal-protection-act-comparability-finding-determinations-harvesting" target="_blank" rel="noopener">NOAA — MMPA Comparability Findings</a></li>
+              <li><a href="https://www.aphis.usda.gov/live-animal-import/fish-eggs-gametes" target="_blank" rel="noopener">USDA APHIS — Fish, Eggs and Gametes Import</a></li>
+            </ul></div>
+          </div>
+        </details>
+
+        <details class="country" id="country-jp" data-country="jp" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 일본 넙치 Kudoa">
+          <summary>
+            <span class="country-code">JP</span>
+            <span class="country-title"><strong>일본</strong><small>매 선적 식품수입신고·활넙치 Kudoa·수산동물 검역</small></span>
+            <span class="country-badges"><span class="chip mandatory">수입신고</span><span class="chip conditional">Kudoa</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>후생노동성 · 농림수산성 · 소비자청</strong></div>
+              <div class="fact"><span>현지 수입자</span><strong>검역소 식품등수입신고</strong></div>
+              <div class="fact"><span>한국 특별관리</span><strong>패류·처리복어·활넙치·뱀장어</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>제주산 활넙치 Kudoa 검사명령</strong></div>
+            </div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> 기본 진입요건</summary>
+              <div class="sub-content">
+                <ol class="number-list">
+                  <li><strong>식품등수입신고:</strong> 판매·영업용 식품은 선적마다 후생노동성 검역소에 신고합니다. 잔류농약·동물용의약품, 첨가물, 미생물 및 성분규격 검사가 지시될 수 있습니다.</li>
+                  <li><strong>한·일 특별관리 품목:</strong> 생굴·피조개·기타 이매패류, 처리복어, 활넙치, 뱀장어는 NFQS 등록시설·수출검사 및 품목별 증명체계를 확인합니다.</li>
+                  <li><strong>일본 식품규격:</strong> Positive List 잔류기준, 지정 첨가물·사용기준, 미생물·독소·복어 처리기준을 적용합니다.</li>
+                </ol>
+                <p>일반 수산물 전체에 대해 외국 제조자의 “일본 HACCP 인증서”가 일률적으로 필요한 것은 아니지만, 일본 수입자와 유통사가 HACCP 또는 동등 위생시스템을 거래조건으로 요구할 수 있습니다.</p>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 활넙치 Kudoa·활수산동물 검역</summary>
+              <div class="sub-content">
+                <h4>한국산 양식 활넙치</h4>
+                <ul>
+                  <li>Kudoa septempunctata 검사명령 대상이 될 수 있음</li>
+                  <li>일본 인정 양식장·가공시설·수출자 목록과 로트가 연결되면 검사명령 면제 가능</li>
+                  <li>생식용 넙치에서 1.0×10<sup>6</sup> spores/g 초과 시 위반 취급</li>
+                  <li>양식장 코드, 출하일, 가공장, 수출자, 증명서의 일치가 중요</li>
+                </ul>
+                <h4>활수산동물</h4>
+                <p>감수성 어종이며 일본 도착 후 공공수역 또는 공공수역으로 배수되는 시설에 보관되는 경우 수입허가와 수출국 정부 건강증명서가 필요할 수 있습니다. 참돔·전복류·굴류 등은 학명·사용목적·보관방식별로 농림수산성 목록을 확인합니다.</p>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> 일본어 라벨</summary>
+              <div class="sub-content"><ul><li>가공품: 명칭, 원재료·첨가물, 알레르기, 내용량, 소비/상미기한, 보관방법, 수입자·책임자, 원산국, 영양성분</li><li>신선 수산물: 명칭, 원산지, 양식 여부 등 신선식품 표시</li><li>일본 수입자가 유통 전 적법한 일본어 보조라벨을 부착하는 방식 가능</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 거래처 대응</summary>
+              <div class="sub-content"><ul><li>JFS-B/JFS-C, FSSC 22000</li><li>활어 수온·용존산소·폐사율 SOP</li><li>Kudoa·Vibrio 선적 전 자체검사</li><li>일본 유통사 중량·선도·포장 규격서</li><li>MSC·ASC</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>일본 공식자료</strong><ul>
+              <li><a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/shokuhin/yunyu_kanshi/kanshi/index_00004.html" target="_blank" rel="noopener">후생노동성 — 식품수입 절차</a></li>
+              <li><a href="https://www.mhlw.go.jp/stf/newpage_73856.html" target="_blank" rel="noopener">후생노동성 — 2026년 검사명령</a></li>
+              <li><a href="https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/0000133250.html" target="_blank" rel="noopener">후생노동성 — Kudoa 관리</a></li>
+              <li><a href="https://www.maff.go.jp/j/syouan/suisan/suisan_boueki/sui_boueki2.html" target="_blank" rel="noopener">농림수산성 — 수산동물 방역</a></li>
+              <li><a href="https://www.caa.go.jp/en/policy/food_labeling/" target="_blank" rel="noopener">소비자청 — Food Labelling</a></li>
+            </ul></div>
+          </div>
+        </details>
+
+        <details class="country" id="country-vn" data-country="vn" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 베트남 NAFIQPM 검역">
+          <summary>
+            <span class="country-code">VN</span>
+            <span class="country-title"><strong>베트남</strong><small>승인 해외시설·2026 수산검역·가공품 자기공표</small></span>
+            <span class="country-badges"><span class="chip mandatory">시설목록</span><span class="chip update">03/2026</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>NAFIQPM · 축산생산수의당국 · 보건부</strong></div>
+              <div class="fact"><span>현지 수입자</span><strong>검역등록·제품 자기공표</strong></div>
+              <div class="fact"><span>정부증명</span><strong>활·신선·냉장·냉동 수산물 필수</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>전복장의 단순가공품 범위 이탈</strong></div>
+            </div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> 승인시설·수입검역</summary>
+              <div class="sub-content">
+                <ol class="number-list">
+                  <li><strong>해외시설 목록:</strong> 원료·단순가공 수산물은 한국 정부가 관리하고 NAFIQPM이 인정하는 해외시설 목록에 시설명·주소·승인번호·품목범위가 정확히 등재되어야 합니다.</li>
+                  <li><strong>검역 사전등록:</strong> 현지 수입자가 시행규칙 03/2026에 따른 수입검역 등록서를 축산생산·수의 당국에 제출합니다.</li>
+                  <li><strong>입항서류:</strong> 한국 정부 원본 위생·검역증명서, 선하증권, CITES 서류, 필요 시 거래허용 목록 밖 종의 수입허가를 제출합니다.</li>
+                  <li><strong>검사:</strong> 활수산동물은 격리·임상검사, 신선·냉장·냉동 제품은 위험도에 따른 서류·동일성·현물·표본검사를 받을 수 있습니다.</li>
+                </ol>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 전복장 등 포장 가공식품</summary>
+              <div class="sub-content">
+                <p>간장·설탕·향신료·첨가물을 사용한 전복장은 위생약정의 단순가공품 범위에서 벗어나 일반 포장 가공식품으로 분류될 가능성이 큽니다. 일반 제품이면 수입자 또는 베트남 책임법인이 제품 자기공표를 수행합니다.</p>
+                <ul><li>제품 자기공표서와 제품규격</li><li>지정 시험기관 시험성적서</li><li>원료·배합·제조공정 및 시설자료</li><li>베트남어 라벨</li></ul>
+                <p>건강기능·특수영양 등 특별용도 표시를 하면 자기공표보다 엄격한 제품등록 대상이 될 수 있습니다.</p>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> 베트남어 보조라벨</summary>
+              <div class="sub-content"><ul><li>제품명·원재료·내용량·원산지</li><li>베트남 수입자·책임사업자</li><li>제조일·소비기한·보관·사용방법</li><li>원라벨과 베트남어 보조라벨 간 불일치 금지</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 시장 대응</summary>
+              <div class="sub-content"><ul><li>HACCP·ISO 22000·FSSC 22000</li><li>양식용의약품 이력과 잔류검사</li><li>베트남어 라벨 사전심사</li><li>남부 유통망 대상 할랄</li><li>ASC·MSC</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>베트남 공식자료</strong><ul>
+              <li><a href="https://nafiqpm.mae.gov.vn/portal/pages/2022/Danh-sach-co-so-tu-cac-quoc-gia-co-Thoa-thuan-hop--2360.aspx" target="_blank" rel="noopener">NAFIQPM — 협약국 해외시설 목록</a></li>
+              <li><a href="https://mae.gov.vn/noidung/Lists/VBQPPL/Attachments/728/03-2026-TT-BNNMT.pdf" target="_blank" rel="noopener">시행규칙 03/2026/TT-BNNMT</a></li>
+              <li><a href="https://vanban.chinhphu.vn/?docid=192829&amp;pageid=27160" target="_blank" rel="noopener">정부 시행령 15/2018/NĐ-CP — 식품안전</a></li>
+              <li><a href="https://vanban.chinhphu.vn/?docid=189385&amp;pageid=27160" target="_blank" rel="noopener">정부 시행령 43/2017/NĐ-CP — 상품표시</a></li>
+            </ul></div>
+          </div>
+        </details>
+
+        <details class="country" id="country-th" data-country="th" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 태국 Thai FDA DOF GMP LPI">
+          <summary>
+            <span class="country-code">TH</span>
+            <span class="country-title"><strong>태국</strong><small>수입장소 허가·DOF 검역·LPI·가공품 GMP 증빙</small></span>
+            <span class="country-badges"><span class="chip mandatory">Orr.7·LPI</span><span class="chip conditional">GMP</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>Thai FDA · Department of Fisheries</strong></div>
+              <div class="fact"><span>현지 수입자</span><strong>식품수입장소 허가 Form Orr.7</strong></div>
+              <div class="fact"><span>건별 절차</span><strong>DOF 허가·National Single Window LPI</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>제품분류와 해외 GMP 증빙 불일치</strong></div>
+            </div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> 수입허가·제품분류·건별 통관</summary>
+              <div class="sub-content">
+                <ol class="number-list">
+                  <li><strong>수입자 허가:</strong> 태국 내 수입자는 Thai FDA 식품수입장소 허가(Form Orr.7)를 보유합니다.</li>
+                  <li><strong>제품분류:</strong> 특정관리식품, 품질·규격식품, 표시관리식품, 일반식품 중 해당 분류를 확정합니다. 등록대상 가공품은 제품등록과 식품 일련번호가 필요합니다.</li>
+                  <li><strong>일반 원료 수산물:</strong> FDA 번호가 면제될 수 있으나 Virtual Number 기록과 수입서류는 필요합니다.</li>
+                  <li><strong>건별 LPI:</strong> National Single Window에서 License per Invoice를 처리합니다.</li>
+                  <li><strong>DOF:</strong> 활수산동물·수산제품은 태국 수산국 수입허가·검역을 적용하며, 한·태 약정품목은 NFQS 등록시설·한국 정부 증명서를 사용합니다.</li>
+                </ol>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 전복장 등 가공품 GMP 증빙</summary>
+              <div class="sub-content"><p>수입 가공식품은 해외 제조시설이 태국 보건부 고시상 GMP와 동등 이상의 제조시스템을 운영한다는 증빙을 요구받을 수 있습니다.</p><ul><li>정부 또는 인정기관의 GMP 증명</li><li>제품과 시설을 포함하는 HACCP·ISO 22000·FSSC 22000 등 동등 증빙</li><li>인증기관 적격성, 시설 주소, 품목·공정 인증범위 일치</li><li>인증서 유효기간·영문 또는 태국어 번역 확인</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> 태국어 라벨</summary>
+              <div class="sub-content"><ul><li>제품명·원재료·첨가물·알레르기</li><li>수입자·제조자·원산국</li><li>순중량·제조일·소비기한·보관방법</li><li>해당 시 Thai FDA 번호</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 시장 대응</summary>
+              <div class="sub-content"><ul><li>CICOT 할랄</li><li>HACCP·FSSC 22000</li><li>콜드체인 온도기록계</li><li>MSC·ASC</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>태국 공식자료</strong><ul>
+              <li><a href="https://en.fda.moph.go.th/entrepreneurs-food/food-importation-01" target="_blank" rel="noopener">Thai FDA — Food Importation</a></li>
+              <li><a href="https://food.fda.moph.go.th/gmp-head/gmpimported" target="_blank" rel="noopener">Thai FDA — Imported Food GMP Evidence</a></li>
+              <li><a href="https://food.fda.moph.go.th/food-law/announ-moph-450/" target="_blank" rel="noopener">Thai FDA — Notification No. 450/2024 Labelling</a></li>
+              <li><a href="https://fsw.fisheries.go.th/" target="_blank" rel="noopener">Department of Fisheries — Fisheries Single Window</a></li>
+            </ul></div>
+          </div>
+        </details>
+
+        <details class="country" id="country-cn" data-country="cn" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 중국 GACC CIFER 280">
+          <summary>
+            <span class="country-code">CN</span>
+            <span class="country-title"><strong>중국</strong><small>GACC 280호·정부 추천 등록·활수생동물 접근목록</small></span>
+            <span class="country-badges"><span class="chip update">280호</span><span class="chip mandatory">GACC</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>해관총서(GACC) · 한국 NFQS</strong></div>
+              <div class="fact"><span>시설등록</span><strong>생산·가공·보관시설 CIFER 등록</strong></div>
+              <div class="fact"><span>정부증명</span><strong>한·중 약정 위생·검역증명</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>등록품목 범위·활수생동물 허용 여부</strong></div>
+            </div>
+            <div class="notice danger"><strong>2026년 6월 1일부터 제280호가 시행 중입니다.</strong> 기존 등록번호만 확인하지 말고 시설, 저장시설, 품목범위, 등록상태 및 포장·신고번호를 새 제도 기준으로 재점검해야 합니다.</div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> GACC 등록·수출입자·정부증명</summary>
+              <div class="sub-content">
+                <ol class="number-list">
+                  <li><strong>해외시설 등록:</strong> 중국 수출용 식품 생산·가공·저장시설은 GACC에 등록합니다. 수산물은 한국 정부의 심사·추천 방식이 적용됩니다.</li>
+                  <li><strong>저장시설:</strong> 냉동·냉장 수산물 해외 냉장창고도 등록대상 여부와 활동범위를 확인합니다.</li>
+                  <li><strong>등록번호:</strong> 유효기간은 원칙적으로 5년이며, 시설명·주소·법인·제품·공정 변경은 변경신고 대상입니다. CIFER만 공식 등록 플랫폼이며 등록 자체에 수수료를 요구하는 비공식 대행에 유의합니다.</li>
+                  <li><strong>수출입자 관리:</strong> 중국 수입자와 해외 수출자·대리인은 필요한 세관 등록을 하고, 수입자는 공급자 심사와 수입·판매 추적기록을 유지합니다.</li>
+                  <li><strong>위생증명:</strong> 한·중 약정 대상 수산물은 한국 정부가 발행한 위생·검역증명서와 세관 신고정보를 일치시킵니다.</li>
+                </ol>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 활수산동물·전복장</summary>
+              <div class="sub-content">
+                <h4>활어·활전복·활소라</h4>
+                <ul><li>한국산 해당 학명의 중국 수입허용 여부</li><li>양식장·포장시설 GACC 승인</li><li>중국 수입자의 활수생동물 수하인 등록</li><li>계약 전 동식물검역허가</li><li>지정 입경항·검역장</li><li>한국 정부 수생동물 검역증명서</li><li>CITES 여부</li></ul>
+                <p>2025년 10월부터 위험도별 차등 검사체계가 적용되어 승인품목도 위험도에 따라 즉시방출·조건부 보류·검사대기가 달라질 수 있습니다.</p>
+                <h4>전복장</h4>
+                <p>간장 등 식물성 원료가 포함되면 조제수산물 또는 수산물 함유 가공식품으로 분류될 수 있습니다. GACC 시설의 등록품목 범위, 위생증명서 모델, 중국 제품표준·첨가물기준을 제품별로 확인합니다. 전복 원료시설만 등록되고 전복장 공정이 등록범위에 없으면 통관 거절 위험이 있습니다.</p>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> 외포장·중문 소비자 라벨</summary>
+              <div class="sub-content">
+                <p><strong>수산물 외포장:</strong> 상품명·학명, 규격·로트·생산일, 유통기한·보관조건, 자연산/양식, 해수/담수, 어획·양식지역, 제조·가공·보관시설과 등록번호, 목적지 중국을 표시합니다.</p>
+                <p><strong>소매 가공품:</strong> 중문 제품명, 원재료·첨가물·알레르기, 순내용량, 날짜·보관·사용법, 영양성분, 중국 수입자 등을 표시합니다.</p>
+                <p>현재 GB 7718-2011·GB 28050-2011이 적용되며, 신판 GB 7718-2025·GB 28050-2025는 2027년 3월 16일 시행 예정이므로 신규 포장에는 전환요건을 선반영하는 것이 바람직합니다.</p>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 시장 대응</summary>
+              <div class="sub-content"><ul><li>FSSC 22000·BRCGS</li><li>중문 라벨·GB 표준 사전심사</li><li>잔류약품·카드뮴·미생물 선적 전 검사</li><li>ASC·MSC</li><li>유기표시 시 중국 유기인증</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>중국 공식자료</strong><ul>
+              <li><a href="https://jckspj.customs.gov.cn/spj/2026-03/30/article_2026033016493586410.html" target="_blank" rel="noopener">GACC — 해관총서령 제280호</a></li>
+              <li><a href="https://jckspj.customs.gov.cn/spj/2026-03/30/article_2026033016425922630.html" target="_blank" rel="noopener">GACC — 2026년 제27호 공고</a></li>
+              <li><a href="https://cifer.singlewindow.cn/" target="_blank" rel="noopener">CIFER — 해외생산기업 등록</a></li>
+              <li><a href="https://www.customs.gov.cn/customs/2021-04/16/article_2025121221035693974.html" target="_blank" rel="noopener">GACC — 수입식품 안전관리령 제249호</a></li>
+              <li><a href="https://www.nhc.gov.cn/sps/c100087/202509/bc824a504ec34c27883da73f14c20d44.shtml" target="_blank" rel="noopener">국가위생건강위원회 — GB 7718-2025</a></li>
+            </ul></div>
+          </div>
+        </details>
+
+        <details class="country" id="country-sg" data-country="sg" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 싱가포르 SFA 굴 복어">
+          <summary>
+            <span class="country-code">SG</span>
+            <span class="country-title"><strong>싱가포르</strong><small>SFA 수입자 라이선스·Cargo Clearance Permit·고위험품목 예외</small></span>
+            <span class="country-badges"><span class="chip mandatory">SFA·CCP</span><span class="chip conditional">고위험품</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>Singapore Food Agency</strong></div>
+              <div class="fact"><span>현지 수입자</span><strong>수산물 수입·수출·환적 라이선스</strong></div>
+              <div class="fact"><span>건별 절차</span><strong>TradeNet Cargo Clearance Permit</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>굴·복어·게살 등 고위험품목</strong></div>
+            </div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> 일반 수산물 수입절차</summary>
+              <div class="sub-content"><ol class="number-list"><li><strong>수입자 라이선스:</strong> 싱가포르 사업자가 SFA 수산물 수입·수출·환적 라이선스를 보유합니다.</li><li><strong>건별 통관:</strong> 모든 상업용 선적은 TradeNet을 통해 Cargo Clearance Permit을 받습니다.</li><li><strong>검사·기준:</strong> 일반 수산물도 SFA의 미생물·오염물질·잔류물질·첨가물 기준과 현물검사 대상입니다.</li></ol><p>일반 어류·전복·소라·수산가공품은 고위험 목록이나 CITES에 해당하지 않는 한 해외 제조시설 SFA 사전승인 및 정부 위생증명서가 일률적으로 요구되지는 않습니다.</p></div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 고위험 수산물 제한</summary>
+              <div class="sub-content">
+                <div class="table-wrap"><table><thead><tr><th>품목</th><th>조치</th></tr></thead><tbody>
+                  <tr><td>냉장 탈각 생굴</td><td>수입금지</td></tr><tr><td>냉장 피조개살</td><td>수입금지</td></tr><tr><td>냉장 조리 새우·게살</td><td>수입금지</td></tr>
+                  <tr><td>활굴</td><td>승인국·승인시설 및 건별 위생증명서. 현재 공개 승인국 목록상 한국산 활굴은 수출 곤란</td></tr>
+                  <tr><td>냉동 굴·피조개·조리 새우·게살</td><td>정부 위생증명서 필요. 냉동 굴은 노로바이러스 관련 증명 확인</td></tr>
+                  <tr><td>복어</td><td>SFA 승인시설 및 위생증명서</td></tr>
+                </tbody></table></div>
+                <p>활굴 제한은 소라·전복에 자동 적용되는 것이 아닙니다. 학명과 제품형태가 고위험 목록에 해당하는지 별도 확인합니다.</p>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> 영문 소비자 라벨·운송포장</summary>
+              <div class="sub-content"><ul><li>영문 제품명·원재료·알레르기·순내용량</li><li>원산국·싱가포르 책임사업자</li><li>날짜·보관조건·사용방법</li><li>운송포장: 제품설명, 국가, 시설명·번호, 가공일·로트·중량 등</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 시장 대응</summary>
+              <div class="sub-content"><ul><li>HACCP·FSSC 22000·BRCGS</li><li>MUIS 인정 할랄</li><li>ASC·MSC</li><li>콜드체인 온도기록과 영문 라벨 사전검토</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>싱가포르 공식자료</strong><ul>
+              <li><a href="https://www.sfa.gov.sg/food-import-export/commercial-imports/import-requirements-for-food-food-products" target="_blank" rel="noopener">SFA — Commercial Food Import Requirements</a></li>
+              <li><a href="https://www.sfa.gov.sg/food-import-export/licence-permit-registration/businesses-that-need-licence-permit-registration-for-import-export" target="_blank" rel="noopener">SFA — Import Licence and Permit</a></li>
+              <li><a href="https://www.sfa.gov.sg/food-import-export/accreditation-of-overseas-farms-establishments/overseas-accreditation-of-food-food-products" target="_blank" rel="noopener">SFA — Overseas Accreditation</a></li>
+              <li><a href="https://www.sfa.gov.sg/regulatory-standards-frameworks-guidelines/food-labelling-packaging-guidelines/labelling-requirements-for-food" target="_blank" rel="noopener">SFA — Food Labelling Requirements</a></li>
+            </ul></div>
+          </div>
+        </details>
+
+        <details class="country" id="country-id" data-country="id" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 인도네시아 BPOM KKP 할랄 halal">
+          <summary>
+            <span class="country-code">ID</span>
+            <span class="country-title"><strong>인도네시아</strong><small>KKP 수산검역·BPOM RI ML·2026 할랄</small></span>
+            <span class="country-badges"><span class="chip mandatory">KKP·BPOM</span><span class="chip update">할랄 2026</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>KKP/BPPMHKP · BPOM · BPJPH</strong></div>
+              <div class="fact"><span>원료 수산물</span><strong>협약시설·정부 검역증명</strong></div>
+              <div class="fact"><span>가공식품</span><strong>BPOM RI ML·SKI Post Border</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>전복장 관할분류·할랄 원료</strong></div>
+            </div>
+            <div class="notice warning"><strong>전복장은 “수산물”과 “소매 가공식품” 절차가 갈릴 수 있습니다.</strong> HS 코드, 소매포장, 배합·공정과 유통형태를 기준으로 KKP 검역과 BPOM 등록 중 적용경로를 수입자와 서면 확정해야 합니다.</div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> 활·신선·냉장·냉동·단순가공 수산물</summary>
+              <div class="sub-content"><ul><li>NFQS 등록 생산·가공시설</li><li>한국 정부 위생·검역증명서</li><li>현지 수입자의 사업자번호(NIB)와 필요한 수입허가·추천</li><li>KKP/BPPMHKP 검역등록·입항검사</li><li>활수산동물 질병·종별 수입조건</li><li>CITES 대상 시 별도 허가</li></ul><p>식염 외 첨가물이나 다른 원료를 사용하면 한·인니 약정의 단순가공품 범위를 벗어날 수 있습니다.</p></div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 전복장 등 소매용 가공식품</summary>
+              <div class="sub-content"><p>소매 포장 수입 가공식품은 원칙적으로 제품별 BPOM 판매허가가 필요합니다.</p><ul><li>인도네시아 수입자·등록책임자 지정</li><li>제품별 BPOM RI ML 허가</li><li>제조시설 GMP 또는 동등자료</li><li>원료·배합·공정·규격·유통기한 자료</li><li>시험성적서와 Bahasa Indonesia 라벨</li><li>수입 시 SKI Post Border</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip update">2026</span> 할랄·비할랄 의무</summary>
+              <div class="sub-content"><ul><li>식품·음료 수입제품의 할랄 의무 이행기한은 2026년 10월 17일로 안내됨</li><li>할랄 유통 시 BPJPH가 인정한 해외 할랄기관 또는 인도네시아 인증절차 적용</li><li>해외 할랄증명서의 BPJPH 등록·상호인정 상태 확인</li><li>비할랄 원료가 있는 제품은 인증 예외가 가능하더라도 비할랄 표시 의무 검토</li><li>전복 자체뿐 아니라 간장, 향미제, 발효주정, 가공보조제의 적합성 확인</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> Bahasa Indonesia 라벨</summary>
+              <div class="sub-content"><ul><li>제품명·원재료·첨가물·알레르기·순내용량</li><li>제조자·수입자·원산국</li><li>제조일·소비기한·로트·보관방법</li><li>해당 시 BPOM RI ML 번호와 할랄/비할랄 표시</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 시장 대응</summary>
+              <div class="sub-content"><ul><li>BPJPH 인정 한국 할랄기관을 조기에 확정</li><li>HACCP·FSSC 22000</li><li>인도네시아어 라벨 사전심사</li><li>ASC·MSC</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>인도네시아 공식자료</strong><ul>
+              <li><a href="https://registrasipangan.pom.go.id/layanan" target="_blank" rel="noopener">BPOM — 가공식품 등록서비스</a></li>
+              <li><a href="https://jdih.pom.go.id/download/rule/1611/28/2023/Regulation%20Of%20The%20Indonesia%20Food%20and%20Drug%20Authority%20Number%2028%20of%202023%20on%20Amendment%20to%20Regulation%20of%20The%20Indonesian%20Food%20and%20Drug%20Authority%20Number%2027%20of%202022%20on%20Importation%20Control%20Of%20Food%20and%20Drugs%20Into%20The%20Territory%20of%20Indonesia" target="_blank" rel="noopener">BPOM Regulation No. 28/2023 — Import Control</a></li>
+              <li><a href="https://bpjph.halal.go.id/read/bpjph-17-oktober-2026-produk-makanan-minuman-umk-harus-sudah-bersertifikat-halal-bagaimana-dengan-produk-luar-negeri" target="_blank" rel="noopener">BPJPH — 2026 할랄 이행 안내</a></li>
+              <li><a href="https://ptsp.kkp.go.id/konten/perijinan/03" target="_blank" rel="noopener">KKP — 수산물 수입 관련 허가</a></li>
+            </ul></div>
+          </div>
+        </details>
+
+        <details class="country" id="country-eu" data-country="eu" data-products="활어 선어 냉장 연체동물 소라 전복 전복장 가공품 EU 유럽연합 TRACES CATCH 복합식품">
+          <summary>
+            <span class="country-code">EU</span>
+            <span class="country-title"><strong>유럽연합(EU)</strong><small>EU 승인시설·공식증명·TRACES·CATCH·복합식품</small></span>
+            <span class="country-badges"><span class="chip mandatory">TRACES</span><span class="chip update">CATCH</span></span>
+          </summary>
+          <div class="country-body">
+            <div class="country-grid">
+              <div class="fact"><span>주관기관</span><strong>EU 집행위 · 회원국 BCP · 한국 NFQS</strong></div>
+              <div class="fact"><span>시설등록</span><strong>TRACES Section VII/VIII 등재</strong></div>
+              <div class="fact"><span>건별 절차</span><strong>공식증명·TRACES·BCP·CHED-P</strong></div>
+              <div class="fact"><span>최대 리스크</span><strong>지정해역·CATCH·전복장 복합식품</strong></div>
+            </div>
+
+            <details class="subsection" open data-level="mandatory">
+              <summary><span class="chip mandatory">필수</span> 승인시설·위생증명·국경검사</summary>
+              <div class="sub-content">
+                <ol class="number-list">
+                  <li><strong>EU 승인시설:</strong> 제조·가공·냉장시설 및 관련 선박은 TRACES 승인시설 목록에 등재되어야 합니다. 활 이매패류 관련 Section VII, 수산제품 관련 Section VIII 등 실제 활동범위를 확인합니다.</li>
+                  <li><strong>공식 증명서:</strong> 일반 수산물은 FISH 계열, 활·냉장·냉동·가공 이매패류·극피류·피낭류·해양복족류는 MOL-HC 계열 등 Regulation 2020/2235의 해당 모델을 사용합니다.</li>
+                  <li><strong>TRACES·BCP:</strong> EU 수입자가 도착 전 TRACES에 사전신고하고 지정 Border Control Post에서 CHED-P를 발급받습니다. 서류·동일성·현물검사를 받을 수 있습니다.</li>
+                  <li><strong>법정 HACCP:</strong> Regulation 852/2004·853/2004에 따른 HACCP 원칙 기반 절차와 동물성 식품 위생요건을 충족해야 합니다.</li>
+                </ol>
+              </div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 소라·전복·활수산동물</summary>
+              <div class="sub-content"><p>소라는 이매패류가 아니라 해양복족류입니다. 다만 EU 수출에서는 이매패류·극피류·피낭류와 함께 지정 생산해역 관리와 특수 위생증명 범위에 포함될 수 있습니다.</p><ul><li>EU 수출이 승인된 지정해역에서 생산·채취</li><li>생산해역·채취일·정화·출하·가공시설 추적</li><li>해양생물독소·E. coli·중금속·카드뮴 관리</li><li>활제품은 학명·용도·감수성에 따라 동물건강 요건 추가</li><li>포장에 국가·품명·승인시설명·승인번호 표시</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip update">2026</span> 자연산 CATCH 전자 어획증명</summary>
+              <div class="sub-content"><p>2026년 1월 10일부터 EU 수입자는 IUU 어획증명 대상 수산물의 증명서와 관련문서를 CATCH 시스템에 전자 제출합니다.</p><ul><li>어선·기국·어획해역·어획일·중량</li><li>양륙·환적·운송정보</li><li>제3국 가공 시 가공증명</li><li>기국 또는 한국 정부의 검증</li><li>수입자의 CATCH 제출</li></ul><p>양식품은 통상 IUU 어획증명 대상이 아니지만 CN 코드와 Regulation 1005/2008의 제외목록을 확인합니다.</p></div>
+            </details>
+
+            <details class="subsection" data-level="conditional">
+              <summary><span class="chip conditional">조건부</span> 전복장 복합식품 판정</summary>
+              <div class="sub-content"><p>전복과 간장·당류·향신료가 결합된 제품은 “식물성 원료와 가공된 동물성 원료를 함께 포함한 복합식품”으로 판정될 가능성이 있습니다.</p><ul><li>전복이 생원료인지 사전 가공원료인지</li><li>제조 중 수산원료 가공이 발생하는지</li><li>냉장·냉동 또는 상온안정인지</li><li>유·난제품 등 다른 동물성 원료 포함 여부</li><li>pH·수분활성·열처리·밀봉조건</li></ul><p>비상온유통 복합식품은 BCP와 공식증명서가 요구될 가능성이 높습니다. 상온안정 복합식품은 조건에 따라 private attestation을 사용할 수 있으나, 함유 수산원료는 EU 승인시설에서 생산되어야 합니다.</p></div>
+            </details>
+
+            <details class="subsection" data-level="label">
+              <summary><span class="chip update">표시</span> 회원국 언어·수산물 추가정보</summary>
+              <div class="sub-content"><ul><li>도착 회원국 언어로 식품명, 원재료·첨가물, 알레르기 강조, 순중량, 날짜·보관조건, EU 책임사업자, 영양성분</li><li>해당 신선·냉장 수산물: 상업명·학명, 생산방식, 어획·양식구역, 어구, 해동 여부</li><li>회원국별 포장재·재활용책임·추가 표시 확인</li></ul></div>
+            </details>
+
+            <details class="subsection" data-level="recommended">
+              <summary><span class="chip recommended">권장</span> 시장 대응</summary>
+              <div class="sub-content"><ul><li>BRCGS·IFS Food·FSSC 22000</li><li>자연산 MSC·양식 ASC</li><li>유기표시 시 EU 유기인증과 TRACES e-COI</li><li>카드뮴·수은·다이옥신·잔류약품·Listeria 선적 전 검사</li></ul></div>
+            </details>
+
+            <div class="sources"><strong>EU 공식자료</strong><ul>
+              <li><a href="https://food.ec.europa.eu/food-safety/biological-safety/food-hygiene/non-eu-countries-authorised-establishments_en" target="_blank" rel="noopener">European Commission — Non-EU Authorised Establishments</a></li>
+              <li><a href="https://eur-lex.europa.eu/eli/reg_impl/2020/2235/oj/eng" target="_blank" rel="noopener">EUR-Lex — Regulation 2020/2235 Official Certificates</a></li>
+              <li><a href="https://food.ec.europa.eu/horizontal-topics/traces_en" target="_blank" rel="noopener">European Commission — TRACES</a></li>
+              <li><a href="https://oceans-and-fisheries.ec.europa.eu/news/new-digital-certification-system-tackle-illegal-fishing-2026-01-12_en" target="_blank" rel="noopener">European Commission — CATCH, 2026</a></li>
+              <li><a href="https://food.ec.europa.eu/horizontal-topics/international-affairs/eu-entry-conditions/composite-products_en" target="_blank" rel="noopener">European Commission — Composite Products</a></li>
+              <li><a href="https://eur-lex.europa.eu/eli/reg/2011/1169/oj/eng" target="_blank" rel="noopener">EUR-Lex — Regulation 1169/2011 Food Information</a></li>
+              <li><a href="https://eur-lex.europa.eu/eli/reg/2013/1379/oj/eng" target="_blank" rel="noopener">EUR-Lex — Regulation 1379/2013 Fishery Market Information</a></li>
+            </ul></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="panel" id="certifications" style="margin-top:24px">
+      <p class="section-kicker">CERTIFICATION MAP</p>
+      <h2>법정요건과 권장 인증의 구분</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>인증·체계</th><th>성격</th><th>주요 활용시장</th><th>주의사항</th></tr></thead>
+          <tbody>
+            <tr><td>국내 식품 HACCP</td><td>국내 법정·지정제도</td><td>전 시장 기본 증빙</td><td>상대국 시설승인·건별 증명서를 대체하지 않음</td></tr>
+            <tr><td>NFQS 수출 시설등록·HACCP</td><td>협약국에서 핵심 필수</td><td>EU·중국·베트남·태국·인니·미국 패류</td><td>시설번호뿐 아니라 품목·공정 범위 확인</td></tr>
+            <tr><td>ISO 22000</td><td>자율 국제규격</td><td>일반 B2B</td><td>GFSI 요구 유통망에서는 단독으로 부족할 수 있음</td></tr>
+            <tr><td>FSSC 22000</td><td>GFSI 인정</td><td>미국·EU·싱가포르·대형유통</td><td>인증범위에 해당 공장·제품군 포함</td></tr>
+            <tr><td>BRCGS·IFS·SQF</td><td>유통망 중심 GFSI 규격</td><td>EU·미국·일부 아시아 체인</td><td>바이어가 특정 규격·등급을 지정할 수 있음</td></tr>
+            <tr><td>MSC</td><td>자연산 지속가능성</td><td>EU·미국·일본·싱가포르</td><td>어업 인증과 CoC 추적성 모두 필요</td></tr>
+            <tr><td>ASC·BAP</td><td>책임양식</td><td>미국·EU·싱가포르</td><td>양식장과 가공유통 CoC 범위 확인</td></tr>
+            <tr><td>할랄</td><td>인니 법적 중요, 기타 시장성</td><td>인도네시아·싱가포르·태국·베트남</td><td>인정기관·상호인정·가공보조제까지 확인</td></tr>
+            <tr><td>유기인증</td><td>유기표시 시 필수</td><td>EU·미국·중국·일본</td><td>한국 인증의 자동 인정 여부를 시장별 확인</td></tr>
+            <tr><td>CITES 허가</td><td>종 보호 무역허가</td><td>해당 종의 전 시장</td><td>식품안전 인증이 아니라 수출입 허가</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" id="checklist">
+      <p class="section-kicker">ACTION CHECKLIST</p>
+      <h2>수출 준비 실행 체크리스트</h2>
+      <div class="check-grid">
+        <div class="check-card"><h3>1. 제품 마스터</h3><ul class="checklist"><li>국문·영문명·정확한 학명</li><li>HS·HTS·CN 코드</li><li>자연산·양식 및 생산해역·양식장</li><li>활·신선·냉장·냉동·가공 구분</li><li>RTE·진공/MAP·밀봉 여부</li><li>pH·수분활성·열처리·유통온도</li></ul></div>
+        <div class="check-card"><h3>2. 시설 승인</h3><ul class="checklist"><li>NFQS 등록과 정기점검 상태</li><li>FDA·GACC·EU·협약국 목록 등재</li><li>공장명·주소·법인·번호 일치</li><li>제품·공정·냉장창고·선박 범위</li><li>변경·갱신·유효기간</li></ul></div>
+        <div class="check-card"><h3>3. 제품 적합성</h3><ul class="checklist"><li>현지 식품·첨가물·잔류 기준</li><li>미생물·중금속·패류독소 검사</li><li>양식약품·휴약기간 기록</li><li>공정검증·유통기한·챌린지 시험</li><li>CITES·질병감수성·수입허용종</li></ul></div>
+        <div class="check-card"><h3>4. 선적 서류</h3><ul class="checklist"><li>위생·검역·동물건강 증명</li><li>어획·양륙·SIMP·CATCH 자료</li><li>송장·포장명세·선하증권 일치</li><li>생산·가공·로트 추적기록</li><li>수입자 허가·사전신고·통관허가</li></ul></div>
+        <div class="check-card"><h3>5. 표시·포장</h3><ul class="checklist"><li>현지 언어·법정 표시사항</li><li>학명·원산지·생산방법</li><li>알레르기·영양·보관조건</li><li>시설번호·로트·날짜</li><li>운송포장과 소매포장 구분</li></ul></div>
+        <div class="check-card"><h3>6. 최종 확인</h3><ul class="checklist"><li>수입자에게 최종 라벨 승인</li><li>관할기관에 제품분류 서면확인</li><li>증명서 원본·전자등록 상태</li><li>온도 로거·폐사·지연 대응계획</li><li>검사보류·반송·리콜 연락망</li></ul></div>
+      </div>
+
+      <div class="notice info" style="margin-top:18px">
+        <strong>전복장 개발 권고:</strong> 8개 시장 공통 사양 하나로 진입하기보다 ① 냉장 비살균형, ② 냉장·냉동 가열형, ③ 상온 밀봉·살균형을 분리하고 시장별 pH·수분활성·공정·라벨·인증경로를 설계하는 편이 안전합니다.
+      </div>
+    </section>
+
+    <section class="panel" id="limitations">
+      <p class="section-kicker">SCOPE &amp; CAUTION</p>
+      <h2>자료 이용 시 유의사항</h2>
+      <ul>
+        <li>본 보고서는 2026년 8월 5일 현재 공개된 정부·관할기관 자료를 중심으로 정리한 실무 참고자료입니다.</li>
+        <li>관세율·FTA 원산지증명, 물류비, 상표권, 포장재 생산자책임, 각 회원국 지방규정은 제품별 별도 검토가 필요합니다.</li>
+        <li>최종 의무는 학명, HS 코드, 원료산지, 자연산·양식, 제품온도, 가공공정, 소비형태, 도착항 및 수입자 지위에 따라 달라집니다.</li>
+        <li>계약·포장 인쇄·선적 전에 제품사양서와 공정도를 첨부하여 NFQS 관할지원 및 현지 수입자가 관할기관에 최신 요건을 재확인해야 합니다.</li>
+      </ul>
+    </section>
+
+    <footer class="footer">
+      제주산 수산물 국가별 수출 인증·허가 실무 보고서 · 기준일 2026.08.05
+    </footer>
+  </main>
+
+  <button class="back-top" id="backTop" type="button" aria-label="맨 위로">↑</button>
+
+  <script>
+    (() => {
+      const countries = [...document.querySelectorAll('details.country')];
+      const subsections = [...document.querySelectorAll('details.subsection')];
+      const searchInput = document.getElementById('searchInput');
+      const countryFilter = document.getElementById('countryFilter');
+      const levelFilter = document.getElementById('levelFilter');
+      const searchStatus = document.getElementById('searchStatus');
+      const backTop = document.getElementById('backTop');
+
+      const normalize = value => (value || '').toLocaleLowerCase('ko').replace(/\s+/g, ' ').trim();
+
+      function applyFilters() {
+        const query = normalize(searchInput.value);
+        const selectedCountry = countryFilter.value;
+        const selectedLevel = levelFilter.value;
+        let shown = 0;
+
+        subsections.forEach(section => {
+          const level = section.dataset.level || 'all';
+          const visible = selectedLevel === 'all' || level === selectedLevel;
+          section.classList.toggle('filtered-out', !visible);
+          if (visible && selectedLevel !== 'all') section.open = true;
+        });
+
+        countries.forEach(country => {
+          const countryMatch = selectedCountry === 'all' || country.dataset.country === selectedCountry;
+          const textMatch = !query || normalize(country.textContent + ' ' + country.dataset.products).includes(query);
+          const visible = countryMatch && textMatch;
+          country.classList.toggle('country-hidden', !visible);
+          if (visible) {
+            shown += 1;
+            if (query || selectedCountry !== 'all' || selectedLevel !== 'all') country.open = true;
+          }
+        });
+
+        searchStatus.textContent = shown
+          ? `${shown}개 시장이 표시되어 있습니다${query ? ` · 검색어: “${searchInput.value.trim()}”` : ''}.`
+          : '일치하는 시장이 없습니다. 검색어 또는 필터를 조정해 주세요.';
+      }
+
+      searchInput.addEventListener('input', applyFilters);
+      countryFilter.addEventListener('change', applyFilters);
+      levelFilter.addEventListener('change', applyFilters);
+
+      document.getElementById('expandAll').addEventListener('click', () => {
+        countries.filter(el => !el.classList.contains('country-hidden')).forEach(el => el.open = true);
+        subsections.filter(el => !el.classList.contains('filtered-out')).forEach(el => el.open = true);
+      });
+      document.getElementById('collapseAll').addEventListener('click', () => {
+        countries.forEach(el => el.open = false);
+        subsections.forEach(el => el.open = false);
+      });
+      document.getElementById('resetFilters').addEventListener('click', () => {
+        searchInput.value = '';
+        countryFilter.value = 'all';
+        levelFilter.value = 'all';
+        applyFilters();
+      });
+      document.getElementById('printReport').addEventListener('click', () => window.print());
+      document.getElementById('saveHtml').addEventListener('click', () => {
+        const source = '<!doctype html>\n' + document.documentElement.outerHTML;
+        const blob = new Blob([source], {type: 'text/html;charset=utf-8'});
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'jeju_seafood_export_certification_report_2026.html';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1200);
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', () => {
+          const target = document.querySelector(link.getAttribute('href'));
+          if (target?.matches('details')) target.open = true;
+          target?.closest('details') && (target.closest('details').open = true);
+        });
+      });
+
+      let printState = [];
+      window.addEventListener('beforeprint', () => {
+        printState = [...document.querySelectorAll('details')].map(el => el.open);
+        document.querySelectorAll('details').forEach(el => el.open = true);
+      });
+      window.addEventListener('afterprint', () => {
+        document.querySelectorAll('details').forEach((el, i) => el.open = printState[i]);
+      });
+
+      window.addEventListener('scroll', () => backTop.classList.toggle('show', window.scrollY > 700), {passive: true});
+      backTop.addEventListener('click', () => window.scrollTo({top: 0, behavior: 'smooth'}));
+      applyFilters();
+    })();
+  </script>
+</body>
+</html>
