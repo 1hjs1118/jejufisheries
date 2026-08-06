@@ -949,10 +949,11 @@ svg {
   </section>
 
   <p class="text-small text-muted source-note">
-    K-stat 국가별 지자체 수출입 누계자료 기준 · 월 실적은 당월 누계에서 전월 누계를 차감 · 누계표에서 생략된 국가는 직전 누계를 유지 · EU는 EU 27개 회원국 합산 · 2026년은 1~6월 자료
+    K-stat 국가별 지자체 수출입 누계자료 기준 · 월 실적은 당월 누계에서 전월 누계를 차감 · 미국·중국·일본·베트남·EU·태국 6개 권역만 포함 · EU는 27개 회원국 합산 · 2026년은 1~6월 자료<br>
+    <strong>가정:</strong> 누계표에서 생략된 국가는 직전 누계가 유지된 것으로 처리했습니다. 생략이 순위 제외·정정에 따른 것이라면 해당 월 실적이 왜곡될 수 있으므로 정책 판단 전 원본 조회조건과 전체 국가 합계로 재대조해야 합니다.
   </p>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="assets/chart.umd.js"></script>
   <script>
     (() => {
       const root = document.getElementById("jeju-fisheries-country-trade");
@@ -1164,9 +1165,9 @@ svg {
   </script>
 </div>
 
-<script id="codex-visualization-floating-ui-core" src="https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js"></script>
-<script id="codex-visualization-floating-ui-dom" src="https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js"></script>
-<script id="codex-visualization-lucide" async src="https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js"></script>
+<script id="codex-visualization-floating-ui-core" src="assets/floating-ui.core.umd.min.js"></script>
+<script id="codex-visualization-floating-ui-dom" src="assets/floating-ui.dom.umd.min.js"></script>
+<script id="codex-visualization-lucide" async src="assets/lucide.js"></script>
 <script id="codex-visualization-tooltip">/* oxlint-disable typescript/no-unsafe-argument, typescript/no-unsafe-call, typescript/no-unsafe-return */
 // Runs inside the visualization sandbox, not the host webview.
 (() => {

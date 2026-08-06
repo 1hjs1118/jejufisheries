@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>제주특별자치도 수산물 수출입 통계 대시보드</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="assets/chart.umd.js"></script>
   <style>
     :root {
       --bg: #0f172a;
@@ -293,6 +293,7 @@
         <div class="tab" data-metric="importCount">수입 건수</div>
       </div>
       <div class="chart-wrap"><canvas id="annualChart"></canvas></div>
+      <div class="info-box"><strong>비교 주의:</strong> 2019~2025년은 1~12월 합계, 2026년은 1~6월 합계입니다. 2025→2026 연결선은 점선으로 표시하며 연간 증감으로 해석하면 안 됩니다.</div>
     </div>
 
     <div class="chart-row">
@@ -331,8 +332,7 @@
     <div class="panel">
       <h2><span class="dot"></span> 동기간 · 동일 HS코드 연도 간 상호 비교</h2>
       <div class="info-box">
-        <strong>사용 방법:</strong> 기준 연도·월·HS코드·지표(수출/수입 금액·건수)를 선택하면,
-        기준 연도·시작월·종료월·HS코드·수출입 지표를 선택하면 다른 연도의 동일 기간과 비교한
+        <strong>사용 방법:</strong> 기준 연도·시작월·종료월·HS코드·수출입 지표를 선택하면 다른 연도의 동일 기간과 비교한
         <strong>절대수치, 증감률(%), HS코드 구성비 차이(%p)</strong>를 표시합니다.
         2026년은 1~6월 데이터만 존재하므로 7월 이후를 포함한 기간은 비교 대상에서 제외됩니다.
       </div>
@@ -397,7 +397,7 @@
           <label>비교 방식</label>
           <select id="cmpMode">
             <option value="all">전체 연도 대비</option>
-            <option value="prev">전년 대비만</option>
+            <option value="prev">기준연도의 전년 대비</option>
           </select>
         </div>
         <div class="filter-group">
@@ -456,7 +456,7 @@
   </div>
 
   <div class="footer">
-    제주특별자치도 수산물 수출입 정책 수립 참고 자료 · 데이터 출처: 제공 CSV (2019–2026.6) · 금액 단위: 천USD · 본 페이지는 오프라인에서도 동작합니다
+    제주특별자치도 수산물 수출입 정책 수립 참고 자료 · 데이터 출처: 제공 CSV (2019–2026.6) · 금액 단위: 천USD · 원본 CSV 파일명·추출시각·조회조건은 패키지에 없어 외부 원천대조에는 한계가 있습니다 · 오프라인 실행 가능
   </div>
 
 <script>
@@ -891,7 +891,9 @@ function buildAnnualSeries(metric) {
     tension: 0.25,
     fill: false,
     borderWidth: 2,
-    pointRadius: 3
+    pointRadius: 3,
+    pointStyle: ctx => ctx.dataIndex === YEARS.length - 1 ? 'rectRot' : 'circle',
+    segment: { borderDash: ctx => ctx.p1DataIndex === YEARS.length - 1 ? [6,4] : undefined }
   }));
   // 전체 합계
   datasets.push({
@@ -1034,6 +1036,7 @@ function runCompare() {
   const hs = document.getElementById('cmpHS').value;
   const metric = document.getElementById('cmpMetric').value;
   const mode = document.getElementById('cmpMode').value;
+  const isPrevMode = mode === 'prev';
   const key = METRIC_KEY[metric];
 
   if (startMonth > endMonth) {
@@ -1084,9 +1087,10 @@ function runCompare() {
       value: val,
       baseValue: baseVal,
       months: baseMonths,
-      pct: pctChange(val, baseVal),
+      diff: isPrevMode ? baseVal - val : val - baseVal,
+      pct: isPrevMode ? pctChange(baseVal, val) : pctChange(val, baseVal),
       share,
-      sharePp: share === null || baseShare === null ? null : share - baseShare
+      sharePp: share === null || baseShare === null ? null : (isPrevMode ? baseShare - share : share - baseShare)
     };
   });
 
@@ -1095,12 +1099,16 @@ function runCompare() {
     : `${startMonth}~${endMonth}월 합계`;
   const hsStr = hs === 'ALL' ? '전체 HS합계' : `${hs} ${HS_NAME[hs]}`;
   const isAllHs = hs === 'ALL';
+  const diffHeading = isPrevMode ? '차이 (기준−전년)' : '차이 (비교−기준)';
+  const pctHeading = isPrevMode ? '기준연도 전년 대비 (%)' : '비교연도 증감률 (%)';
+  const shareHeading = isPrevMode ? '구성비 차이 (기준−전년, %p)' : '구성비 차이 (비교−기준, %p)';
 
   let html = `
     <div class="info-box" style="margin-top:8px">
       <strong>기준:</strong> ${baseYear}년 ${periodStr} · ${hsStr} · ${METRIC_LABEL[metric]}
       = <strong style="color:var(--text)">${fmt(baseVal)}</strong>
       ${isAllHs ? '' : ` · HS 구성비 <strong style="color:var(--text)">${baseShare === null ? '-' : baseShare.toFixed(1) + '%'}</strong>`}
+      ${isPrevMode ? '<br>아래 증감률과 차이는 기준연도에서 전년을 뺀 방향으로 계산합니다.' : ''}
     </div>
     <div class="compare-table-wrap">
       <table>
@@ -1110,10 +1118,10 @@ function runCompare() {
             <th>비교 기간</th>
             <th>절대 수치</th>
             <th>기준 연도 수치</th>
-            <th>차이 (비교−기준)</th>
-            <th>증감률 (%)</th>
+            <th>${diffHeading}</th>
+            <th>${pctHeading}</th>
             <th>HS 구성비</th>
-            <th>구성비 차이 (%p)</th>
+            <th>${shareHeading}</th>
           </tr>
         </thead>
         <tbody>
@@ -1131,7 +1139,7 @@ function runCompare() {
       </tr>`;
       return;
     }
-    const diff = r.value - r.baseValue;
+    const diff = r.diff;
     const cls = deltaClass(r.pct);
     const mLabel = r.months.length === 12
       ? '1~12월'
@@ -1152,8 +1160,9 @@ function runCompare() {
 
   html += `</tbody></table></div>
     <p style="margin-top:10px;font-size:0.78rem;color:var(--muted)">
-      ※ 증감률(%) = (비교연도 수치 − 기준연도 수치) / 기준연도 수치 × 100.
-      구성비 차이(%p) = 비교연도 HS코드 구성비 − 기준연도 HS코드 구성비.
+      ※ ${isPrevMode
+        ? '전년 대비(%) = (기준연도 수치 − 전년 수치) / 전년 수치 × 100. 구성비 차이(%p) = 기준연도 구성비 − 전년 구성비.'
+        : '증감률(%) = (비교연도 수치 − 기준연도 수치) / 기준연도 수치 × 100. 구성비 차이(%p) = 비교연도 구성비 − 기준연도 구성비.'}
       전체 HS합계를 선택하면 구성비와 %p는 표시하지 않습니다.
       무역수지는 표시하지 않습니다.
     </p>`;
@@ -1161,9 +1170,14 @@ function runCompare() {
   document.getElementById('compareResult').innerHTML = html;
 
   // 비교 차트
-  const chartLabels = [baseYear + '(기준)', ...rows.filter(r=>r.value!=null).map(r => String(r.year))];
-  const chartData = [baseVal, ...rows.filter(r=>r.value!=null).map(r => r.value)];
-  const colors = chartLabels.map((l,i) => i===0 ? '#818cf8' : '#38bdf8');
+  const validRows = rows.filter(r=>r.value!=null);
+  const chartLabels = isPrevMode
+    ? [...validRows.map(r => String(r.year)), baseYear + '(기준)']
+    : [baseYear + '(기준)', ...validRows.map(r => String(r.year))];
+  const chartData = isPrevMode
+    ? [...validRows.map(r => r.value), baseVal]
+    : [baseVal, ...validRows.map(r => r.value)];
+  const colors = chartLabels.map(l => l.includes('(기준)') ? '#818cf8' : '#38bdf8');
 
   const ctx = document.getElementById('compareChart').getContext('2d');
   if (compareChart) compareChart.destroy();

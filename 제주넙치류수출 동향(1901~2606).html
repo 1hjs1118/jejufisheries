@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>제주특별자치도 넙치류 수출 동향 대시보드</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="assets/chart.umd.js"></script>
   <style>
     :root {
       --bg:#08111f; --panel:#111d2f; --panel2:#18263b; --line:#2c3c54;
@@ -157,6 +157,7 @@
       <strong>자료 이용 유의:</strong> 2019~2026년은 한국무역협회 제주지부 첨부 PDF의 월별·상반기·연간 품목표를 추가 반영했습니다.
       보고서가 나중에 실적을 정정한 경우 더 최신 보고서의 전년동월 수치를 우선했으며, 6월·12월 일부는 상반기·연간 누계에서
       확인된 월을 차감해 산출했습니다. ‘누계차감’ 값은 직접 기재값과 구분해 표시하므로 정책 검토 시 원문 통계와 재확인해야 합니다.
+      월별 증감률은 원문 공표값이며, 화면의 만 달러 단위 반올림 금액으로 재계산한 값과 소폭 다를 수 있습니다.
     </div>
 
     <section class="panel">
@@ -201,7 +202,7 @@
       <section class="panel">
         <h2><span class="dot"></span> 연도별 넙치류 수출액 합계</h2>
         <div class="chart-wrap"><canvas id="annualChart"></canvas></div>
-        <p class="chart-note">※ 2019~2025년은 1~12월 연간 합계이며, 2026년은 1~6월 누계입니다.</p>
+        <p class="chart-note">※ 연도별 합계와 전년 비교는 현재 선택한 기간·자료 구분 필터를 반영합니다. 전체 조회 시 2019~2025년은 연간, 2026년은 1~6월입니다.</p>
       </section>
     </div>
 
@@ -467,32 +468,34 @@
     }
 
     function annualData(rows) {
-      const minYear=Number(document.getElementById('startPeriod').value.slice(0,4));
-      const maxYear=Number(document.getElementById('endPeriod').value.slice(0,4));
-      const groups=[];
-      for(let y=minYear;y<=maxYear;y++){
-        const months=ALL_MONTHS.filter(r=>r.y===y);
+      const officialAnnual={2022:2535.4};
+      const years=[...new Set(rows.map(r=>r.y))].sort((a,b)=>a-b);
+      const groups=years.map(y=>{
+        const months=rows.filter(r=>r.y===y).sort((a,b)=>a.m-b.m);
         const known=months.filter(r=>r.v!=null);
-        const partial=months.length<12;
-        groups.push({
-          y,months,known,partial,
-          period:partial?`1~${months.length}월 누계`:'1~12월',
-          total:known.reduce((a,b)=>a+b.v,0),
+        const monthNums=months.map(r=>r.m);
+        const contiguous=monthNums.every((m,i)=>i===0||m===monthNums[i-1]+1);
+        const fullYear=monthNums.length===12&&monthNums[0]===1&&monthNums[11]===12;
+        const period=fullYear?'1~12월':contiguous&&monthNums.length>1?`${monthNums[0]}~${monthNums.at(-1)}월`:monthNums.length?`${monthNums.join('·')}월`:'-';
+        const monthlyTotal=known.reduce((a,b)=>a+b.v,0);
+        const officialTotal=fullYear&&known.length===12?officialAnnual[y]??null:null;
+        return {
+          y,months,known,monthNums,partial:!fullYear,period,
+          monthlyTotal,officialTotal,total:officialTotal??monthlyTotal,
           complete:months.length>0&&known.length===months.length
-        });
-      }
-      groups.forEach((g,i)=>{
+        };
+      });
+      groups.forEach(g=>{
         if(!g.complete){g.change=null;return;}
-        if(g.partial){
-          const prior=ALL_MONTHS.filter(r=>r.y===g.y-1&&r.m<=g.months.length&&r.v!=null);
-          const priorTotal=prior.reduce((a,b)=>a+b.v,0);
-          g.change=prior.length===g.months.length&&priorTotal?(g.total-priorTotal)/priorTotal*100:null;
-          g.changeLabel='전년 동기간 대비';
-        }else{
-          const p=groups[i-1];
-          g.change=(p?.complete&&!p.partial&&p.total)?(g.total-p.total)/p.total*100:null;
-          g.changeLabel='전년 동기대비';
-        }
+        const p=groups.find(item=>item.y===g.y-1);
+        if(!p){g.change=null;return;}
+        const prior=p.months.filter(r=>g.monthNums.includes(r.m));
+        const sameMonths=prior.length===g.months.length&&prior.every(r=>r.v!=null);
+        if(!sameMonths){g.change=null;return;}
+        const priorMonthly=prior.reduce((sum,r)=>sum+r.v,0);
+        const priorTotal=!g.partial&&!p.partial&&p.officialTotal!=null?p.officialTotal:priorMonthly;
+        g.change=priorTotal?(g.total-priorTotal)/priorTotal*100:null;
+        g.changeLabel='전년 동일 월 대비';
       });
       return groups;
     }
@@ -502,7 +505,7 @@
       if(annualChart)annualChart.destroy();
       annualChart=new Chart(document.getElementById('annualChart'),{
         type:'bar',
-        data:{labels:groups.map(g=>g.partial?[String(g.y),'1~6월']:String(g.y)),datasets:[{
+        data:{labels:groups.map(g=>g.partial?[String(g.y),g.period]:String(g.y)),datasets:[{
           data:groups.map(g=>g.known.length?g.total:null),
           backgroundColor:groups.map(g=>g.complete?'rgba(52,211,153,.78)':'rgba(251,191,36,.65)'),
           borderRadius:6,label:'수출액 합계(만 달러)'
@@ -513,8 +516,8 @@
       });
       document.getElementById('annualTableBody').innerHTML=groups.map(g=>`
         <tr><td>${g.y}년</td><td>${g.period}</td>
-        <td>${g.known.length?fmt(g.total)+' 만 달러':'-'}</td><td class="${yoyClass(g.change)}">${pct(g.change)}</td>
-        <td>${g.known.length}/${g.months.length}개월</td><td>${g.complete?(g.partial?'<span class="pill derived">1~6월 집계</span>':'<span class="pill direct">연간 완료</span>'):'<span class="pill missing">일부 미확인</span>'}</td></tr>
+        <td>${g.known.length?(g.officialTotal!=null?`${fmt(g.officialTotal)} 만 달러 <small>(공식 연간)<br>월합계 ${fmt(g.monthlyTotal)} · 차이 ${fmt(g.officialTotal-g.monthlyTotal)}</small>`:fmt(g.total)+' 만 달러'):'-'}</td><td class="${yoyClass(g.change)}">${pct(g.change)}</td>
+        <td>${g.known.length}/${g.months.length}개월</td><td>${g.complete?(g.partial?'<span class="pill derived">선택 월 집계</span>':'<span class="pill direct">연간 완료</span>'):'<span class="pill missing">일부 미확인</span>'}</td></tr>
       `).join('');
     }
 
