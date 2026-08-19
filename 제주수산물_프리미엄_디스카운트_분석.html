@@ -454,18 +454,16 @@ function renderAnalysis(){
  const dText=d?`${d.species}(${d.methods}개 방식 모두 디스카운트)`:'해당 없음';
  e.innerHTML=`
  <p class="lead"><b>결론:</b> 선어 상태만 비교하면 프리미엄은 ${s.premium}개(${s.premiumShare.toFixed(1)}%)로 디스카운트 ${s.discount}개(${s.discountShare.toFixed(1)}%)보다 많습니다. 그러나 공통 조합 ${r.commonCells}개 중 ${r.classChangeCount}개가 기존 혼합상태 판정과 달라졌고, 같은 어종도 어업방식에 따라 부호가 바뀌므로 ‘제주산 효과’ 하나로 해석해서는 안 됩니다.</p>
- <div class="callout"><b>가장 안정적인 선어 신호</b> — ${escapeHtml(pText)}입니다. 반대로 ${escapeHtml(dText)}입니다. 이 패턴은 상태 혼합 제거 뒤에도 여러 어업방식에서 반복된다는 점에서 우선 모니터링할 가치가 있습니다.</div>
- <h3>1. 판정 변화는 연안복합어업에 집중돼 상태 혼합 민감도가 높다</h3>
- <p>변경된 ${r.classChangeCount}개 중 <b>${r.changes.filter(x=>x.method==='연안복합어업').length}개</b>가 연안복합어업입니다. 가자미류·갯장어·물메기·붕장어·넙치는 기존 혼합상태 디스카운트에서 선어 프리미엄으로 바뀌었습니다. 이 조합들은 앞으로 상태 코드 분리 여부를 데이터 파이프라인의 필수 검증항목으로 두는 것이 타당합니다.</p>
- <h3>2. 상태를 맞춰도 같은 어종의 어업방식별 부호 역전은 남는다</h3>
- <p>${rev.map(x=>`${x.species}: ${x.lowMethod} ${pct(x.lowPct)} ↔ ${x.highMethod} ${pct(x.highPct)}`).join(' · ')}. 선어라는 동일 상태 안에서도 차이가 크므로, 남은 설명변수는 크기·등급·선도·손상·양륙항·구매자 구성일 가능성이 큽니다.</p>
- <h3>3. 연간 가중평균은 ‘대부분의 달에 같은 방향’이라는 뜻이 아니다</h3>
+ <div class="callout"><b>가장 안정적인 선어 신호</b> — ${escapeHtml(pText)}입니다. 반대 사례는 ${escapeHtml(dText)}입니다. 여러 어업방식에서 반복된다는 점에서 우선 신뢰성이 높습니다.</div>
+ <h3>1. 어종의 어업방식별 부호 역전 해석</h3>
+ <p>${rev.map(x=>`${x.species}: ${x.lowMethod} ${pct(x.lowPct)} ↔ ${x.highMethod} ${pct(x.highPct)}`).join(' · ')}. 설명변수는 크기·등급·선도·손상·양륙항·구매자 구성일 가능성이 큽니다.</p>
+ <h3>2. 연간 가중평균은 ‘대부분의 달에 같은 방향’이라는 뜻이 아니다</h3>
  <p>${volatile?`${volatile.method} ${volatile.species}는 연간 ${pct(volatile.pct)}이지만 우위 ${volatile.higher}개월·열위 ${volatile.lower}개월입니다.`:''} 특정 월의 대량거래가 연간 평균을 지배할 수 있으므로 <b>연간 상대지수 + 우위·열위 월수 + 제주·전국 물량</b>을 함께 사용해야 합니다.</p>
- <h3>4. 가장 큰 수치는 프리미엄 확정이 아니라 비교가능성 재점검 신호다</h3>
+ <h3>3. 가장 큰 수치는 프리미엄 확정이 아니라 비교가능성 재점검 신호다</h3>
  <p>최대 프리미엄은 ${top.method} ${top.species} ${pct(top.pct)}이고, 최대 디스카운트는 ${bottom.method} ${bottom.species} ${pct(bottom.pct)}입니다. 절대 격차가 큰 조합일수록 전국 비교군의 세부 종·규격·지역 구성과 제주 거래의 등급 구성이 같은지 먼저 확인해야 합니다.</p>
- <h3>5. 어업방식 전체 지수는 구성효과를 보여주지만 원/kg 가격은 아니다</h3>
+ <h3>4. 어업방식 전체 지수는 구성효과를 보여주지만 원/kg 가격은 아니다</h3>
  <p>${i.methodMix.map(x=>`${x.method} ${pct(x.premiumPct)}(중앙값 ${pct(x.medianPct)})`).join(' · ')}. 어업방식 집계는 어종별 상대지수를 비교물량으로 가중한 값이므로, 서로 다른 어종의 원/kg를 직접 합산한 가격으로 읽으면 안 됩니다.</p>
- <div class="callout"><b>해석 한계:</b> 선어 필터는 기존 상태 혼합 오류를 줄였지만, 규격·등급·선도·구매자·양륙항·세부 산지 구성이 같다는 보장은 없습니다. 따라서 본 결과는 가격차의 관측·우선순위 설정에는 사용할 수 있으나 인과효과 추정에는 사용할 수 없습니다.</div>`;
+ <div class="callout"><b>해석 한계:</b> 규격·등급·선도·구매자·양륙항·세부 산지 구성이 같다는 보장은 없습니다. 따라서 본 결과는 가격차의 관측·우선순위 설정에는 사용할 수 있으나 인과효과 추정에는 사용할 수 없습니다.</div>`;
 }
 
 function renderActions(){
