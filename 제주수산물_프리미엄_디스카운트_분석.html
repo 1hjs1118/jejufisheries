@@ -338,8 +338,8 @@ function verdictHtml(c,p){return `<span class="${clsKey(c)}-t"><b>${escapeHtml(c
 function renderTop(){
  const s=D.summary, r=D.revision;
  document.getElementById('blufText').innerHTML=`
- <p><b>결론:</b> 선어만으로 다시 계산한 최종 <b>${s.cells}개 조합</b> 중 <span class="premium-t"><b>${s.premium}개(${s.premiumShare.toFixed(1)}%)</b></span>가 제주 프리미엄, <span class="neutral-t"><b>${s.neutral}개(${s.neutralShare.toFixed(1)}%)</b></span>가 중립, <span class="discount-t"><b>${s.discount}개(${s.discountShare.toFixed(1)}%)</b></span>가 디스카운트입니다.</p>
- <p><b>개정 영향:</b> 기존 혼합상태 보고서와 공통인 ${r.commonCells}개 중 <b>${r.classChangeCount}개 판정이 변경</b>됐고, 기존 8개 조합은 선어 기준 신뢰도 조건을 충족하지 못해 제외됐습니다. 상태 혼합 제거가 결과에 실질적인 영향을 줬습니다.</p>
+ <p><b>결론:</b> 최종 <b>${s.cells}개 조합</b> 중 <span class="premium-t"><b>${s.premium}개(${s.premiumShare.toFixed(1)}%)</b></span>가 제주 프리미엄, <span class="neutral-t"><b>${s.neutral}개(${s.neutralShare.toFixed(1)}%)</b></span>가 중립, <span class="discount-t"><b>${s.discount}개(${s.discountShare.toFixed(1)}%)</b></span>가 디스카운트입니다.</p>
+
  <p><b>반복성:</b> 12개월 중 9개월 이상 같은 방향인 조합은 <b>${s.sustainedPremium+s.sustainedDiscount}개(${s.persistentShare.toFixed(1)}%)</b>입니다. 나머지는 연간 가중평균과 월별 방향이 다를 수 있으므로 우위·열위 월수와 물량을 함께 봐야 합니다.</p>`;
  const cards=[['선어 비교 조합',`${s.cells}개`,`${s.methods}개 어업방식 · ${s.species}개 어종`],['프리미엄',`${s.premium}개`,`${s.premiumShare.toFixed(1)}%`],['디스카운트',`${s.discount}개`,`${s.discountShare.toFixed(1)}%`],['판정 변경',`${r.classChangeCount}개`,`기존 공통 ${r.commonCells}개 대비`]];
  document.getElementById('kpiGrid').innerHTML=cards.map((x,i)=>`<div class="kpi"><div class="label">${x[0]}</div><div class="value ${i===1?'premium-t':i===2?'discount-t':i===3?'neutral-t':''}">${x[1]}</div><div class="note">${x[2]}</div></div>`).join('');
