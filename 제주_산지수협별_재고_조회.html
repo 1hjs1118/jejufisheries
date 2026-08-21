@@ -1,0 +1,1460 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>제주 산지수협 재고 수급관리 대시보드</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    :root{
+      --navy:#0f3f66;
+      --blue:#1769aa;
+      --teal:#187c75;
+      --orange:#d97706;
+      --red:#b91c1c;
+      --ink:#18212b;
+      --muted:#65717f;
+      --line:#dbe2ea;
+      --bg:#f3f6f9;
+      --card:#ffffff;
+      --soft:#eef4f8;
+      --shadow:0 8px 24px rgba(15,63,102,.08);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+      line-height:1.5;
+    }
+    .wrap{max-width:1480px;margin:0 auto;padding:24px}
+    header.hero{
+      background:linear-gradient(135deg,#0f3f66,#1769aa);
+      color:white;
+      border-radius:18px;
+      padding:28px 30px;
+      box-shadow:var(--shadow);
+      margin-bottom:18px;
+    }
+    .hero-top{display:flex;gap:16px;justify-content:space-between;align-items:flex-start;flex-wrap:wrap}
+    .hero h1{margin:0 0 6px;font-size:clamp(1.5rem,2.6vw,2.2rem)}
+    .hero p{margin:0;color:rgba(255,255,255,.86)}
+    .hero-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+    .badge{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:7px 10px;border-radius:999px;
+      background:rgba(255,255,255,.15);font-size:.9rem
+    }
+    .dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#cbd5e1}
+    .dot.ok{background:#55d98b}
+    .dot.bad{background:#ff8a8a}
+    .hero-actions{display:flex;gap:8px;flex-wrap:wrap}
+    button{
+      border:0;border-radius:9px;padding:10px 14px;font:inherit;
+      cursor:pointer;font-weight:650
+    }
+    button.primary{background:var(--navy);color:#fff}
+    button.secondary{background:#e8eef4;color:#18354e}
+    button.ghost{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.25)}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .panel{
+      background:var(--card);border:1px solid var(--line);border-radius:14px;
+      padding:18px;box-shadow:var(--shadow);margin-bottom:18px
+    }
+    .panel-title{
+      display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+      margin-bottom:14px
+    }
+    .panel h2{margin:0;font-size:1.14rem}
+    .panel .sub{color:var(--muted);font-size:.9rem;margin-top:3px}
+    .controls{
+      display:grid;grid-template-columns:repeat(12,1fr);gap:12px;align-items:end
+    }
+    .field{grid-column:span 3}
+    .field.wide{grid-column:span 6}
+    .field.full{grid-column:1/-1}
+    label{display:block;font-size:.86rem;font-weight:700;margin-bottom:5px}
+    input,select{
+      width:100%;padding:9px 10px;border:1px solid #bfcbd7;border-radius:8px;
+      background:#fff;font:inherit;color:var(--ink)
+    }
+    input[type="checkbox"]{width:auto}
+    .coop-list{
+      display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px 12px;
+      border:1px solid var(--line);border-radius:10px;padding:12px;background:#fbfcfd
+    }
+    .coop-list label{display:flex;gap:8px;align-items:center;font-weight:550;margin:0}
+    .control-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+    .statusline{
+      display:flex;gap:10px;flex-wrap:wrap;align-items:center;
+      font-size:.9rem;color:var(--muted);margin-top:12px
+    }
+    .progress{height:7px;background:#e5ebf1;border-radius:999px;overflow:hidden;margin-top:10px;display:none}
+    .progress > div{height:100%;width:0;background:var(--blue);transition:width .2s}
+    .unit-note{
+      border-left:4px solid var(--orange);background:#fff7ed;padding:11px 13px;
+      border-radius:8px;font-size:.9rem;color:#6f4a14;margin-top:12px
+    }
+    .kpis{
+      display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:18px
+    }
+    .kpi{
+      background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px 16px;
+      box-shadow:var(--shadow);min-height:104px
+    }
+    .kpi .name{font-size:.82rem;color:var(--muted);font-weight:700}
+    .kpi .value{font-size:1.45rem;font-weight:800;margin-top:8px;letter-spacing:-.02em}
+    .kpi .desc{font-size:.78rem;color:var(--muted);margin-top:4px}
+    .chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+    .chart-card{
+      background:var(--card);border:1px solid var(--line);border-radius:14px;
+      padding:14px 14px 8px;box-shadow:var(--shadow)
+    }
+    .chart-card.full{grid-column:1/-1}
+    .chart-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;padding:2px 4px 8px}
+    .chart-head h3{margin:0;font-size:1rem}
+    .chart-head p{margin:3px 0 0;color:var(--muted);font-size:.82rem}
+    .chart{height:390px;width:100%}
+    .chart.large{height:440px}
+    .alert-list{display:grid;gap:9px}
+    .alert-item{
+      border:1px solid var(--line);border-radius:10px;padding:11px 12px;
+      display:grid;grid-template-columns:92px 1fr auto;gap:10px;align-items:center
+    }
+    .alert-level{
+      border-radius:999px;padding:5px 8px;text-align:center;font-size:.78rem;font-weight:800;background:#edf2f7
+    }
+    .alert-level.watch{background:#fff3cd;color:#725700}
+    .alert-level.down{background:#eaf2ff;color:#2256a4}
+    .alert-level.high{background:#fdecec;color:#9d1f1f}
+    .alert-text strong{display:block;margin-bottom:2px}
+    .alert-text span{font-size:.85rem;color:var(--muted)}
+    .alert-value{font-weight:800;white-space:nowrap}
+    .history-tools{display:grid;grid-template-columns:190px 180px 180px 1fr;gap:10px;align-items:end}
+    .table-tools{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:10px}
+    .table-tools .left,.table-tools .right{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .table-wrap{overflow:auto;border:1px solid var(--line);border-radius:10px;max-height:560px}
+    table{width:100%;border-collapse:collapse;min-width:1080px;font-size:.88rem}
+    th,td{padding:9px 10px;border-bottom:1px solid #e6ebf0;text-align:left;white-space:nowrap}
+    th{
+      position:sticky;top:0;background:#eef3f7;z-index:2;font-size:.8rem;
+      cursor:pointer;user-select:none
+    }
+    tbody tr:hover{background:#f8fbfd}
+    td.num{text-align:right;font-variant-numeric:tabular-nums}
+    .pill{
+      display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:5px 8px;
+      font-size:.78rem;background:#fff;color:var(--muted)
+    }
+    .empty{
+      color:var(--muted);padding:28px;text-align:center;border:1px dashed #cbd5df;
+      border-radius:10px;background:#fafcfd
+    }
+    details{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:#fbfcfd}
+    details summary{cursor:pointer;font-weight:750}
+    .diagnostics{font-size:.83rem;color:var(--muted);margin-top:8px}
+    .footer-note{color:var(--muted);font-size:.8rem;margin-top:10px}
+    .toast{
+      position:fixed;right:20px;bottom:20px;background:#162536;color:#fff;padding:11px 14px;
+      border-radius:9px;box-shadow:0 10px 30px rgba(0,0,0,.2);display:none;z-index:20
+    }
+    @media (max-width:1100px){
+      .kpis{grid-template-columns:repeat(3,1fr)}
+      .chart-grid{grid-template-columns:1fr}
+      .chart-card.full{grid-column:auto}
+      .coop-list{grid-template-columns:repeat(2,1fr)}
+      .field,.field.wide{grid-column:span 6}
+    }
+    @media (max-width:700px){
+      .wrap{padding:12px}
+      header.hero{padding:20px}
+      .kpis{grid-template-columns:1fr 1fr}
+      .controls{grid-template-columns:1fr}
+      .field,.field.wide,.field.full{grid-column:1}
+      .coop-list{grid-template-columns:1fr}
+      .chart{height:330px}
+      .history-tools{grid-template-columns:1fr}
+      .alert-item{grid-template-columns:78px 1fr}
+      .alert-value{grid-column:2}
+    }
+    @media print{
+      body{background:#fff}
+      .no-print{display:none!important}
+      .panel,.kpi,.chart-card,header.hero{box-shadow:none}
+      .table-wrap{max-height:none;overflow:visible}
+      th{position:static}
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="hero-top">
+      <div>
+        <h1>제주 지역 산지수협 재고 수급관리 대시보드</h1>
+        <p>Cloudflare 보안 백엔드를 통해 해양수산부 제주 7개 산지수협의 품목별 재고 자료를 조회해 비교·추이·집중도를 시각화합니다.</p>
+        <div class="hero-badges">
+          <span class="badge"><span id="apiDot" class="dot"></span><span id="apiStatus">API 미조회</span></span>
+          <span class="badge">조회가능 최신일 <strong id="latestAvailableDate">-</strong></span>
+          <span class="badge">재고량 단위 <strong>공식 미확인</strong></span>
+        </div>
+      </div>
+      <div class="hero-actions no-print">
+        <button class="ghost" id="printBtn">인쇄 / PDF</button>
+        <button class="ghost" id="resetBtn">화면 초기화</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="panel no-print">
+    <div class="panel-title">
+      <div>
+        <h2>조회 조건</h2>
+        <div class="sub" id="latestDateGuide">기본값은 실행일 기준 오늘 날짜에서 5일 전입니다.</div>
+      </div>
+      <span class="pill">API: Cloudflare Worker → 해양수산부 수협 산지조합 창고 품목별 재고 현황</span>
+    </div>
+
+    <div class="controls">
+      <div class="field">
+        <label for="baseDate">기준일</label>
+        <input id="baseDate" type="date" min="2018-01-01">
+      </div>
+      <div class="field">
+        <label for="itemFilter">품목 필터</label>
+        <input id="itemFilter" type="text" placeholder="예: 갈치, 옥돔, 방어">
+      </div>
+
+      <div class="field full">
+        <label>산지수협 선택</label>
+        <div class="coop-list" id="coopList">
+          <label><input type="checkbox" name="coop" checked data-code="368" data-name="서귀포수산업협동조합"> 서귀포수산업협동조합 (368)</label>
+          <label><input type="checkbox" name="coop" checked data-code="369" data-name="성산포수산업협동조합"> 성산포수산업협동조합 (369)</label>
+          <label><input type="checkbox" name="coop" checked data-code="370" data-name="제주시수산업협동조합"> 제주시수산업협동조합 (370)</label>
+          <label><input type="checkbox" name="coop" checked data-code="371" data-name="추자도수산업협동조합"> 추자도수산업협동조합 (371)</label>
+          <label><input type="checkbox" name="coop" checked data-code="372" data-name="한림수산업협동조합"> 한림수산업협동조합 (372)</label>
+          <label><input type="checkbox" name="coop" checked data-code="373" data-name="모슬포수산업협동조합"> 모슬포수산업협동조합 (373)</label>
+          <label><input type="checkbox" name="coop" checked data-code="516" data-name="제주어류양식수산업협동조합"> 제주어류양식수산업협동조합 (516)</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="control-actions">
+      <button class="primary" id="loadCurrentBtn">재고현황 불러오기</button>
+      <button class="secondary" id="selectAllBtn">7개 전체 선택</button>
+      <button class="secondary" id="clearAllBtn">선택 해제</button>
+    </div>
+
+    <div class="statusline">
+      <span id="currentStatus">조회 전</span>
+      <span id="currentMeta"></span>
+    </div>
+    <div class="progress" id="currentProgress"><div></div></div>
+
+    <div class="unit-note">
+      <strong>단위 유의:</strong> 공공데이터 원자료는 <code>invntryQy</code>를 “재고량”으로 제공하지만 측정단위를 명시하지 않습니다.
+      따라서 이 보고서는 kg·박스·톤으로 임의 환산하지 않고 <strong>“재고량(원자료 단위)”</strong>로 표시합니다.
+    </div>
+  </section>
+
+  <section class="kpis">
+    <div class="kpi"><div class="name">기준일</div><div class="value" id="kpiDate">-</div><div class="desc">현재 화면 데이터 기준</div></div>
+    <div class="kpi"><div class="name">총 재고량</div><div class="value" id="kpiTotal">-</div><div class="desc">원자료 수치 합계</div></div>
+    <div class="kpi"><div class="name">데이터가 있는 수협</div><div class="value" id="kpiCoops">-</div><div class="desc">선택 수협 중 응답 존재</div></div>
+    <div class="kpi"><div class="name">품목 수</div><div class="value" id="kpiItems">-</div><div class="desc">고유 품목명 기준</div></div>
+    <div class="kpi"><div class="name">최대 재고 수협</div><div class="value" id="kpiTopCoop">-</div><div class="desc" id="kpiTopCoopDesc">-</div></div>
+    <div class="kpi"><div class="name">전월 대비</div><div class="value" id="kpiMoM">-</div><div class="desc">월별 추이 조회 후 계산</div></div>
+  </section>
+
+  <section class="chart-grid">
+    <article class="chart-card">
+      <div class="chart-head">
+        <div><h3>수협별 총 재고량 비교</h3><p>막대를 클릭하면 하단 상세표를 해당 수협으로 좁힙니다.</p></div>
+      </div>
+      <div id="coopBar" class="chart"></div>
+    </article>
+
+    <article class="chart-card">
+      <div class="chart-head">
+        <div><h3>품목별 재고 구성</h3><p>상위 품목의 재고 집중도를 트리맵으로 표시합니다.</p></div>
+      </div>
+      <div id="itemTree" class="chart"></div>
+    </article>
+
+    <article class="chart-card full">
+      <div class="chart-head">
+        <div><h3>수협 × 품목 재고 히트맵</h3><p>선택 기준일의 상위 품목이 어느 수협에 집중되어 있는지 비교합니다.</p></div>
+      </div>
+      <div id="heatmap" class="chart large"></div>
+    </article>
+  </section>
+
+  <section class="panel no-print">
+    <div class="panel-title">
+      <div>
+        <h2>월별 재고 추이</h2>
+        <div class="sub">월말 기준일을 순차 조회합니다. 기간이 길수록 API 호출 횟수가 늘어납니다.</div>
+      </div>
+      <span class="pill" id="historyEstimate">예상 호출: -</span>
+    </div>
+    <div class="history-tools">
+      <div>
+        <label for="historyGroupMode">시각화 기준</label>
+        <select id="historyGroupMode">
+          <option value="coop" selected>산지수협별</option>
+          <option value="item">어종(품목)별</option>
+        </select>
+      </div>
+      <div>
+        <label for="historyStart">시작월</label>
+        <input id="historyStart" type="month" min="2018-01">
+      </div>
+      <div>
+        <label for="historyEnd">종료월</label>
+        <input id="historyEnd" type="month" min="2018-01">
+      </div>
+      <div>
+        <button class="primary" id="loadHistoryBtn">월별 추이 불러오기</button>
+      </div>
+    </div>
+    <div class="statusline">
+      <span id="historyStatus">이력 조회 전</span>
+    </div>
+    <div class="progress" id="historyProgress"><div></div></div>
+  </section>
+
+  <section class="chart-grid">
+    <article class="chart-card full">
+      <div class="chart-head">
+        <div><h3>월별 재고량 추이</h3><p id="historyChartDesc">전체 합계와 수협별 흐름을 함께 비교합니다. 범위 슬라이더로 기간을 확대할 수 있습니다.</p></div>
+      </div>
+      <div id="historyLine" class="chart large"></div>
+    </article>
+  </section>
+
+  <section class="panel no-print">
+    <div class="panel-title">
+      <div>
+        <h2>월간 재고 추이</h2>
+        <div class="sub">특정 월을 선택하면 해당 월의 1일부터 마지막 일자까지 일자별 재고를 순차 조회합니다.</div>
+      </div>
+      <span class="pill" id="monthlyEstimate">예상 호출: -</span>
+    </div>
+    <div class="history-tools">
+      <div>
+        <label for="monthlyGroupMode">시각화 기준</label>
+        <select id="monthlyGroupMode">
+          <option value="coop" selected>산지수협별</option>
+          <option value="item">어종(품목)별</option>
+        </select>
+      </div>
+      <div>
+        <label for="monthlyMonth">조회월</label>
+        <input id="monthlyMonth" type="month" min="2018-01">
+      </div>
+      <div></div>
+      <div>
+        <button class="primary" id="loadMonthlyBtn">월간 추이 불러오기</button>
+      </div>
+    </div>
+    <div class="statusline">
+      <span id="monthlyStatus">월간 조회 전</span>
+    </div>
+    <div class="progress" id="monthlyProgress"><div></div></div>
+  </section>
+
+  <section class="chart-grid">
+    <article class="chart-card full">
+      <div class="chart-head">
+        <div><h3>월간 재고량 추이</h3><p id="monthlyChartDesc">선택 월의 일자별 전체 합계와 산지수협별 흐름을 비교합니다.</p></div>
+      </div>
+      <div id="monthlyLine" class="chart large"></div>
+    </article>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">
+      <div>
+        <h2>수급관리 관찰 포인트</h2>
+        <div class="sub">재고 급증·급감 및 품목 편중을 단순 규칙으로 표시한 참고지표입니다.</div>
+      </div>
+      <span class="pill">공식 경보 기준 아님</span>
+    </div>
+    <div id="alerts" class="alert-list">
+      <div class="empty">현황 또는 월별 추이를 조회하면 관찰 포인트가 표시됩니다.</div>
+    </div>
+  </section>
+
+  <section class="panel">
+    <div class="panel-title">
+      <div>
+        <h2>데이터 및 API 진단</h2>
+        <div class="sub">원본 JSON 대신 응답 상태와 누락 여부만 간단히 확인합니다.</div>
+      </div>
+    </div>
+    <details>
+      <summary>API 응답 진단 보기</summary>
+      <div id="diagnostics" class="diagnostics">조회 전입니다.</div>
+    </details>
+  </section>
+
+  <!-- 최하단 상세표/CSV 영역 -->
+  <section class="panel" id="dataTableSection">
+    <div class="panel-title">
+      <div>
+        <h2>조회자료 상세표</h2>
+        <div class="sub">현재 조회·필터된 데이터를 표로 확인하고 CSV 파일로 저장할 수 있습니다.</div>
+      </div>
+      <span class="pill" id="tableCount">0건</span>
+    </div>
+
+    <div class="table-tools no-print">
+      <div class="left">
+        <input id="tableSearch" type="text" placeholder="표 안에서 검색" style="width:220px">
+        <select id="tableCoopFilter" style="width:240px">
+          <option value="">전체 수협</option>
+        </select>
+        <button class="secondary" id="clearTableFilterBtn">표 필터 초기화</button>
+      </div>
+      <div class="right">
+        <button class="primary" id="csvBtn">CSV 다운로드 (현재 표)</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th data-key="stdrDe">기준일자 ↕</th>
+            <th data-key="mxtrCode">조합코드 ↕</th>
+            <th data-key="mxtrNm">조합명 ↕</th>
+            <th data-key="wrhousCode">창고코드 ↕</th>
+            <th data-key="wrhousNm">창고명 ↕</th>
+            <th data-key="mprcStdCode">수산물표준코드 ↕</th>
+            <th data-key="mprcStdCodeNm">품목명 ↕</th>
+            <th data-key="invntryQy">재고량(원자료 단위) ↕</th>
+          </tr>
+        </thead>
+        <tbody id="dataTbody">
+          <tr><td colspan="8" style="text-align:center;color:#65717f;padding:28px">데이터를 먼저 조회해 주세요.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="footer-note">
+      ※ CSV는 현재 하단 표에 표시된 데이터만 저장합니다. 표·CSV의 날짜 정렬은 최신일 우선입니다.
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+// 공공데이터 서비스키는 브라우저에 두지 않습니다.
+// 아래 Cloudflare Worker가 서버 측 Secret(SERVICE_KEY)을 주입해 공공데이터 API를 대신 호출합니다.
+const BACKEND_ENDPOINT = "https://application.hjs1118.workers.dev/stock";
+const PAGE_SIZE = 100;
+const MIN_DATE = "2018-01-01";
+const MIN_MONTH = "2018-01";
+const {date: MAX_DATE, month: MAX_MONTH} = getDynamicLatestLimit();
+const COOPS = [
+  {code:"368", name:"서귀포수산업협동조합"},
+  {code:"369", name:"성산포수산업협동조합"},
+  {code:"370", name:"제주시수산업협동조합"},
+  {code:"371", name:"추자도수산업협동조합"},
+  {code:"372", name:"한림수산업협동조합"},
+  {code:"373", name:"모슬포수산업협동조합"},
+  {code:"516", name:"제주어류양식수산업협동조합"}
+];
+
+const state = {
+  currentRows: [],
+  historyRows: [],
+  monthlyRows: [],
+  monthlyDates: [],
+  diagnostics: [],
+  tableSort: {key:"stdrDe", dir:"desc"},
+  tableCoopFilter: "",
+  charts: {}
+};
+
+function getDynamicLatestLimit(){
+  const now = new Date();
+  // 실행 시점의 오늘 날짜에서 5일 전을 조회 가능한 최신일로 설정
+  // 예: 2026-08-21 실행 -> 2026-08-16
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 5);
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return {date:`${yyyy}-${mm}-${dd}`, month:`${yyyy}-${mm}`};
+}
+
+function shiftMonth(month, offset){
+  const [y,m] = month.split("-").map(Number);
+  const d = new Date(y, (m - 1) + offset, 1);
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+
+function defaultHistoryStart(){
+  const start = shiftMonth(MAX_MONTH, -11);
+  return start < MIN_MONTH ? MIN_MONTH : start;
+}
+
+function applyDynamicDateLimits(){
+  $("latestAvailableDate").textContent = MAX_DATE;
+  $("latestDateGuide").textContent = `기본값은 실행일 기준 오늘 날짜에서 5일 전인 ${MAX_DATE}입니다.`;
+
+  $("baseDate").max = MAX_DATE;
+  $("baseDate").value = MAX_DATE;
+
+  $("historyStart").max = MAX_MONTH;
+  $("historyStart").value = defaultHistoryStart();
+  $("historyEnd").max = MAX_MONTH;
+  $("historyEnd").value = MAX_MONTH;
+
+  $("monthlyMonth").max = MAX_MONTH;
+  $("monthlyMonth").value = MAX_MONTH;
+}
+
+function $(id){ return document.getElementById(id); }
+function fmt(n){
+  const v = Number(n);
+  if (!Number.isFinite(v)) return "-";
+  return new Intl.NumberFormat("ko-KR", {maximumFractionDigits:2}).format(v);
+}
+function pct(v){
+  if (!Number.isFinite(v)) return "-";
+  return `${v >= 0 ? "+" : ""}${v.toFixed(1)}%`;
+}
+function apiDateFromInput(v){ return (v || "").replaceAll("-",""); }
+function prettyDate(apiDate){
+  if (!apiDate || apiDate.length !== 8) return apiDate || "-";
+  return `${apiDate.slice(0,4)}-${apiDate.slice(4,6)}-${apiDate.slice(6,8)}`;
+}
+function selectedCoops(){
+  return [...document.querySelectorAll('input[name="coop"]:checked')].map(el => ({
+    code: el.dataset.code, name: el.dataset.name
+  }));
+}
+function showToast(msg){
+  const el = $("toast");
+  el.textContent = msg;
+  el.style.display = "block";
+  clearTimeout(showToast.t);
+  showToast.t = setTimeout(() => el.style.display = "none", 2600);
+}
+function delay(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+function parseApiResponse(text){
+  try {
+    const json = JSON.parse(text);
+    const root = json.responseJson || json.response || json;
+    const header = root.header || {};
+    const body = root.body || {};
+    let items = body.item ?? body.items?.item ?? [];
+    if (!Array.isArray(items)) items = items ? [items] : [];
+    return {
+      ok: String(header.resultCode ?? "") === "00",
+      resultCode: String(header.resultCode ?? ""),
+      resultMsg: String(header.resultMsg ?? ""),
+      totalCount: Number(header.totalCount ?? body.totalCount ?? items.length ?? 0),
+      items
+    };
+  } catch (_) {
+    const xml = new DOMParser().parseFromString(text, "application/xml");
+    const get = tag => xml.querySelector(tag)?.textContent?.trim() || "";
+    return {
+      ok:false,
+      resultCode:get("returnReasonCode") || get("resultCode"),
+      resultMsg:get("returnAuthMsg") || get("errMsg") || get("resultMsg") || "JSON 파싱 실패",
+      totalCount:0,
+      items:[]
+    };
+  }
+}
+
+function buildUrl(coop, apiDate, pageNo=1){
+  const p = new URLSearchParams();
+  p.set("numOfRows", String(PAGE_SIZE));
+  p.set("pageNo", String(pageNo));
+  p.set("baseDt", apiDate);
+  p.set("mxtrNm", coop.name);
+  return `${BACKEND_ENDPOINT}?${p.toString()}`;
+}
+
+async function fetchPage(coop, apiDate, pageNo){
+  const url = buildUrl(coop, apiDate, pageNo);
+  const res = await fetch(url, {method:"GET"});
+  const text = await res.text();
+  const parsed = parseApiResponse(text);
+
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  if (!parsed.ok) {
+    throw new Error(`${parsed.resultCode || "API"} ${parsed.resultMsg || "오류"}`);
+  }
+  return parsed;
+}
+
+async function fetchCoopDate(coop, apiDate){
+  const first = await fetchPage(coop, apiDate, 1);
+  let rows = first.items.map(normalizeRow);
+  const pages = Math.max(1, Math.ceil(first.totalCount / PAGE_SIZE));
+
+  for (let p=2; p<=pages; p++){
+    await delay(60);
+    const next = await fetchPage(coop, apiDate, p);
+    rows = rows.concat(next.items.map(normalizeRow));
+  }
+
+  const codes = [...new Set(rows.map(r => r.mxtrCode).filter(Boolean))];
+  state.diagnostics.push({
+    date:apiDate, coop:coop.name, expectedCode:coop.code,
+    totalCount:first.totalCount, returnedCodes:codes,
+    codeMatch:codes.length ? codes.includes(coop.code) : null
+  });
+
+  return rows;
+}
+
+function normalizeRow(r){
+  return {
+    stdrDe:String(r.stdrDe ?? ""),
+    mxtrCode:String(r.mxtrCode ?? ""),
+    mxtrNm:String(r.mxtrNm ?? ""),
+    wrhousCode:String(r.wrhousCode ?? ""),
+    wrhousNm:String(r.wrhousNm ?? ""),
+    mprcStdCode:String(r.mprcStdCode ?? ""),
+    mprcStdCodeNm:String(r.mprcStdCodeNm ?? ""),
+    invntryQy:Number(String(r.invntryQy ?? "0").replaceAll(",","")) || 0
+  };
+}
+
+function setProgress(id, done, total){
+  const el = $(id);
+  if (!total){ el.style.display="none"; return; }
+  el.style.display="block";
+  el.firstElementChild.style.width = `${Math.min(100, done/total*100)}%`;
+}
+
+function filteredCurrentRows(){
+  const q = $("itemFilter").value.trim().toLowerCase();
+  if (!q) return state.currentRows.slice();
+  return state.currentRows.filter(r => r.mprcStdCodeNm.toLowerCase().includes(q));
+}
+
+function groupSum(rows, key){
+  const m = new Map();
+  for (const r of rows) m.set(r[key], (m.get(r[key]) || 0) + r.invntryQy);
+  return m;
+}
+
+function renderAll(){
+  renderKPIs();
+  renderCurrentCharts();
+  renderAlerts();
+  populateTableCoops();
+  renderTable();
+  renderDiagnostics();
+}
+
+function renderKPIs(){
+  const rows = filteredCurrentRows();
+  const total = rows.reduce((s,r)=>s+r.invntryQy,0);
+  const coops = new Set(rows.map(r=>r.mxtrNm).filter(Boolean)).size;
+  const items = new Set(rows.map(r=>r.mprcStdCodeNm).filter(Boolean)).size;
+  const coopSums = [...groupSum(rows,"mxtrNm").entries()].sort((a,b)=>b[1]-a[1]);
+  const top = coopSums[0];
+
+  $("kpiDate").textContent = rows.length ? prettyDate(rows.map(r=>r.stdrDe).sort().at(-1)) : "-";
+  $("kpiTotal").textContent = rows.length ? fmt(total) : "-";
+  $("kpiCoops").textContent = rows.length ? `${coops}개` : "-";
+  $("kpiItems").textContent = rows.length ? `${items}개` : "-";
+  $("kpiTopCoop").textContent = top ? shortCoop(top[0]) : "-";
+  $("kpiTopCoopDesc").textContent = top ? `재고량 ${fmt(top[1])}` : "-";
+
+  const monthly = getMonthlyTotalsFiltered();
+  if (monthly.length >= 2){
+    const a = monthly.at(-2).total;
+    const b = monthly.at(-1).total;
+    const change = a === 0 ? NaN : (b-a)/a*100;
+    $("kpiMoM").textContent = pct(change);
+    $("kpiMoM").style.color = Number.isFinite(change) ? (change > 0 ? "var(--red)" : change < 0 ? "var(--blue)" : "inherit") : "inherit";
+  } else {
+    $("kpiMoM").textContent = "-";
+    $("kpiMoM").style.color = "inherit";
+  }
+}
+
+function shortCoop(name){
+  return name
+    .replace("수산업협동조합","수협")
+    .replace("제주어류양식수협","제주어류양식수협");
+}
+
+function initCharts(){
+  if (!window.echarts){
+    ["coopBar","itemTree","heatmap","historyLine","monthlyLine"].forEach(id=>{
+      $(id).innerHTML = '<div class="empty">차트 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인해 주세요.</div>';
+    });
+    return;
+  }
+  state.charts.coopBar = echarts.init($("coopBar"));
+  state.charts.itemTree = echarts.init($("itemTree"));
+  state.charts.heatmap = echarts.init($("heatmap"));
+  state.charts.historyLine = echarts.init($("historyLine"));
+  state.charts.monthlyLine = echarts.init($("monthlyLine"));
+
+  state.charts.coopBar.on("click", params => {
+    $("tableCoopFilter").value = params.name;
+    state.tableCoopFilter = params.name;
+    renderTable();
+    $("dataTableSection").scrollIntoView({behavior:"smooth"});
+    showToast(`${shortCoop(params.name)} 상세표로 이동했습니다.`);
+  });
+
+  state.charts.itemTree.on("click", params => {
+    if (!params.name || params.name === "기타") return;
+    $("itemFilter").value = params.name;
+    renderAll();
+    showToast(`품목 필터: ${params.name}`);
+  });
+
+  window.addEventListener("resize", ()=>{
+    Object.values(state.charts).forEach(c=>c?.resize());
+  });
+}
+
+function renderCurrentCharts(){
+  if (!window.echarts || !state.charts.coopBar) return;
+  const rows = filteredCurrentRows();
+
+  const coopData = [...groupSum(rows,"mxtrNm").entries()]
+    .sort((a,b)=>b[1]-a[1])
+    .map(([name,value])=>({name,value}));
+
+  state.charts.coopBar.setOption({
+    animationDuration:500,
+    grid:{left:70,right:25,top:20,bottom:100},
+    tooltip:{trigger:"axis",axisPointer:{type:"shadow"},formatter:p=>{
+      const d=p[0]; return `<strong>${d.name}</strong><br>재고량(원자료): ${fmt(d.value)}`;
+    }},
+    xAxis:{type:"category",data:coopData.map(d=>d.name),axisLabel:{rotate:25,formatter:shortCoop}},
+    yAxis:{type:"value",name:"재고량(원자료)",axisLabel:{formatter:v=>fmt(v)}},
+    series:[{type:"bar",data:coopData.map(d=>d.value),barMaxWidth:58,itemStyle:{borderRadius:[6,6,0,0]}}]
+  }, true);
+
+  const itemEntries = [...groupSum(rows,"mprcStdCodeNm").entries()].sort((a,b)=>b[1]-a[1]);
+  const topN = itemEntries.slice(0,15);
+  const rest = itemEntries.slice(15).reduce((s,x)=>s+x[1],0);
+  const treeData = topN.map(([name,value])=>({name,value}));
+  if (rest>0) treeData.push({name:"기타",value:rest});
+
+  const itemTotal = treeData.reduce((sum,d)=>sum+d.value,0);
+  state.charts.itemTree.setOption({
+    tooltip:{formatter:p=>{
+      const share = itemTotal > 0 ? (Number(p.value) / itemTotal * 100) : 0;
+      return `<strong>${p.name}</strong><br>재고량(원자료): ${fmt(p.value)}<br>구성비: ${share.toFixed(1)}%`;
+    }},
+    series:[{
+      type:"treemap", roam:true, nodeClick:false, breadcrumb:{show:false},
+      label:{show:true,formatter:p=>`${p.name}\n${fmt(p.value)}`},
+      upperLabel:{show:false},
+      itemStyle:{borderColor:"#fff",borderWidth:2,gapWidth:2},
+      data:treeData
+    }]
+  }, true);
+
+  const topItems = itemEntries.slice(0,12).map(x=>x[0]);
+  const coopNames = COOPS.filter(c=>rows.some(r=>r.mxtrNm===c.name)).map(c=>c.name);
+  const map = new Map();
+  for (const r of rows){
+    const k = `${r.mxtrNm}|||${r.mprcStdCodeNm}`;
+    map.set(k,(map.get(k)||0)+r.invntryQy);
+  }
+  const heat = [];
+  let max=0;
+  coopNames.forEach((coop, y)=>{
+    topItems.forEach((item, x)=>{
+      const v = map.get(`${coop}|||${item}`)||0;
+      max=Math.max(max,v);
+      heat.push([x,y,v]);
+    });
+  });
+
+  state.charts.heatmap.setOption({
+    grid:{left:150,right:80,top:30,bottom:120},
+    tooltip:{position:"top",formatter:p=>{
+      const item=topItems[p.value[0]], coop=coopNames[p.value[1]];
+      return `<strong>${coop}</strong><br>${item}<br>재고량(원자료): ${fmt(p.value[2])}`;
+    }},
+    xAxis:{type:"category",data:topItems,splitArea:{show:true},axisLabel:{rotate:30}},
+    yAxis:{type:"category",data:coopNames,splitArea:{show:true},axisLabel:{formatter:shortCoop}},
+    visualMap:{min:0,max:max||1,calculable:true,orient:"vertical",right:5,top:"middle",text:["많음","적음"]},
+    series:[{type:"heatmap",data:heat,label:{show:false},emphasis:{itemStyle:{shadowBlur:10,shadowColor:"rgba(0,0,0,.25)"}}}]
+  }, true);
+}
+
+function monthEndApiDates(startMonth, endMonth){
+  const [sy,sm] = startMonth.split("-").map(Number);
+  const [ey,em] = endMonth.split("-").map(Number);
+  const out=[];
+  const maxApiDate = apiDateFromInput(MAX_DATE);
+  let y=sy,m=sm;
+  while (y<ey || (y===ey && m<=em)){
+    const d = new Date(y,m,0);
+    const mm=String(m).padStart(2,"0"), dd=String(d.getDate()).padStart(2,"0");
+    const monthEnd = `${y}${mm}${dd}`;
+    if(monthEnd <= maxApiDate){
+      out.push(monthEnd);
+    } else if(`${y}-${mm}` === MAX_MONTH){
+      // 최신월은 아직 월말이 오지 않았으므로 조회 가능한 최신일(오늘-5일)을 사용
+      out.push(maxApiDate);
+    }
+    m++; if(m===13){m=1;y++;}
+  }
+  return out;
+}
+
+function updateHistoryEstimate(){
+  const s=$("historyStart").value, e=$("historyEnd").value;
+  if(!s||!e){$("historyEstimate").textContent="예상 호출: -";return;}
+  const months=monthEndApiDates(s,e).length;
+  const coops=selectedCoops().length;
+  $("historyEstimate").textContent=`기본 호출 약 ${months*coops}회 + 추가 페이지`;
+}
+
+function monthApiDates(month){
+  if(!/^\d{4}-\d{2}$/.test(month)) return [];
+  const [y,m]=month.split("-").map(Number);
+  const calendarLastDay=new Date(y,m,0).getDate();
+  const mm=String(m).padStart(2,"0");
+  let lastDay=calendarLastDay;
+  if(month === MAX_MONTH){
+    lastDay=Number(MAX_DATE.slice(8,10));
+  }
+  return Array.from({length:lastDay},(_,i)=>`${y}${mm}${String(i+1).padStart(2,"0")}`);
+}
+
+function updateMonthlyEstimate(){
+  const month=$("monthlyMonth")?.value;
+  if(!month){$("monthlyEstimate").textContent="예상 호출: -";return;}
+  const days=monthApiDates(month).length;
+  const coops=selectedCoops().length;
+  $("monthlyEstimate").textContent=`기본 호출 약 ${days*coops}회 + 추가 페이지`;
+}
+
+async function loadCurrent(){
+  const coops=selectedCoops();
+  const apiDate=apiDateFromInput($("baseDate").value);
+  if(coops.length===0){showToast("수협을 하나 이상 선택하세요.");return;}
+  if(!/^\d{8}$/.test(apiDate)){showToast("기준일을 확인하세요.");return;}
+  if($("baseDate").value < MIN_DATE){showToast("2018-01-01 이전 일자는 조회할 수 없습니다.");return;}
+  if($("baseDate").value > MAX_DATE){showToast("조회 가능한 최신일을 초과했습니다.");return;}
+
+  $("loadCurrentBtn").disabled=true;
+  $("currentStatus").textContent="API 조회 중...";
+  $("currentMeta").textContent="";
+  state.diagnostics=[];
+  setProgress("currentProgress",0,coops.length);
+
+  const all=[];
+  let okCount=0;
+  for(let i=0;i<coops.length;i++){
+    const coop=coops[i];
+    try{
+      const rows=await fetchCoopDate(coop,apiDate);
+      all.push(...rows);
+      okCount++;
+    }catch(err){
+      state.diagnostics.push({date:apiDate,coop:coop.name,error:String(err.message||err)});
+    }
+    setProgress("currentProgress",i+1,coops.length);
+    await delay(80);
+  }
+
+  state.currentRows=all;
+  $("loadCurrentBtn").disabled=false;
+  $("apiDot").className=`dot ${okCount ? "ok":"bad"}`;
+  $("apiStatus").textContent=okCount ? `API 연결 ${okCount}/${coops.length}` : "API 조회 실패";
+  $("currentStatus").textContent=okCount ? "조회 완료" : "조회 실패";
+  $("currentMeta").textContent=`${prettyDate(apiDate)} · ${all.length}행 수신`;
+  renderAll();
+  setTimeout(()=>setProgress("currentProgress",0,0),700);
+}
+
+async function loadHistory(){
+  const coops=selectedCoops();
+  const s=$("historyStart").value, e=$("historyEnd").value;
+  if(coops.length===0){showToast("수협을 하나 이상 선택하세요.");return;}
+  if(!s||!e||s>e){showToast("조회 기간을 확인하세요.");return;}
+  if(s < MIN_MONTH || e < MIN_MONTH){showToast("2018-01 이전 월은 조회할 수 없습니다.");return;}
+  if(s > MAX_MONTH || e > MAX_MONTH){showToast("조회 가능한 최신월을 초과했습니다.");return;}
+
+  const dates=monthEndApiDates(s,e);
+  const baseCalls=dates.length*coops.length;
+  if(baseCalls>400){
+    const go=confirm(`약 ${baseCalls}회 이상의 API 요청이 발생할 수 있습니다. 계속할까요?`);
+    if(!go)return;
+  }
+
+  $("loadHistoryBtn").disabled=true;
+  $("historyStatus").textContent=`월별 이력 조회 중... 0/${baseCalls}`;
+  setProgress("historyProgress",0,baseCalls);
+
+  const all=[];
+  let done=0, errors=0;
+  for(const date of dates){
+    for(const coop of coops){
+      try{
+        const rows=await fetchCoopDate(coop,date);
+        all.push(...rows);
+      }catch(err){
+        errors++;
+      }
+      done++;
+      $("historyStatus").textContent=`월별 이력 조회 중... ${done}/${baseCalls}`;
+      setProgress("historyProgress",done,baseCalls);
+      await delay(70);
+    }
+  }
+
+  state.historyRows=all;
+  $("loadHistoryBtn").disabled=false;
+  $("historyStatus").textContent=`이력 조회 완료 · ${dates.length}개월 · ${all.length}행 · 오류 ${errors}건`;
+  renderHistoryChart();
+  renderKPIs();
+  renderAlerts();
+  setTimeout(()=>setProgress("historyProgress",0,0),800);
+}
+
+async function loadMonthly(){
+  const coops=selectedCoops();
+  const month=$("monthlyMonth").value;
+  if(coops.length===0){showToast("수협을 하나 이상 선택하세요.");return;}
+  if(!month || !/^\d{4}-\d{2}$/.test(month)){showToast("조회월을 확인하세요.");return;}
+  if(month < MIN_MONTH){showToast("2018-01 이전 월은 조회할 수 없습니다.");return;}
+  if(month > MAX_MONTH){showToast("조회 가능한 최신월을 초과했습니다.");return;}
+
+  const dates=monthApiDates(month);
+  const baseCalls=dates.length*coops.length;
+  $("loadMonthlyBtn").disabled=true;
+  $("monthlyStatus").textContent=`월간 일자별 조회 중... 0/${baseCalls}`;
+  setProgress("monthlyProgress",0,baseCalls);
+
+  const all=[];
+  let done=0, errors=0;
+  for(const date of dates){
+    for(const coop of coops){
+      try{
+        const rows=await fetchCoopDate(coop,date);
+        all.push(...rows);
+      }catch(err){
+        errors++;
+      }
+      done++;
+      $("monthlyStatus").textContent=`월간 일자별 조회 중... ${done}/${baseCalls}`;
+      setProgress("monthlyProgress",done,baseCalls);
+      await delay(70);
+    }
+  }
+
+  state.monthlyRows=all;
+  state.monthlyDates=dates;
+  $("loadMonthlyBtn").disabled=false;
+  $("monthlyStatus").textContent=`월간 조회 완료 · ${dates.length}일 · ${all.length}행 · 오류 ${errors}건`;
+  renderMonthlyChart();
+  setTimeout(()=>setProgress("monthlyProgress",0,0),800);
+}
+
+function renderMonthlyChart(){
+  if(!window.echarts || !state.charts.monthlyLine)return;
+
+  const mode=$("monthlyGroupMode")?.value || "coop";
+  const q=$("itemFilter").value.trim().toLowerCase();
+  const rows=q ? state.monthlyRows.filter(r=>r.mprcStdCodeNm.toLowerCase().includes(q)) : state.monthlyRows;
+  const dates=state.monthlyDates.length
+    ? state.monthlyDates.slice()
+    : [...new Set(rows.map(r=>r.stdrDe))].sort();
+
+  const totalMap=new Map();
+  for(const r of rows) totalMap.set(r.stdrDe,(totalMap.get(r.stdrDe)||0)+r.invntryQy);
+
+  const series=[{
+    name:"전체",
+    type:"line",
+    smooth:true,
+    showSymbol:false,
+    data:dates.map(d=>totalMap.get(d)||0),
+    lineStyle:{width:4}
+  }];
+
+  if(mode === "item"){
+    const itemTotals=new Map();
+    for(const r of rows){
+      const item=r.mprcStdCodeNm || "품목명 없음";
+      itemTotals.set(item,(itemTotals.get(item)||0)+r.invntryQy);
+    }
+    const rankedItems=[...itemTotals.entries()].sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+    const topItems=rankedItems.slice(0,12);
+    const otherItems=new Set(rankedItems.slice(12));
+
+    for(const item of topItems){
+      const m=new Map();
+      for(const r of rows){
+        if((r.mprcStdCodeNm || "품목명 없음") !== item) continue;
+        m.set(r.stdrDe,(m.get(r.stdrDe)||0)+r.invntryQy);
+      }
+      series.push({name:item,type:"line",smooth:true,showSymbol:false,data:dates.map(d=>m.get(d)||0)});
+    }
+
+    if(otherItems.size){
+      const otherMap=new Map();
+      for(const r of rows){
+        const item=r.mprcStdCodeNm || "품목명 없음";
+        if(!otherItems.has(item)) continue;
+        otherMap.set(r.stdrDe,(otherMap.get(r.stdrDe)||0)+r.invntryQy);
+      }
+      series.push({name:"기타 품목",type:"line",smooth:true,showSymbol:false,data:dates.map(d=>otherMap.get(d)||0),lineStyle:{type:"dashed"}});
+    }
+
+    if($("monthlyChartDesc")){
+      $("monthlyChartDesc").textContent="선택 월의 일자별 어종(품목) 흐름을 비교합니다. 월 누적 재고량 상위 12개 품목과 기타 품목을 표시합니다.";
+    }
+  } else {
+    for(const coop of selectedCoops()){
+      const m=new Map();
+      for(const r of rows){
+        if(r.mxtrNm!==coop.name) continue;
+        m.set(r.stdrDe,(m.get(r.stdrDe)||0)+r.invntryQy);
+      }
+      series.push({name:shortCoop(coop.name),type:"line",smooth:true,showSymbol:false,data:dates.map(d=>m.get(d)||0)});
+    }
+    if($("monthlyChartDesc")){
+      $("monthlyChartDesc").textContent="선택 월의 일자별 전체 합계와 산지수협별 흐름을 비교합니다.";
+    }
+  }
+
+  state.charts.monthlyLine.setOption({
+    legend:{type:"scroll",top:0},
+    grid:{left:75,right:30,top:62,bottom:75},
+    tooltip:{trigger:"axis",valueFormatter:v=>fmt(v)},
+    xAxis:{
+      type:"category",
+      data:dates.map(d=>`${d.slice(4,6)}-${d.slice(6,8)}`)
+    },
+    yAxis:{type:"value",name:"재고량(원자료)",axisLabel:{formatter:v=>fmt(v)}},
+    dataZoom:[{type:"inside"},{type:"slider",bottom:20}],
+    series
+  }, true);
+}
+
+function getMonthlyTotalsFiltered(){
+  const q=$("itemFilter").value.trim().toLowerCase();
+  const rows=q ? state.historyRows.filter(r=>r.mprcStdCodeNm.toLowerCase().includes(q)) : state.historyRows;
+  const m=new Map();
+  for(const r of rows){
+    const month=r.stdrDe.slice(0,6);
+    m.set(month,(m.get(month)||0)+r.invntryQy);
+  }
+  return [...m.entries()].sort((a,b)=>a[0].localeCompare(b[0])).map(([month,total])=>({month,total}));
+}
+
+function renderHistoryChart(){
+  if(!window.echarts || !state.charts.historyLine)return;
+
+  const mode = $("historyGroupMode")?.value || "coop";
+  const q = $("itemFilter").value.trim().toLowerCase();
+  const rows = q
+    ? state.historyRows.filter(r=>r.mprcStdCodeNm.toLowerCase().includes(q))
+    : state.historyRows;
+
+  const months=[...new Set(rows.map(r=>r.stdrDe.slice(0,6)))].sort();
+  const totalMap=new Map();
+
+  for(const r of rows){
+    const month=r.stdrDe.slice(0,6);
+    totalMap.set(month,(totalMap.get(month)||0)+r.invntryQy);
+  }
+
+  const series=[{
+    name:"전체",
+    type:"line",
+    smooth:true,
+    showSymbol:false,
+    data:months.map(m=>totalMap.get(m)||0),
+    lineStyle:{width:4}
+  }];
+
+  if(mode === "item"){
+    // 어종(품목)별 모드: 전체 기간 누적 재고량 기준 상위 12개 품목 + 기타 품목
+    // 품목이 지나치게 많을 때 그래프가 난잡해지는 것을 방지하기 위한 표시 규칙
+    const itemTotals = new Map();
+    for(const r of rows){
+      const item = r.mprcStdCodeNm || "품목명 없음";
+      itemTotals.set(item,(itemTotals.get(item)||0)+r.invntryQy);
+    }
+
+    const rankedItems = [...itemTotals.entries()]
+      .sort((a,b)=>b[1]-a[1])
+      .map(x=>x[0]);
+
+    const topItems = rankedItems.slice(0,12);
+    const otherItems = new Set(rankedItems.slice(12));
+
+    for(const item of topItems){
+      const m=new Map();
+      for(const r of rows){
+        if((r.mprcStdCodeNm || "품목명 없음") !== item) continue;
+        const month=r.stdrDe.slice(0,6);
+        m.set(month,(m.get(month)||0)+r.invntryQy);
+      }
+      series.push({
+        name:item,
+        type:"line",
+        smooth:true,
+        showSymbol:false,
+        data:months.map(month=>m.get(month)||0)
+      });
+    }
+
+    if(otherItems.size){
+      const otherMap=new Map();
+      for(const r of rows){
+        const item=r.mprcStdCodeNm || "품목명 없음";
+        if(!otherItems.has(item)) continue;
+        const month=r.stdrDe.slice(0,6);
+        otherMap.set(month,(otherMap.get(month)||0)+r.invntryQy);
+      }
+      series.push({
+        name:"기타 품목",
+        type:"line",
+        smooth:true,
+        showSymbol:false,
+        data:months.map(month=>otherMap.get(month)||0),
+        lineStyle:{type:"dashed"}
+      });
+    }
+
+    if($("historyChartDesc")){
+      $("historyChartDesc").textContent =
+        "어종(품목)별 흐름을 비교합니다. 전체 기간 누적 재고량 상위 12개 품목과 기타 품목을 표시하며, 범위 슬라이더로 기간을 확대할 수 있습니다.";
+    }
+  } else {
+    // 산지수협별 모드
+    const byCoop=new Map();
+
+    for(const coop of COOPS){
+      const m=new Map();
+      for(const r of rows.filter(x=>x.mxtrNm===coop.name)){
+        const month=r.stdrDe.slice(0,6);
+        m.set(month,(m.get(month)||0)+r.invntryQy);
+      }
+      byCoop.set(coop.name,m);
+    }
+
+    for(const coop of selectedCoops()){
+      series.push({
+        name:shortCoop(coop.name),
+        type:"line",
+        smooth:true,
+        showSymbol:false,
+        data:months.map(m=>byCoop.get(coop.name)?.get(m)||0)
+      });
+    }
+
+    if($("historyChartDesc")){
+      $("historyChartDesc").textContent =
+        "전체 합계와 산지수협별 흐름을 함께 비교합니다. 범위 슬라이더로 기간을 확대할 수 있습니다.";
+    }
+  }
+
+  state.charts.historyLine.setOption({
+    legend:{type:"scroll",top:0},
+    grid:{left:75,right:30,top:62,bottom:75},
+    tooltip:{
+      trigger:"axis",
+      valueFormatter:v=>fmt(v)
+    },
+    xAxis:{
+      type:"category",
+      data:months.map(m=>`${m.slice(0,4)}-${m.slice(4,6)}`)
+    },
+    yAxis:{
+      type:"value",
+      name:"재고량(원자료)",
+      axisLabel:{formatter:v=>fmt(v)}
+    },
+    dataZoom:[
+      {type:"inside"},
+      {type:"slider",bottom:20}
+    ],
+    series
+  }, true);
+}
+function renderAlerts(){
+  const box=$("alerts");
+  const current=filteredCurrentRows();
+  if(!current.length && !state.historyRows.length){
+    box.innerHTML='<div class="empty">현황 또는 월별 추이를 조회하면 관찰 포인트가 표시됩니다.</div>';
+    return;
+  }
+
+  const alerts=[];
+
+  // 현재 품목 편중
+  if(current.length){
+    const total=current.reduce((s,r)=>s+r.invntryQy,0);
+    const itemSums=[...groupSum(current,"mprcStdCodeNm").entries()].sort((a,b)=>b[1]-a[1]);
+    if(total>0 && itemSums.length){
+      const share=itemSums[0][1]/total*100;
+      if(share>=40){
+        alerts.push({
+          level:"편중", cls:"watch",
+          title:`${itemSums[0][0]} 재고 비중이 높습니다.`,
+          text:`선택한 수협 전체 재고의 ${share.toFixed(1)}%를 차지합니다.`,
+          value:`${fmt(itemSums[0][1])}`
+        });
+      }
+    }
+  }
+
+  // 월별 수협 급증/급감
+  if(state.historyRows.length){
+    const months=[...new Set(state.historyRows.map(r=>r.stdrDe.slice(0,6)))].sort();
+    if(months.length>=2){
+      const prev=months.at(-2), latest=months.at(-1);
+      for(const coop of selectedCoops()){
+        const a=state.historyRows.filter(r=>r.mxtrNm===coop.name && r.stdrDe.startsWith(prev)).reduce((s,r)=>s+r.invntryQy,0);
+        const b=state.historyRows.filter(r=>r.mxtrNm===coop.name && r.stdrDe.startsWith(latest)).reduce((s,r)=>s+r.invntryQy,0);
+        if(a>0){
+          const ch=(b-a)/a*100;
+          if(ch>=30){
+            alerts.push({level:"증가",cls:"high",title:`${shortCoop(coop.name)} 재고가 전월 대비 크게 증가했습니다.`,text:`${prev.slice(0,4)}-${prev.slice(4)} → ${latest.slice(0,4)}-${latest.slice(4)}`,value:pct(ch)});
+          }else if(ch<=-30){
+            alerts.push({level:"감소",cls:"down",title:`${shortCoop(coop.name)} 재고가 전월 대비 크게 감소했습니다.`,text:`${prev.slice(0,4)}-${prev.slice(4)} → ${latest.slice(0,4)}-${latest.slice(4)}`,value:pct(ch)});
+          }
+        }
+      }
+    }
+  }
+
+  if(!alerts.length){
+    box.innerHTML='<div class="empty">현재 설정한 단순 기준(전월 대비 ±30%, 단일 품목 비중 40% 이상)에 해당하는 관찰 항목이 없습니다.</div>';
+    return;
+  }
+
+  box.innerHTML=alerts.map(a=>`
+    <div class="alert-item">
+      <div class="alert-level ${a.cls}">${a.level}</div>
+      <div class="alert-text"><strong>${escapeHtml(a.title)}</strong><span>${escapeHtml(a.text)}</span></div>
+      <div class="alert-value">${escapeHtml(a.value)}</div>
+    </div>
+  `).join("");
+}
+
+function populateTableCoops(){
+  const sel=$("tableCoopFilter");
+  const current=sel.value;
+  const names=[...new Set(filteredCurrentRows().map(r=>r.mxtrNm))].sort();
+  sel.innerHTML='<option value="">전체 수협</option>'+names.map(n=>`<option value="${escapeAttr(n)}">${escapeHtml(n)}</option>`).join("");
+  if(names.includes(current)) sel.value=current;
+}
+
+function getTableRows(){
+  let rows=filteredCurrentRows();
+  const tq=$("tableSearch").value.trim().toLowerCase();
+  const coop=$("tableCoopFilter").value;
+  if(coop) rows=rows.filter(r=>r.mxtrNm===coop);
+  if(tq){
+    rows=rows.filter(r=>Object.values(r).some(v=>String(v).toLowerCase().includes(tq)));
+  }
+  const {key,dir}=state.tableSort;
+  rows.sort((a,b)=>{
+    const av=a[key], bv=b[key];
+    const cmp=(typeof av==="number" && typeof bv==="number")
+      ? av-bv
+      : String(av).localeCompare(String(bv),"ko");
+    return dir==="asc" ? cmp : -cmp;
+  });
+  return rows;
+}
+
+function renderTable(){
+  const rows=getTableRows();
+  $("tableCount").textContent=`${fmt(rows.length)}건`;
+  const tbody=$("dataTbody");
+  if(!rows.length){
+    tbody.innerHTML='<tr><td colspan="8" style="text-align:center;color:#65717f;padding:28px">표시할 데이터가 없습니다.</td></tr>';
+    return;
+  }
+  tbody.innerHTML=rows.map(r=>`
+    <tr>
+      <td>${escapeHtml(prettyDate(r.stdrDe))}</td>
+      <td>${escapeHtml(r.mxtrCode)}</td>
+      <td>${escapeHtml(r.mxtrNm)}</td>
+      <td>${escapeHtml(r.wrhousCode)}</td>
+      <td>${escapeHtml(r.wrhousNm)}</td>
+      <td>${escapeHtml(r.mprcStdCode)}</td>
+      <td>${escapeHtml(r.mprcStdCodeNm)}</td>
+      <td class="num">${fmt(r.invntryQy)}</td>
+    </tr>
+  `).join("");
+}
+
+function renderDiagnostics(){
+  const el=$("diagnostics");
+  if(!state.diagnostics.length){el.textContent="조회 전입니다.";return;}
+  const latest=state.diagnostics.slice(-40);
+  el.innerHTML=latest.map(d=>{
+    if(d.error) return `<div>• ${prettyDate(d.date)} / ${escapeHtml(d.coop)} — <strong>오류:</strong> ${escapeHtml(d.error)}</div>`;
+    const match=d.codeMatch===true?"코드 일치":d.codeMatch===false?"코드 불일치":"데이터 없음";
+    return `<div>• ${prettyDate(d.date)} / ${escapeHtml(d.coop)} — ${fmt(d.totalCount)}건, ${match}</div>`;
+  }).join("");
+}
+
+function downloadCsv(){
+  const rows=getTableRows();
+  if(!rows.length){showToast("다운로드할 데이터가 없습니다.");return;}
+  const headers=["기준일자","조합코드","조합명","창고코드","창고명","수산물표준코드","품목명","재고량(원자료 단위)"];
+  const csvRows=[headers];
+  for(const r of rows){
+    csvRows.push([
+      prettyDate(r.stdrDe),r.mxtrCode,r.mxtrNm,r.wrhousCode,r.wrhousNm,
+      r.mprcStdCode,r.mprcStdCodeNm,r.invntryQy
+    ]);
+  }
+  const csv=csvRows.map(row=>row.map(csvEscape).join(",")).join("\r\n");
+  const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8;"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  const date=rows[0]?.stdrDe || "data";
+  a.href=url;
+  a.download=`제주_산지수협_재고_${date}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function csvEscape(v){
+  const s=String(v??"");
+  return `"${s.replaceAll('"','""')}"`;
+}
+function escapeHtml(v){
+  return String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+}
+function escapeAttr(v){return escapeHtml(v);}
+
+function resetView(){
+  applyDynamicDateLimits();
+  $("itemFilter").value="";
+  $("tableSearch").value="";
+  $("tableCoopFilter").value="";
+  document.querySelectorAll('input[name="coop"]').forEach(x=>x.checked=true);
+  state.currentRows=[];
+  state.historyRows=[];
+  state.monthlyRows=[];
+  state.monthlyDates=[];
+  state.diagnostics=[];
+  state.tableSort={key:"stdrDe",dir:"desc"};
+  $("apiDot").className="dot";
+  $("apiStatus").textContent="API 미조회";
+  $("currentStatus").textContent="조회 전";
+  $("currentMeta").textContent="";
+  $("historyStatus").textContent="이력 조회 전";
+  $("historyGroupMode").value="coop";
+  $("monthlyStatus").textContent="월간 조회 전";
+  $("monthlyGroupMode").value="coop";
+  if($("historyChartDesc")){
+    $("historyChartDesc").textContent="전체 합계와 산지수협별 흐름을 함께 비교합니다. 범위 슬라이더로 기간을 확대할 수 있습니다.";
+  }
+  if($("monthlyChartDesc")){
+    $("monthlyChartDesc").textContent="선택 월의 일자별 전체 합계와 산지수협별 흐름을 비교합니다.";
+  }
+  Object.values(state.charts).forEach(c=>c?.clear());
+  renderAll();
+  updateHistoryEstimate();
+  updateMonthlyEstimate();
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  applyDynamicDateLimits();
+  initCharts();
+  renderAll();
+  updateHistoryEstimate();
+  updateMonthlyEstimate();
+
+  $("loadCurrentBtn").addEventListener("click",loadCurrent);
+  $("loadHistoryBtn").addEventListener("click",loadHistory);
+  $("loadMonthlyBtn").addEventListener("click",loadMonthly);
+  $("csvBtn").addEventListener("click",downloadCsv);
+  $("printBtn").addEventListener("click",()=>window.print());
+  $("resetBtn").addEventListener("click",resetView);
+
+  $("selectAllBtn").addEventListener("click",()=>{
+    document.querySelectorAll('input[name="coop"]').forEach(x=>x.checked=true);
+    updateHistoryEstimate();
+    updateMonthlyEstimate();
+  });
+  $("clearAllBtn").addEventListener("click",()=>{
+    document.querySelectorAll('input[name="coop"]').forEach(x=>x.checked=false);
+    updateHistoryEstimate();
+    updateMonthlyEstimate();
+  });
+
+  document.querySelectorAll('input[name="coop"]').forEach(x=>x.addEventListener("change",()=>{
+    updateHistoryEstimate();
+    updateMonthlyEstimate();
+  }));
+  $("historyStart").addEventListener("change",updateHistoryEstimate);
+  $("historyEnd").addEventListener("change",updateHistoryEstimate);
+  $("monthlyMonth").addEventListener("change",updateMonthlyEstimate);
+  $("historyGroupMode").addEventListener("change",()=>{
+    renderHistoryChart();
+    showToast(
+      $("historyGroupMode").value === "item"
+        ? "월별 추이를 어종(품목)별로 전환했습니다."
+        : "월별 추이를 산지수협별로 전환했습니다."
+    );
+  });
+  $("monthlyGroupMode").addEventListener("change",()=>{
+    renderMonthlyChart();
+    showToast(
+      $("monthlyGroupMode").value === "item"
+        ? "월간 추이를 어종(품목)별로 전환했습니다."
+        : "월간 추이를 산지수협별로 전환했습니다."
+    );
+  });
+
+  $("itemFilter").addEventListener("input",()=>{
+    renderKPIs(); renderCurrentCharts(); renderHistoryChart(); renderMonthlyChart(); renderAlerts(); populateTableCoops(); renderTable();
+  });
+  $("tableSearch").addEventListener("input",renderTable);
+  $("tableCoopFilter").addEventListener("change",()=>{
+    state.tableCoopFilter=$("tableCoopFilter").value;
+    renderTable();
+  });
+  $("clearTableFilterBtn").addEventListener("click",()=>{
+    $("tableSearch").value="";
+    $("tableCoopFilter").value="";
+    state.tableCoopFilter="";
+    renderTable();
+  });
+
+  document.querySelectorAll("th[data-key]").forEach(th=>{
+    th.addEventListener("click",()=>{
+      const key=th.dataset.key;
+      if(state.tableSort.key===key) state.tableSort.dir=state.tableSort.dir==="asc"?"desc":"asc";
+      else state.tableSort={key,dir:key==="stdrDe"?"desc":"asc"};
+      renderTable();
+    });
+  });
+});
+</script>
+</body>
+</html>
