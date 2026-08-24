@@ -212,7 +212,7 @@
     <div class="panel-title">
       <div>
         <h2>조회 조건</h2>
-        <div class="sub" id="latestDateGuide">기본값은 실행일 기준 오늘 날짜에서 5일 전입니다.</div>
+        <div class="sub" id="latestDateGuide">기본값은 실행일 기준 오늘 날짜에서 6일 전입니다.</div>
       </div>
       <span class="pill">API: Cloudflare Worker → 해양수산부 수협 산지조합 창고 품목별 재고 현황</span>
     </div>
@@ -483,9 +483,9 @@ const state = {
 
 function getDynamicLatestLimit(){
   const now = new Date();
-  // 실행 시점의 오늘 날짜에서 5일 전을 조회 가능한 최신일로 설정
+  // 실행 시점의 오늘 날짜에서 6일 전을 조회 가능한 최신일로 설정
   // 예: 2026-08-21 실행 -> 2026-08-16
-  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 5);
+  const d = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 6);
   const yyyy = d.getFullYear();
   const mm = String(d.getMonth() + 1).padStart(2, "0");
   const dd = String(d.getDate()).padStart(2, "0");
@@ -505,7 +505,7 @@ function defaultHistoryStart(){
 
 function applyDynamicDateLimits(){
   $("latestAvailableDate").textContent = MAX_DATE;
-  $("latestDateGuide").textContent = `기본값은 실행일 기준 오늘 날짜에서 5일 전인 ${MAX_DATE}입니다.`;
+  $("latestDateGuide").textContent = `기본값은 실행일 기준 오늘 날짜에서 6일 전인 ${MAX_DATE}입니다.`;
 
   $("baseDate").max = MAX_DATE;
   $("baseDate").value = MAX_DATE;
@@ -812,7 +812,7 @@ function monthEndApiDates(startMonth, endMonth){
     if(monthEnd <= maxApiDate){
       out.push(monthEnd);
     } else if(`${y}-${mm}` === MAX_MONTH){
-      // 최신월은 아직 월말이 오지 않았으므로 조회 가능한 최신일(오늘-5일)을 사용
+      // 최신월은 아직 월말이 오지 않았으므로 조회 가능한 최신일(오늘-6일)을 사용
       out.push(maxApiDate);
     }
     m++; if(m===13){m=1;y++;}
