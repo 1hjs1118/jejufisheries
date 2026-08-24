@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>제주·서귀포 여객 및 화물선 입출항 시각화</title>
+<title>제주·서귀포 여객 및 화물선 입출항 시각화 · 시제품6차</title>
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="preconnect" href="https://tile.openstreetmap.org" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
@@ -50,7 +50,7 @@
       <button id="csvBtn" class="btn download" type="button" disabled>CSV 다운로드</button>
     </div>
     <div class="notice"><b style="color:#7a4b10">지도 바로 아래의 제주항·서귀포항 선석 보기 버튼으로 항내 선석별 입·출항 확대 재생화면을 열 수 있습니다.</b></div>
-    <div class="notice"><b>조회 가능 기간: 2022-08-21 ~ 2026-08-20.</b> 조회기간 안에 실제 입항 또는 출항 이벤트가 있는 기항 건을 표시합니다. 주요 국내 항로는 확인 가능한 제주 기점 노선을 우선 반영하고, 원자료가 <b>기타항</b>인 경우 동일 선박의 과거 운항패턴과 확인 가능한 정기항로를 우선 적용합니다. <span class="warn">항로 선은 항해용 전자해도가 아닌 시각화용 추정 경유선이며 육지를 가로지르지 않도록 제주 연안과 남해·서해·동해 접근 방향을 분리했습니다.</span></div>
+    <div class="notice"><b>조회 가능 기간: 2022-08-21 ~ 2026-08-20.</b> 조회기간 안에 실제 입항 또는 출항 이벤트가 있는 기항 건을 표시합니다. 주요 국내 항로는 확인 가능한 제주 기점 노선을 우선 반영하고, 원자료가 <b>기타항</b>인 경우 동일 선박의 과거 운항패턴과 확인 가능한 정기항로를 우선 적용합니다. 제주항 기점 여객·화객선 중 목포·완도·진도·우수영·녹동·삼천포 노선은 <b>OpenStreetMap의 route=ferry 점선 형상</b>을 우선 사용합니다. OSM 경로가 없는 강정지구의 크루즈·대형선은 <b>해양수산부 공공 AIS 익명 샘플에서 확인되는 제주 남방 통항축</b>을 항만 접근구간에 보정 적용하고, 강정지구 기항은 메인 지도에서도 강정항 좌표를 기점으로 사용합니다. <span class="warn">공공 AIS 샘플은 MMSI가 익명화되어 있으므로 특정 크루즈의 실제 항적을 재현한 것이 아니라 통항축 형상만 참고한 것입니다. 실제 운항 여부와 입출항 시각은 PORT-MIS 원자료를 기준으로 합니다.</span></div>
   </section>
 
   <section class="kpis">
@@ -65,7 +65,7 @@
 
   <section class="panel map-card">
     <div class="map-head"><div><h2>선박 이동 시뮬레이션</h2><div id="periodText" class="period">-</div></div><div class="map-actions"><button id="fitPortsBtn" class="btn" type="button">제주권 보기</button><button id="fitRoutesBtn" class="btn" type="button">조회 항로 전체보기</button></div></div>
-    <div class="map-wrap"><div id="map" class="map"></div><div id="mapFallback" class="map-fallback"><div><b>지도 모듈을 불러오지 못했습니다.</b><br>인터넷 연결 후 다시 열어주세요. 데이터와 항로 계산 로직은 HTML 내부에 포함되어 있습니다.</div></div><div class="map-overlay"><div><span class="legend-dot" style="background:#136f8a"></span> 제주항 기점 항로 &nbsp; <span class="legend-dot" style="background:#b45f2b"></span> 서귀포항 기점 항로</div><div><span class="legend-dot" style="background:#2775b6"></span> 여객·유람 &nbsp; <span class="legend-dot" style="background:#b3642a"></span> 화물·운반</div><div>선박 원의 <b>면적</b>은 총톤수에 비례합니다.</div><div id="activeText">선박 0척 표시</div></div></div>
+    <div class="map-wrap"><div id="map" class="map"></div><div id="mapFallback" class="map-fallback"><div><b>지도 모듈을 불러오지 못했습니다.</b><br>인터넷 연결 후 다시 열어주세요. 데이터와 항로 계산 로직은 HTML 내부에 포함되어 있습니다.</div></div><div class="map-overlay"><div><span class="legend-dot" style="background:#136f8a"></span> 제주항 기점 항로 &nbsp; <span class="legend-dot" style="background:#b45f2b"></span> 서귀포항 기점 항로</div><div><span class="legend-dot" style="background:#2775b6"></span> 여객·유람 &nbsp; <span class="legend-dot" style="background:#b3642a"></span> 화물·운반</div><div>선박 원의 <b>면적</b>은 총톤수에 비례합니다.</div><div><span style="display:inline-block;width:22px;border-top:2px dashed #506d7a;vertical-align:3px;margin-right:5px"></span>정기 여객·화객: OSM ferry 도상 보정 우선</div><div><span style="display:inline-block;width:22px;border-top:3px dashed #6b4aa5;vertical-align:3px;margin-right:5px"></span>강정 대형 국제선: 공공 AIS 통항축 보정</div><div id="activeText">선박 0척 표시</div></div></div>
     <div class="map-switchbar" aria-label="선석 확대 지도 화면 전환">
       <div class="map-switch-copy"><b>선석 확대 지도 화면</b><span>선박 원에 가리지 않는 별도 버튼으로 항내 지도로 전환합니다.</span></div>
       <div class="map-switch-actions"><button id="openJejuDetailBtn" class="port-switch-btn jeju" type="button"><span class="port-switch-dot"></span><b>제주항 선석 보기</b><small>내항 · 외항</small></button><button id="openSeogwipoDetailBtn" class="port-switch-btn seogwipo" type="button"><span class="port-switch-dot"></span><b>서귀포항 선석 보기</b><small>서귀포항 · 강정지구</small></button></div>
@@ -110,8 +110,8 @@
     </section>
   </div>
 
-  <footer class="footer">원자료: 사용자 제공 PORT-MIS 선박입출항현황 XLSX 2개 파일. 선석 번호·배치 참고: 부산지방해양수산청 관할항만 제주 항만시설 현황. 지도상 개별 선석 점 좌표는 공개 항만도·지도 형상을 이용한 시각화용 추정치. 배경지도: OpenStreetMap / Leaflet. 항로 경유선은 시각화를 위한 추정치이므로 실제 항해·안전운항 판단에 사용할 수 없습니다.
-    <details><summary>항로 보정 참고자료</summary><div>• 제주연구원 「제주지역 물류산업 현안 및 개선방안」: 제주항의 목포·부산·완도·인천·여수·녹동·진도·우수영·삼천포 등 연안항로 현황 — <a href="https://www.jri.re.kr/publication/file/3561/1" target="_blank">자료 보기</a><br>• 진도군: 산타모니카호 진도–제주 항로 — <a href="https://jindo.go.kr/home/board/B0052.cs?act=read&articleId=188624" target="_blank">자료 보기</a><br>• 남해고속: 아리온제주 고흥(녹동)–제주 운항 — <a href="https://www.namhaegosok.co.kr/s2/s2_1.php" target="_blank">자료 보기</a><br>• 그 밖의 화물·국제항로는 원자료의 전출항지·차항지 좌표를 항만 대표 좌표와 연결하고, 제주도를 관통하지 않도록 서·동·남측 해상 경유점을 배치한 추정 경로입니다.</div></details>
+  <footer class="footer">원자료: 사용자 제공 PORT-MIS 선박입출항현황. 선석 번호·배치 참고: 부산지방해양수산청 관할항만 제주 항만시설 현황. 배경지도: OpenStreetMap / Leaflet. 제주항 주요 국내 여객·화객선은 OSM route=ferry 도상 선형을 우선 사용하고, 강정지구의 크루즈·대형 국제선은 해양수산부 공개 AIS 익명 샘플에서 확인되는 제주 남방 통항축을 항만 접근구간의 보정선으로 사용합니다. 특정 선박의 상업 AIS 과거항적을 복제하거나 재배포하지 않았습니다. 모든 광역 경로는 시각화용이며 항해·안전운항 판단에 사용할 수 없습니다.
+    <details><summary>항로 보정 참고자료·라이선스</summary><div>• 해양수산부 「선박 AIS 동적정보_20220101」: 위·경도, SOG, COG, Heading이 포함된 익명 AIS 샘플. 공공데이터포털 표시 기준 <b>무료 · 이용허락범위 제한 없음</b>. MMSI는 특수문자로 익명화되어 있어 개별 PORT-MIS 선박과 매칭하지 않고 제주 남방의 통항축 형상에만 사용 — <a href="https://www.data.go.kr/data/15129186/fileData.do?recommendDataYn=Y" target="_blank">공공데이터포털</a><br>• 공개 미리보기의 원시 위·경도 수치는 페이지 안내의 단순 환산값과 자릿수 해석상 불일치가 있어, 연속 위치점 간 거리와 SOG·COG의 일관성을 검토해 시각화용 중심선으로 정규화했습니다. 원기관의 원시 좌표 정의 또는 추가 기간 자료를 확보하면 해당 중심선을 교체하는 것이 바람직합니다.<br>• OpenStreetMap route=ferry: 정기 페리 노선 도상 선형 — <a href="https://wiki.openstreetmap.org/wiki/Tag:route%3Dferry" target="_blank">OSM 문서</a><br>• 제주연구원·진도군·남해고속 등 공개 운항자료는 국내 정기항로의 목적항 확인에 보조적으로 사용했습니다.<br>• 공공 AIS 보정이 적용되지 않는 화물·유조·기타 국제항로는 원자료의 전출항지·차항지와 항만 대표좌표를 연결한 추정 해상 경유선을 사용합니다.</div></details>
   </footer>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
@@ -139,6 +139,61 @@ const PORT_DETAIL_CONFIG={
 ['GJ11','선선 위치 불명(33.2223388, 126.4861895)',[33.2223388,126.4861895],'gangjeong'],['GJ12','선선 위치 불명(33.2223388, 126.4861895)',[33.2223388,126.4861895],'gangjeong'],['GJ21','선선 위치 불명(33.2223388, 126.4861895)',[33.2223388,126.4861895],'gangjeong'],['GJ22','선선 위치 불명(33.2223388, 126.4861895)',[33.2223388,126.4861895],'gangjeong']]}
 };
 
+// 제주항 국내 정기 여객·화객선용 OSM ferry 도상 보정 경로.
+// 좌표는 OpenStreetMap 표준지도에 표시되는 route=ferry 점선의 전체적인 굴곡과
+// 공개 여객항 위치를 맞추기 위한 시각화용 제어점이다. AIS 실제 항적이 아니다.
+// 목포-제주는 OSM way 593979099(route=ferry, 목포-제주) 존재를 확인해 길이/방향을 교차 점검했다.
+const OSM_FERRY_PATHS={
+'목포':{osmWay:'593979099',basis:'OpenStreetMap route=ferry(목포-제주) 도상 형상 보정',path:[
+[33.52594,126.54499],[33.603,126.493],[33.724,126.445],[33.846,126.404],[33.968,126.374],[34.086,126.357],[34.205,126.331],[34.323,126.310],[34.438,126.304],[34.555,126.326],[34.665,126.350],[34.735,126.371],[34.783,126.383]
+]},
+'완도':{basis:'OpenStreetMap route=ferry 점선 도상 형상 보정',path:[
+[33.52594,126.54499],[33.600,126.602],[33.705,126.657],[33.815,126.705],[33.925,126.748],[34.035,126.785],[34.145,126.802],[34.235,126.797],[34.295,126.773],[34.315,126.752]
+]},
+'진도':{basis:'OpenStreetMap ferry/추자 경유 점선 도상 형상 보정',path:[
+[33.52594,126.54499],[33.600,126.493],[33.715,126.440],[33.830,126.382],[33.945,126.329],[34.055,126.274],[34.165,126.225],[34.265,126.180],[34.330,126.151],[34.366,126.132]
+]},
+'우수영':{basis:'OpenStreetMap ferry/추자 경유 점선 도상 형상 보정',path:[
+[33.52594,126.54499],[33.600,126.493],[33.715,126.440],[33.830,126.382],[33.945,126.329],[34.055,126.274],[34.165,126.225],[34.275,126.200],[34.380,126.213],[34.470,126.252],[34.535,126.287],[34.573,126.309]
+]},
+'녹동':{basis:'OpenStreetMap route=ferry 점선 도상 형상 보정',path:[
+[33.52594,126.54499],[33.575,126.635],[33.655,126.748],[33.755,126.858],[33.865,126.956],[33.985,127.035],[34.115,127.086],[34.255,127.118],[34.390,127.133],[34.527,127.138]
+]},
+'삼천포':{basis:'OpenStreetMap route=ferry 점선 도상 형상 보정',path:[
+[33.52594,126.54499],[33.580,126.698],[33.655,126.895],[33.755,127.112],[33.875,127.345],[34.020,127.575],[34.190,127.785],[34.380,127.950],[34.570,128.055],[34.740,128.115],[34.865,128.105],[34.932,128.071]
+]}
+};
+function osmFerryPathFor(r,name){
+  if(r.p!==0||purposeClass(r.purpose)!=='PASS')return null;
+  return OSM_FERRY_PATHS[name]||null;
+}
+
+// License-safe AIS refinement: Ministry of Oceans and Fisheries public AIS dynamic sample.
+// The public sample anonymizes MMSI, so this is used only as a traffic-corridor shape,
+// never as a claim that a specific PORT-MIS vessel followed these exact points.
+const PUBLIC_AIS_SOUTH_JEJU={
+ source:'해양수산부_선박 AIS 동적정보_20220101',
+ sourceUrl:'https://www.data.go.kr/data/15129186/fileData.do?recommendDataYn=Y',
+ license:'공공데이터포털 · 무료 · 이용허락범위 제한 없음',
+ note:'MMSI 익명화 공개 샘플의 연속 위치·SOG·COG를 제주 남방 통항축 형상 참고로 사용',
+ // 공개 미리보기 연속점의 수치·속력 일관성을 검증하여 decimal-degree 형태로 정규화한 대표 중심선.
+ corridor:[[33.1430083,126.5831750],[33.1349633,126.5819533],[33.1237600,126.5822267],[33.1119967,126.5819183],[33.1086350,126.5826533]]
+};
+function isGangjeongCall(r){return r.p===1&&/강정지구/.test(String(r.berth||''))}
+function isLargeOceanVessel(r){return /크루즈/.test(String(r.purpose||''))||(+r.gt||0)>=30000}
+function publicAisApproachFor(r,region){
+ if(!isGangjeongCall(r)||!isLargeOceanVessel(r))return null;
+ const core=PUBLIC_AIS_SOUTH_JEJU.corridor;
+ const west=['CHINA_NORTH','CHINA_EAST','CHINA_SOUTH','TAIWAN','PHILIPPINES','SE_ASIA','INDIAN','GUNSAN','WESTMID','WESTCOAST'];
+ const northEast=['WANDO','NOKDONG','YEOSU','SACHEON','BUSAN','ULSAN','POHANG','EASTCOAST','JAPAN_WEST','JAPAN_SET0','JAPAN_SEA'];
+ const southEast=['JAPAN_SW','JAPAN_SOUTH','JAPAN_SHIKOKU','JAPAN_KANSAI','JAPAN_PACIFIC','AUSTRALIA','PACIFIC'];
+ let bridge=null;
+ if(west.includes(region))bridge=[[33.188,126.515],[33.160,126.555],...core,[33.070,126.430],[33.055,126.260],[33.100,126.000]];
+ else if(northEast.includes(region))bridge=[[33.188,126.515],[33.160,126.555],...core,[33.090,126.700],[33.145,126.900],[33.300,127.080]];
+ else if(southEast.includes(region))bridge=[[33.188,126.515],[33.160,126.555],...core,[33.035,126.720],[32.930,126.930]];
+ if(!bridge)return null;
+ return{path:bridge,basis:'해양수산부 공개 AIS 익명 샘플 기반 제주 남방 통항축 보정',source:PUBLIC_AIS_SOUTH_JEJU.source,sourceUrl:PUBLIC_AIS_SOUTH_JEJU.sourceUrl};
+}
 const UNKNOWN=new Set(['','기타항','OTHERS','OCEAN DISTRICT','JAPAN /OTHER-PORT/']);
 const MANUAL_HINTS={'3E3357':{name:'진도',why:'산타모니카 진도–제주 정기항로'},'176215':{name:'녹동',why:'아리온제주 녹동–제주 정기항로'},'9694880':{name:'우수영',why:'퀸스타2 제주–우수영 운항자료'}};
 const DESTS={
@@ -182,7 +237,50 @@ function access(p,region){if(p===0){if(['MOKPO','GUNSAN','WESTMID','WESTCOAST','
 function corridor(region){const C={MOKPO:[[33.90,126.00],[34.20,126.00],[34.45,126.12]],WANDO:[[33.95,126.80],[34.18,126.84],[34.30,126.82]],NOKDONG:[[33.90,127.00],[34.20,127.08],[34.42,127.12]],YEOSU:[[33.75,127.18],[34.05,127.42],[34.35,127.58],[34.58,127.70]],SACHEON:[[33.72,127.20],[34.05,127.55],[34.32,127.95],[34.55,128.18],[34.75,128.36]],BUSAN:[[33.72,127.20],[34.05,127.60],[34.30,128.05],[34.55,128.45],[34.72,128.78],[34.86,128.95]],ULSAN:[[33.72,127.20],[34.05,127.60],[34.35,128.10],[34.65,128.55],[34.85,128.92],[35.15,129.18],[35.40,129.42]],POHANG:[[33.72,127.20],[34.10,127.65],[34.45,128.25],[34.80,128.80],[35.20,129.20],[35.65,129.50],[35.95,129.55]],EASTCOAST:[[33.72,127.20],[34.10,127.65],[34.50,128.30],[34.90,128.95],[35.40,129.45],[36.10,129.62],[36.80,129.52],[37.45,129.35]],GUNSAN:[[33.85,125.78],[34.45,125.45],[35.15,125.35],[35.65,125.48]],WESTMID:[[33.85,125.78],[34.45,125.45],[35.15,125.35],[35.85,125.48],[36.35,125.70]],WESTCOAST:[[33.85,125.78],[34.45,125.45],[35.15,125.35],[35.85,125.48],[36.45,125.72],[37.00,126.02]],CHINA_NORTH:[[33.55,125.50],[34.20,124.30],[35.00,123.00],[35.80,121.80]],CHINA_EAST:[[33.25,125.45],[32.60,124.10],[31.90,122.60]],CHINA_SOUTH:[[33.10,125.40],[31.50,123.40],[29.50,121.80],[27.50,120.80]],JAPAN_WEST:[[33.45,127.45],[33.50,128.25],[33.65,129.05],[33.55,129.65]],JAPAN_SW:[[32.85,127.35],[32.72,128.15]],JAPAN_SOUTH:[[32.80,127.45],[32.20,128.50],[31.70,129.55]],JAPAN_SHIKOKU:[[32.80,127.60],[32.30,129.00],[32.40,130.60],[32.30,132.00],[32.80,133.00]],JAPAN_KANSAI:[[32.80,127.60],[32.30,129.00],[32.40,130.80],[32.40,132.50],[32.60,134.00],[33.20,134.70],[33.80,134.80],[34.25,134.90],[34.50,135.10]],JAPAN_SET0:[[33.30,127.50],[33.45,128.50],[33.70,129.45],[33.45,130.40],[33.30,131.20],[33.50,132.00]],JAPAN_PACIFIC:[[32.80,127.60],[32.20,129.00],[31.80,131.00],[32.20,132.80],[32.70,134.40],[33.20,135.80],[34.00,137.50]],JAPAN_SEA:[[33.60,128.20],[34.00,129.20],[34.50,130.20],[35.20,130.80],[36.20,131.50],[37.60,132.60]],TAIWAN:[[32.70,125.30],[31.00,123.70],[29.00,122.80],[26.80,122.20]],PHILIPPINES:[[32.50,125.20],[29.50,123.00],[26.00,122.10],[22.00,121.00],[18.00,120.60]],SE_ASIA:[[32.50,125.20],[29.50,123.00],[25.00,121.80],[21.00,120.20],[16.00,117.00],[10.00,111.00],[4.00,106.00]],AUSTRALIA:[[32.50,127.20],[28.00,130.00],[22.00,132.00],[15.00,135.00],[5.00,140.00],[-8.00,145.00]],INDIAN:[[32.00,124.00],[27.00,121.00],[20.00,116.00],[10.00,110.00],[3.00,104.00],[1.00,100.00],[-2.00,90.00],[5.00,75.00]],PACIFIC:[[32.50,129.00],[31.50,134.00],[32.00,140.00],[35.00,150.00],[38.00,165.00],[42.00,180.00],[45.00,200.00]],ATLANTIC:[[32.00,124.00],[25.00,121.00],[15.00,115.00],[3.00,104.00],[-5.00,90.00],[-15.00,70.00],[-30.00,45.00],[-35.00,20.00],[-20.00,0.00],[0.00,-20.00],[20.00,-50.00]]};return C[region]||[]}
 function localRoute(p,targetName){const s=PORTS[p];if(targetName===s.name)return[[s.lat,s.lng],[s.lat+0.10,s.lng+0.16],[s.lat+0.03,s.lng+0.28],[s.lat-0.08,s.lng+0.18],[s.lat,s.lng]];if(p===0&&targetName==='서귀포')return[[s.lat,s.lng],[33.60,126.45],[33.58,126.20],[33.40,126.08],[33.22,126.12],[33.12,126.35],[33.15,126.50],[33.2363,126.5611]];if(p===1&&targetName==='제주')return localRoute(0,'서귀포').slice().reverse();if(targetName==='성산포'){return p===0?[[s.lat,s.lng],[33.57,126.72],[33.56,126.93],[33.472,126.930]]:[[s.lat,s.lng],[33.20,126.75],[33.30,126.96],[33.472,126.930]]}return null}
 function fallbackTarget(r,dir){const h=hash(r.call+'|'+dir);const opts=r.p===0?[[34.20,125.70],[34.15,127.55],[33.10,125.60],[32.90,127.20]]:[[33.80,125.80],[34.00,127.50],[32.80,125.80],[32.60,127.30]];return opts[h%opts.length]}
-function routeFor(r,dir){const key=[r.p,r.call,dir,r.prev,r.next,r.purpose].join('|');if(routeCache.has(key))return routeCache.get(key);const res=resolveDest(r,dir),src=PORTS[r.p];let path,target,region='';if(res.localLoop){if(r.p===1)path=[[src.lat,src.lng],[33.210,126.600],[33.195,126.550],[33.205,126.500],[33.225,126.485],[33.2363,126.5611]];else path=[[src.lat,src.lng],[33.58,126.48],[33.62,126.55],[33.59,126.65],[src.lat,src.lng]];target=path[path.length-1];region='LOCAL'}else{const loc=localRoute(r.p,res.name);if(loc){path=loc;target=loc[loc.length-1];region='JEJU_LOCAL'}else{const d=DESTS[res.name];if(d){target=[d[0],d[1]];region=d[2];path=dedupe([[src.lat,src.lng],...access(r.p,region),...corridor(region),target])}else{target=fallbackTarget(r,dir);region='UNKNOWN';path=dedupe([[src.lat,src.lng],...access(r.p,r.p===0?'MOKPO':'BUSAN'),target])}}}if(dir==='prev')path=path.slice().reverse();const km=pathDistance(path),minutes=durationMinutes(r,res.name,km);const out={...res,path,target:dir==='prev'?path[0]:path[path.length-1],km,minutes,region};routeCache.set(key,out);return out}
+
+function routeOrigin(r){
+ if(isGangjeongCall(r))return{lat:33.2223388,lng:126.4861895,name:'강정항'};
+ const p=PORTS[r.p];return{lat:p.lat,lng:p.lng,name:p.name+'항'};
+}
+function routeFor(r,dir){
+ const key=[r.p,r.call,dir,r.prev,r.next,r.purpose,r.berth].join('|');
+ if(routeCache.has(key))return routeCache.get(key);
+ const res=resolveDest(r,dir),src=routeOrigin(r);
+ let path,target,region='',osmFerry=false,osmWay=null,openAis=false,aisSource=null,aisSourceUrl=null,routeBasis='';
+ if(res.localLoop){
+  if(r.p===1)path=[[src.lat,src.lng],[33.210,126.600],[33.195,126.550],[33.205,126.500],[33.225,126.485],[src.lat,src.lng]];
+  else path=[[src.lat,src.lng],[33.58,126.48],[33.62,126.55],[33.59,126.65],[src.lat,src.lng]];
+  target=path[path.length-1];region='LOCAL';
+ }else{
+  const loc=localRoute(r.p,res.name);
+  if(loc&&!isGangjeongCall(r)){path=loc;target=loc[loc.length-1];region='JEJU_LOCAL'}
+  else{
+   const d=DESTS[res.name];
+   if(d){
+    target=[d[0],d[1]];region=d[2];
+    const of=osmFerryPathFor(r,res.name);
+    const oa=of?null:publicAisApproachFor(r,region);
+    if(of){
+     path=dedupe([[src.lat,src.lng],[33.5219,126.5397],...of.path,target]);
+     osmFerry=true;osmWay=of.osmWay||null;routeBasis=of.basis;
+    }else if(oa){
+     path=dedupe([[src.lat,src.lng],...oa.path,...corridor(region),target]);
+     openAis=true;aisSource=oa.source;aisSourceUrl=oa.sourceUrl;routeBasis=oa.basis;
+    }else{
+     path=dedupe([[src.lat,src.lng],...access(r.p,region),...corridor(region),target]);
+    }
+   }else{
+    target=fallbackTarget(r,dir);region='UNKNOWN';
+    path=dedupe([[src.lat,src.lng],...access(r.p,r.p===0?'MOKPO':'BUSAN'),target]);
+   }
+  }
+ }
+ if(dir==='prev')path=path.slice().reverse();
+ const km=pathDistance(path),minutes=durationMinutes(r,res.name,km);
+ const method=(osmFerry||openAis)?`${res.method} · ${routeBasis}`:res.method;
+ const out={...res,method,path,target:dir==='prev'?path[0]:path[path.length-1],km,minutes,region,osmFerry,osmWay,openAis,aisSource,aisSourceUrl,routeBasis,originName:src.name};
+ routeCache.set(key,out);return out
+}
 function hav(a,b){const R=6371,p1=a[0]*Math.PI/180,p2=b[0]*Math.PI/180,dp=(b[0]-a[0])*Math.PI/180;let dl=(b[1]-a[1])*Math.PI/180;while(dl>Math.PI)dl-=2*Math.PI;while(dl<-Math.PI)dl+=2*Math.PI;const q=Math.sin(dp/2)**2+Math.cos(p1)*Math.cos(p2)*Math.sin(dl/2)**2;return 2*R*Math.asin(Math.min(1,Math.sqrt(q)))}
 function pathDistance(p){let s=0;for(let i=1;i<p.length;i++)s+=hav(p[i-1],p[i]);return s}
 function durationMinutes(r,dest,km){if(r.call==='3E3357'&&dest==='진도')return 100;if(r.call==='176215'&&dest==='녹동')return 220;if(r.call==='9694880'&&dest==='우수영')return 180;if(purposeClass(r.purpose)==='PASS'){if(dest==='완도')return Math.max(150,km/1.852/20*60);if(dest==='목포')return Math.max(250,km/1.852/20*60);if(dest==='삼천포')return Math.max(390,km/1.852/18*60)}let kt=/유람/.test(r.purpose)?9:/여객|화객/.test(r.purpose)?20:/유조/.test(r.purpose)?11:13;return Math.max(45,km/1.852/kt*60)}
@@ -212,12 +310,12 @@ function closePortDetail(){$('portDetailOverlay').classList.remove('open');$('po
 function initMap(){if(typeof L==='undefined'){document.getElementById('mapFallback').style.display='grid';return}map=L.map('map',{zoomControl:true,preferCanvas:true,worldCopyJump:true}).setView([33.55,126.55],8);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);routeLayer=L.layerGroup().addTo(map);shipLayer=L.layerGroup().addTo(map);portLayer=L.layerGroup().addTo(map);destLayer=L.layerGroup().addTo(map);PORTS.forEach((p,i)=>{const c=L.circleMarker([p.lat,p.lng],{radius:9,weight:2,color:p.color,fillColor:'#fff',fillOpacity:1,className:'port-detail-hint'}).addTo(portLayer);c.bindTooltip(`${p.code} ${p.name}`,{permanent:true,direction:'top',offset:[0,-7],className:'port-label'});c.bindPopup(`<b>${p.code} ${p.name}\ud56d</b><br>\uc120\uc11d \ud655\ub300\ub294 \uc9c0\ub3c4 \uc544\ub798 \uc804\ud658 \ubc84\ud2bc\uc744 \uc774\uc6a9\ud558\uc138\uc694.`)});fitPorts()}
 function fitPorts(){if(map)map.fitBounds([[32.95,125.85],[34.10,127.20]],{padding:[20,20]})}
 function routeKey(r,dir,ri){return r.p+'|'+ri.name}
-function drawRoutes(){const ag=new Map();for(const r of current){const f=eventFlags(r);if(f.arr){const ri=routeFor(r,'prev'),k=routeKey(r,'prev',ri);if(!ag.has(k))ag.set(k,{r,ri,n:0});ag.get(k).n++}if(f.dep){const ri=routeFor(r,'next'),k=routeKey(r,'next',ri);if(!ag.has(k))ag.set(k,{r,ri,n:0});ag.get(k).n++}}els.kRoutes.textContent=fmt(ag.size);if(!routeLayer)return;routeLayer.clearLayers();destLayer.clearLayers();const arr=[...ag.values()].sort((a,b)=>b.n-a.n);routeBounds=[];arr.forEach((x,idx)=>{const col=PORTS[x.r.p].color,w=1.2+Math.min(5,Math.log2(x.n+1));const line=L.polyline(x.ri.path,{color:col,weight:w,opacity:.34,dashArray:x.ri.estimated?'5 6':null,lineCap:'round'}).addTo(routeLayer);line.bindTooltip(`${PORTS[x.r.p].name} ↔ ${esc(x.ri.name)} · ${fmt(x.n)}건<br>${esc(x.ri.method)}<br>약 ${fmt(Math.round(x.ri.km))} km`,{sticky:true});routeBounds.push(...x.ri.path);if(idx<35){const t=x.ri.path[0][0]===PORTS[x.r.p].lat&&x.ri.path[0][1]===PORTS[x.r.p].lng?x.ri.path[x.ri.path.length-1]:x.ri.path[0];const m=L.circleMarker(t,{radius:3,color:col,weight:1,fillColor:'#fff',fillOpacity:.9}).addTo(destLayer);m.bindTooltip(x.ri.name,{direction:'top',className:'dest-label'})}})}
+function drawRoutes(){const ag=new Map();for(const r of current){const f=eventFlags(r);if(f.arr){const ri=routeFor(r,'prev'),k=routeKey(r,'prev',ri);if(!ag.has(k))ag.set(k,{r,ri,n:0});ag.get(k).n++}if(f.dep){const ri=routeFor(r,'next'),k=routeKey(r,'next',ri);if(!ag.has(k))ag.set(k,{r,ri,n:0});ag.get(k).n++}}els.kRoutes.textContent=fmt(ag.size);if(!routeLayer)return;routeLayer.clearLayers();destLayer.clearLayers();const arr=[...ag.values()].sort((a,b)=>b.n-a.n);routeBounds=[];arr.forEach((x,idx)=>{const col=PORTS[x.r.p].color,w=1.2+Math.min(5,Math.log2(x.n+1));const special=x.ri.osmFerry||x.ri.openAis;const dash=x.ri.openAis?'10 4 2 4':(x.ri.osmFerry?'2 7':(x.ri.estimated?'5 6':null));const line=L.polyline(x.ri.path,{color:col,weight:special?w+0.8:w,opacity:x.ri.openAis?.66:(x.ri.osmFerry?.56:.34),dashArray:dash,lineCap:'round'}).addTo(routeLayer);line.bindTooltip(`${esc(x.ri.originName||routeOrigin(x.r).name)} ↔ ${esc(x.ri.name)} · ${fmt(x.n)}건<br>${x.ri.openAis?'<b>공공 AIS 통항축 보정</b><br>':(x.ri.osmFerry?'<b>OSM ferry 도상 보정</b><br>':'')}${esc(x.ri.method)}${x.ri.osmWay?`<br>OSM way ${esc(x.ri.osmWay)}`:''}${x.ri.aisSource?`<br>${esc(x.ri.aisSource)}`:''}<br>약 ${fmt(Math.round(x.ri.km))} km`,{sticky:true});routeBounds.push(...x.ri.path);if(idx<35){const o=routeOrigin(x.r),first=x.ri.path[0];const startsAtOrigin=Math.abs(first[0]-o.lat)<1e-6&&Math.abs(first[1]-o.lng)<1e-6;const t=startsAtOrigin?x.ri.path[x.ri.path.length-1]:x.ri.path[0];const m=L.circleMarker(t,{radius:3,color:col,weight:1,fillColor:'#fff',fillOpacity:.9}).addTo(destLayer);m.bindTooltip(x.ri.name,{direction:'top',className:'dest-label'})}})}
 function fitRoutes(){if(!map||!routeBounds||!routeBounds.length){fitPorts();return}try{map.fitBounds(routeBounds,{padding:[24,24],maxZoom:8})}catch(e){fitPorts()}}
-function stateAt(r,t){const f=eventFlags(r),a=f.a?+f.a:null,d=f.d?+f.d:null;if(f.arr&&a){const ri=routeFor(r,'prev'),st=a-ri.minutes*60000;if(t>=st&&t<a)return{pos:pointOn(ri.path,(t-st)/(a-st)),state:`${ri.name} → ${PORTS[r.p].name} 입항 중`,ri};}if(a&&d&&t>=a&&t<d&&(f.arr||f.dep))return{pos:[PORTS[r.p].lat,PORTS[r.p].lng],state:'항만 정박·계류',ri:null};if(f.dep&&d){const ro=routeFor(r,'next'),eta=d+ro.minutes*60000;if(t>=d&&t<eta)return{pos:pointOn(ro.path,(t-d)/(eta-d)),state:`${PORTS[r.p].name} → ${ro.name} 항해 중`,ri:ro};if(t>=eta&&t<eta+120*60000)return{pos:ro.target,state:`${ro.name} 도착`,ri:ro};}return null}
-function popup(r,s){const f=eventFlags(r),ri=s.ri;return `<div class="ship-popup"><b>${esc(r.name||'-')}</b><br><span class="tag">${esc(r.purpose||'-')}</span><span class="tag">${fmt(r.gt)} GT</span><br>호출부호 ${esc(r.call||'-')} · ${PORTS[r.p].code} ${PORTS[r.p].name}<br><b>${esc(s.state)}</b><br>입항 ${esc(r.arr||'-')} ${f.arr?'<span class="arr">● 조회기간</span>':''}<br>출항 ${esc(r.dep||'-')} ${f.dep?'<span class="dep">● 조회기간</span>':''}<br>전출항지 ${esc(r.prev||'-')} → <b>${PORTS[r.p].name}</b> → 차항지 ${esc(r.next||'-')}<br>계선장소 ${esc(r.berth||'-')} · ${esc(r.dom||'-')}${ri?`<div class="route-note">시각화 목적지: ${esc(ri.name)} · 약 ${fmt(Math.round(ri.km))}km · 예상 ${fmt(Math.round(ri.minutes))}분<br>${esc(ri.method)}</div>`:''}</div>`}
+function stateAt(r,t){const f=eventFlags(r),a=f.a?+f.a:null,d=f.d?+f.d:null,o=routeOrigin(r);if(f.arr&&a){const ri=routeFor(r,'prev'),st=a-ri.minutes*60000;if(t>=st&&t<a)return{pos:pointOn(ri.path,(t-st)/(a-st)),state:`${ri.name} → ${o.name} 입항 중`,ri};}if(a&&d&&t>=a&&t<d&&(f.arr||f.dep))return{pos:[o.lat,o.lng],state:`${o.name} 정박·계류`,ri:null};if(f.dep&&d){const ro=routeFor(r,'next'),eta=d+ro.minutes*60000;if(t>=d&&t<eta)return{pos:pointOn(ro.path,(t-d)/(eta-d)),state:`${o.name} → ${ro.name} 항해 중`,ri:ro};if(t>=eta&&t<eta+120*60000)return{pos:ro.target,state:`${ro.name} 도착`,ri:ro};}return null}
+function popup(r,s){const f=eventFlags(r),ri=s.ri,o=routeOrigin(r);return `<div class="ship-popup"><b>${esc(r.name||'-')}</b><br><span class="tag">${esc(r.purpose||'-')}</span><span class="tag">${fmt(r.gt)} GT</span><br>호출부호 ${esc(r.call||'-')} · ${esc(o.name)}<br><b>${esc(s.state)}</b><br>입항 ${esc(r.arr||'-')} ${f.arr?'<span class="arr">● 조회기간</span>':''}<br>출항 ${esc(r.dep||'-')} ${f.dep?'<span class="dep">● 조회기간</span>':''}<br>전출항지 ${esc(r.prev||'-')} → <b>${esc(o.name)}</b> → 차항지 ${esc(r.next||'-')}<br>계선장소 ${esc(r.berth||'-')} · ${esc(r.dom||'-')}${ri?`<div class="route-note">시각화 목적지: ${esc(ri.name)} · 약 ${fmt(Math.round(ri.km))}km · 예상 ${fmt(Math.round(ri.minutes))}분<br>${ri.openAis?'<b>공공 AIS 통항축 보정 적용</b><br>':(ri.osmFerry?'<b>OSM ferry 도상 보정 적용</b><br>':'')}${esc(ri.method)}${ri.osmWay?`<br>OSM way ${esc(ri.osmWay)}`:''}${ri.aisSource?`<br>자료: ${esc(ri.aisSource)} (개별선박 식별 아님)` :''}</div>`:''}</div>`}
 function updateShips(force=false){if(!shipLayer)return;const now=performance.now();if(!force&&now-lastRender<90)return;lastRender=now;shipLayer.clearLayers();const t=queryStartMs+(+els.timeline.value)*60000;let n=0;for(const r of current){const s=stateAt(r,t);if(!s)continue;n++;const col=colorFor(r.purpose),rad=radiusGT(r.gt);const m=L.circleMarker(s.pos,{radius:rad,color:'#fff',weight:1.2,fillColor:col,fillOpacity:.84,opacity:.96}).addTo(shipLayer);m.bindPopup(popup(r,s));if(rad>=14)m.bindTooltip(r.name,{permanent:true,direction:'right',offset:[rad+2,0],className:'ship-label'})}els.active.textContent=`선박 ${fmt(n)}척 표시`}
-function buildEvents(){const ev=[];for(const r of current){const f=eventFlags(r);if(f.arr)ev.push({t:+f.a,type:'입항',r,ri:routeFor(r,'prev')});if(f.dep)ev.push({t:+f.d,type:'출항',r,ri:routeFor(r,'next')})}ev.sort((a,b)=>b.t-a.t||a.type.localeCompare(b.type));currentEvents=ev;els.eventCount.textContent=`${fmt(ev.length)}건${ev.length>800?' · 최근 800건 표시':''}`;if(!ev.length){els.events.innerHTML='<div class="empty">해당 조건의 입출항 이벤트가 없습니다.</div>';return}const shown=ev.slice(0,800);els.events.innerHTML='<table><thead><tr><th>일시</th><th>입출</th><th>항만</th><th>선명</th><th>총톤수</th><th>원자료 전출항지 → 차항지</th><th>시각화 항로</th><th>선박용도</th></tr></thead><tbody>'+shown.map(e=>`<tr data-time="${e.t}"><td>${formatDT(new Date(e.t))}</td><td class="${e.type==='입항'?'arr':'dep'}">${e.type}</td><td>${PORTS[e.r.p].code} ${PORTS[e.r.p].name}</td><td><b>${esc(e.r.name)}</b><br><span style="color:#7a8994">${esc(e.r.call)}</span></td><td>${fmt(e.r.gt)} GT</td><td>${esc(e.r.prev||'-')} → ${esc(e.r.next||'-')}</td><td>${esc(e.ri.name)}${e.ri.estimated?' <span style="color:#9a6a28">(추정)</span>':''}</td><td>${esc(e.r.purpose)}</td></tr>`).join('')+'</tbody></table>'}
+function buildEvents(){const ev=[];for(const r of current){const f=eventFlags(r);if(f.arr)ev.push({t:+f.a,type:'입항',r,ri:routeFor(r,'prev')});if(f.dep)ev.push({t:+f.d,type:'출항',r,ri:routeFor(r,'next')})}ev.sort((a,b)=>b.t-a.t||a.type.localeCompare(b.type));currentEvents=ev;els.eventCount.textContent=`${fmt(ev.length)}건${ev.length>800?' · 최근 800건 표시':''}`;if(!ev.length){els.events.innerHTML='<div class="empty">해당 조건의 입출항 이벤트가 없습니다.</div>';return}const shown=ev.slice(0,800);els.events.innerHTML='<table><thead><tr><th>일시</th><th>입출</th><th>항만</th><th>선명</th><th>총톤수</th><th>원자료 전출항지 → 차항지</th><th>시각화 항로</th><th>선박용도</th></tr></thead><tbody>'+shown.map(e=>`<tr data-time="${e.t}"><td>${formatDT(new Date(e.t))}</td><td class="${e.type==='입항'?'arr':'dep'}">${e.type}</td><td>${PORTS[e.r.p].code} ${PORTS[e.r.p].name}</td><td><b>${esc(e.r.name)}</b><br><span style="color:#7a8994">${esc(e.r.call)}</span></td><td>${fmt(e.r.gt)} GT</td><td>${esc(e.r.prev||'-')} → ${esc(e.r.next||'-')}</td><td>${esc(e.ri.name)}${e.ri.openAis?' <span style="color:#6b4aa5;font-weight:800">(공공 AIS 통항축)</span>':(e.ri.osmFerry?' <span style="color:#216b51;font-weight:800">(OSM ferry 보정)</span>':'')}${e.ri.estimated?' <span style="color:#9a6a28">(목적지 추정)</span>':''}</td><td>${esc(e.r.purpose)}</td></tr>`).join('')+'</tbody></table>'}
 function highlightEvent(){const t=queryStartMs+(+els.timeline.value)*60000,b=els.events.querySelectorAll('tbody tr');let best=null,bd=Infinity;b.forEach(tr=>{tr.classList.remove('current');const d=Math.abs(+tr.dataset.time-t);if(d<bd){bd=d;best=tr}});if(best&&bd<=20*60000)best.classList.add('current')}
 function summarize(){let arr=0,dep=0,gt=0,max=null;const ps=PORTS.map(()=>({arr:0,dep:0,calls:new Set()})),purposes=new Map();for(const r of current){const f=eventFlags(r);if(f.arr){arr++;ps[r.p].arr++;purposes.set(r.purpose,(purposes.get(r.purpose)||0)+1)}if(f.dep){dep++;ps[r.p].dep++;purposes.set(r.purpose,(purposes.get(r.purpose)||0)+1)}ps[r.p].calls.add(r.call+'|'+r.arr+'|'+r.dep);gt+=r.gt;if(!max||r.gt>max.gt)max=r}els.kArr.textContent=fmt(arr);els.kDep.textContent=fmt(dep);els.kCalls.textContent=fmt(current.length);els.kGT.textContent=fmt(gt)+' GT';els.kMax.textContent=max?fmt(max.gt)+' GT':'-';els.kMaxName.textContent=max?max.name:'-';const days=Math.round((queryEndMs-queryStartMs)/86400000);els.kDays.textContent=fmt(days)+'일';els.portSummary.innerHTML=PORTS.map((p,i)=>`<div class="port-stat"><b>${p.code} ${p.name}<strong>${fmt(ps[i].calls.size)}건</strong></b><span>입항 ${fmt(ps[i].arr)} / 출항 ${fmt(ps[i].dep)}</span></div>`).join('');const sorted=[...purposes.entries()].sort((a,b)=>b[1]-a[1]);const mx=sorted[0]?.[1]||1;els.purposeList.innerHTML=sorted.length?sorted.slice(0,14).map(([k,v])=>`<div class="purpose-row"><span>${esc(k)}</span><span class="bar"><i style="width:${(v/mx*100).toFixed(1)}%"></i></span><em>${fmt(v)}건</em></div>`).join(''):'<div class="empty">데이터 없음</div>'}
 function setupTimeline(){simEndMs=queryEndMs;for(const r of current){const f=eventFlags(r);if(f.dep&&f.d){const ro=routeFor(r,'next');simEndMs=Math.max(simEndMs,+f.d+ro.minutes*60000+120*60000)}}const maxMin=Math.max(1,Math.ceil((simEndMs-queryStartMs)/60000));els.timeline.max=maxMin;els.timeline.value=0;updateClock(true);updateTicks();const ext=simEndMs>queryEndMs+60000?` · 항로완주 ${formatDT(new Date(simEndMs))}까지`:' ';els.period.textContent=`${els.start.value} ~ ${els.end.value}${ext}`;els.clockSub.textContent='조회 시작시각'}
@@ -236,7 +334,7 @@ function stop(){playing=false;els.play.textContent='▶';lastTs=0;syncDetailPlay
 function toggle(){if(!current.length)return;if(+els.timeline.value>=+els.timeline.max)els.timeline.value=0;playing=!playing;els.play.textContent=playing?'❚❚':'▶';lastTs=0;syncDetailPlayback();if(playing)requestAnimationFrame(tick)}
 function tick(ts){if(!playing)return;if(!lastTs)lastTs=ts;const dt=ts-lastTs;lastTs=ts;const total=+els.timeline.max,speed=+els.speed.value;let t=+els.timeline.value+dt*(total/90000)*speed;if(t>=total){t=total;stop()}els.timeline.value=t;updateClock();if(playing)requestAnimationFrame(tick)}
 function csvEscape(v){const s=String(v??'');return /[",\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s}
-function downloadCSV(){if(!currentEvents.length)return;const hdr=['조회시작일','조회종료일','이벤트일시','입출','청코드','항명','호출부호','선명','총톤수_GT','입항일시','출항일시','전출항지_원자료','차항지_원자료','시각화_연결항','항로보정기준','예상항해거리_km','예상항해시간_분','선박용도','외내','계선장소','항해구분','여객수'];const rows=currentEvents.slice().sort((a,b)=>b.t-a.t).map(e=>[els.start.value,els.end.value,formatDT(new Date(e.t)),e.type,PORTS[e.r.p].code,PORTS[e.r.p].name,e.r.call,e.r.name,e.r.gt,e.r.arr,e.r.dep,e.r.prev,e.r.next,e.ri.name,e.ri.method,Math.round(e.ri.km),Math.round(e.ri.minutes),e.r.purpose,e.r.dom,e.r.berth,e.r.voyage,e.r.passengers]);const text='\uFEFF'+[hdr,...rows].map(r=>r.map(csvEscape).join(',')).join('\r\n');const blob=new Blob([text],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${els.start.value.replaceAll('-','')}~${els.end.value.replaceAll('-','')}_제주서귀포_입출항.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+function downloadCSV(){if(!currentEvents.length)return;const hdr=['조회시작일','조회종료일','이벤트일시','입출','청코드','항명','호출부호','선명','총톤수_GT','입항일시','출항일시','전출항지_원자료','차항지_원자료','시각화_연결항','항로자료구분','항로보정기준','예상항해거리_km','예상항해시간_분','선박용도','외내','계선장소','항해구분','여객수'];const rows=currentEvents.slice().sort((a,b)=>b.t-a.t).map(e=>[els.start.value,els.end.value,formatDT(new Date(e.t)),e.type,PORTS[e.r.p].code,PORTS[e.r.p].name,e.r.call,e.r.name,e.r.gt,e.r.arr,e.r.dep,e.r.prev,e.r.next,e.ri.name,e.ri.openAis?'공공 AIS 통항축':(e.ri.osmFerry?'OSM ferry':'추정 경유선'),e.ri.method,Math.round(e.ri.km),Math.round(e.ri.minutes),e.r.purpose,e.r.dom,e.r.berth,e.r.voyage,e.r.passengers]);const text='\uFEFF'+[hdr,...rows].map(r=>r.map(csvEscape).join(',')).join('\r\n');const blob=new Blob([text],{type:'text/csv;charset=utf-8'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`${els.start.value.replaceAll('-','')}~${els.end.value.replaceAll('-','')}_제주서귀포_입출항.csv`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 els.search.addEventListener('click',query);els.csv.addEventListener('click',downloadCSV);els.fitPorts.addEventListener('click',fitPorts);els.fitRoutes.addEventListener('click',fitRoutes);$('openJejuDetailBtn').addEventListener('click',()=>openPortDetail(0));$('openSeogwipoDetailBtn').addEventListener('click',()=>openPortDetail(1));els.play.addEventListener('click',toggle);els.timeline.addEventListener('input',()=>{stop();updateClock(true)});els.speed.addEventListener('change',syncDetailPlayback);els.purpose.addEventListener('change',query);els.ports.addEventListener('change',query);els.start.addEventListener('keydown',e=>{if(e.key==='Enter')query()});els.end.addEventListener('keydown',e=>{if(e.key==='Enter')query()});$('detailClose').addEventListener('click',closePortDetail);$('detailPlayBtn').addEventListener('click',toggle);$('detailTimeline').addEventListener('input',()=>{stop();els.timeline.value=$('detailTimeline').value;updateClock(true)});$('detailSpeed').addEventListener('change',()=>{els.speed.value=$('detailSpeed').value;syncDetailPlayback()});$('portDetailOverlay').addEventListener('click',e=>{if(e.target===$('portDetailOverlay'))closePortDetail()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('portDetailOverlay').classList.contains('open'))closePortDetail()});window.addEventListener('resize',()=>{if(current.length)drawCharts();if(detailMap&&$('portDetailOverlay').classList.contains('open'))detailMap.invalidateSize()});
 initMap();query();
 })();
