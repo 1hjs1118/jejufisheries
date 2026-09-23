@@ -144,7 +144,7 @@
       <h1>제주특별자치도 넙치류 수출 동향</h1>
       <p class="subtitle">한국무역협회 제주지부 「제주 수출입동향」 기반 · 정책 수립 참고용</p>
       <div class="badges">
-        <span class="badge">대상기간 2019.01~2026.07</span>
+        <span class="badge">대상기간 2019.01~2026.08</span>
         <span class="badge">금액 단위: 만 달러</span>
         <span class="badge">월별 본문 74건 및 첨부 PDF 87건 대조</span>
         <span class="badge">직접값·누계차감 구분</span>
@@ -203,7 +203,7 @@
       <section class="panel">
         <h2><span class="dot"></span> 연도별 넙치류 수출액 합계</h2>
         <div class="chart-wrap"><canvas id="annualChart"></canvas></div>
-        <p class="chart-note">※ 연도별 합계와 전년 비교는 현재 선택한 기간·자료 구분 필터를 반영합니다. 전체 조회 시 2019~2025년은 연간, 2026년은 1~7월입니다.</p>
+        <p class="chart-note">※ 연도별 합계와 전년 비교는 현재 선택한 기간·자료 구분 필터를 반영합니다. 전체 조회 시 2019~2025년은 연간, 2026년은 1~8월입니다.</p>
       </section>
     </div>
 
@@ -340,7 +340,8 @@
       '2026-04':{v:242.4,s:'pdf',yoy:14.0,why:'2026.4 PDF 본문의 넙치 수출액',src:'1869821'},
       '2026-05':{v:190.0,s:'pdf',yoy:-1.5,why:'2026.5 PDF 본문의 넙치 수출액',src:'1870784'},
       '2026-06':{v:228.9,s:'derived',yoy:6.5,why:'2026 상반기 PDF의 누계 1,351.7−1~5월 1,122.8',src:'1871599'},
-      '2026-07':{v:229.6,s:'pdf',yoy:-6.7,why:'2026.7 PDF 품목별 수출표의 당월 값(2,296천 달러)'}
+      '2026-07':{v:229.6,s:'pdf',yoy:-6.7,why:'2026.7 PDF 품목별 수출표의 당월 값(2,296천 달러)'},
+      '2026-08':{v:252.5,s:'direct',yoy:-7.6,why:'사용자 제공 2026.8 수출동향 본문: 넙치 252.5만 달러, 전년 동월 대비 7.6% 감소'}
     };
 
     const NOTES = [
@@ -393,12 +394,13 @@
       ['2026-04','1869821','넙치와 기타수산가공품 증가에 힘입어 수산물 수출은 375.2만 달러로 16.0% 증가했다. 기타수산가공품은 베트남·미국을 중심으로 확대됐다.'],
       ['2026-05','1870784','넙치는 소폭 감소했지만 기타수산가공품이 1,210.4% 급증해 수산물 수출은 289.8만 달러로 10.6% 증가했다.'],
       ['2026-06','1871599','상반기 넙치는 1,351.7만 달러로 6.4%, 기타수산가공품은 181.2만 달러로 344.7% 증가했다. 일본 대상 넙치 수출이 23.7% 증가해 전체 실적을 견인했다.'],
-      ['2026-07',null,'넙치는 229.6만 달러로 전년 동월 대비 6.7% 감소했으나, 기타수산가공품(+55.9%)·기타어류(+31.7%)·갈치(+1,090.5%) 증가 등에 힘입어 전체 수산물 수출은 382.5만 달러로 9.6% 증가했다.']
+      ['2026-07',null,'넙치는 229.6만 달러로 전년 동월 대비 6.7% 감소했으나, 기타수산가공품(+55.9%)·기타어류(+31.7%)·갈치(+1,090.5%) 증가 등에 힘입어 전체 수산물 수출은 382.5만 달러로 9.6% 증가했다.'],
+      ['2026-08',null,'기타수산가공품(19.7만 달러, +70.2%)은 증가했으나 넙치(252.5만 달러, -7.6%) 및 조개(21.2만 달러, -19.1%) 등 수출 감소로 수산물 수출은 전년 동월 대비 8.8% 감소한 337.7만 달러를 기록했다. 기타수산가공품은 베트남(15.7만 달러, 신규), 홍콩(2.8만 달러, +10.7%) 중심으로 증가했다.']
     ].map(([ym,src,text])=>({ym,src,text}));
 
     const ALL_MONTHS = [];
     for (let y=2019;y<=2026;y++) {
-      const max = y===2026 ? 7 : 12;
+      const max = y===2026 ? 8 : 12;
       for (let m=1;m<=max;m++) {
         const ym = `${y}-${String(m).padStart(2,'0')}`;
         ALL_MONTHS.push({ym,y,m,...(VALUES[ym] || {v:null,s:'missing',yoy:null,why:'본문과 확보된 첨부자료에서 월별 넙치류 수출액 미확인',src:null})});
@@ -418,7 +420,7 @@
       document.getElementById('startPeriod').innerHTML=options;
       document.getElementById('endPeriod').innerHTML=options;
       document.getElementById('startPeriod').value='2019-01';
-      document.getElementById('endPeriod').value='2026-07';
+      document.getElementById('endPeriod').value='2026-08';
     }
 
     function selectedRows(ignoreStatus=false) {
